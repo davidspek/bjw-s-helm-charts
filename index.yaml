@@ -1,5 +1,33 @@
 apiVersion: v1
 entries:
+  app-template:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: |
+            Updated library version to 3.2.1.
+          links:
+            - name: Upgrade instructions from v2.x
+              url: https://bjw-s.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
+            - name: Common library chart definition
+              url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
+    apiVersion: v2
+    created: "2024-07-24T10:06:46.101717397Z"
+    dependencies:
+    - name: common
+      repository: https://bjw-s.github.io/helm-charts
+      version: 3.2.1
+    description: A common powered chart template. This can be useful for small projects
+      that don't have their own chart.
+    digest: 152e36dcc69b0b2683ae5a93c9302d3f9d68f7e7b6ca488e06fa11ad83cecd9b
+    kubeVersion: '>=1.22.0-0'
+    maintainers:
+    - email: me@bjw-s.dev
+      name: bjw-s
+    name: app-template
+    urls:
+    - https://davidspek.github.io/davidspek-helm-charts/other/app-template-3.2.2.tgz
+    version: 3.2.2
   common:
   - annotations:
       artifacthub.io/changes: |-
@@ -19,7 +47,7 @@ entries:
           description: |-
             Fixed networkPolicies not rendering correctly
     apiVersion: v2
-    created: "2024-07-24T10:05:47.131074826Z"
+    created: "2024-07-24T10:06:46.099215817Z"
     description: Function library for Helm charts
     digest: d01f8835c6b7b9aa9888eaaba73c30c25aae2e87180171f7f3ba0359ce032848
     home: https://github.com/bjw-s/helm-charts/tree/main/charts/library/common
@@ -35,4 +63,4 @@ entries:
     urls:
     - https://davidspek.github.io/davidspek-helm-charts/library/common-4.0.0.tgz
     version: 4.0.0
-generated: "2024-07-24T10:05:47.128138655Z"
+generated: "2024-07-24T10:06:46.096192705Z"
