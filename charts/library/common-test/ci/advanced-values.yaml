@@ -1,6 +1,6 @@
 ---
 # yaml-language-server: $schema=../../common/values.schema.json
-controllers:
+components:
   main:
     containers:
       main:
@@ -38,7 +38,7 @@ controllers:
           repository: ghcr.io/mendhak/http-https-echo
           tag: 31
 
-  second-controller:
+  second-component:
     type: deployment
     containers:
       main:
@@ -52,7 +52,7 @@ controllers:
 
 service:
   main:
-    controller: main
+    component: main
     ports:
       http:
         port: 8887
@@ -82,7 +82,7 @@ persistence:
     name: |-
       {{- (include "bjw-s.common.lib.chart.names.fullname" $) -}}-config
     advancedMounts:
-      main: # the controller with the "main" identifier
+      main: # the component with the "main" identifier
         main: # the container with the "main" identifier
           - path: /data/config.yaml
             readOnly: false
@@ -90,7 +90,7 @@ persistence:
         second-container: # the container with the "second-container" identifier
           - path: /appdata/config
             readOnly: true
-      second-controller: # the controller with the "second-controller" identifier
+      second-component: # the component with the "second-component" identifier
         main: # the container with the "main" identifier
           - path: /data/config.yaml
             readOnly: false

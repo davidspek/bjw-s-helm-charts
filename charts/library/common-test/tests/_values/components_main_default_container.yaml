@@ -1,5 +1,6 @@
 ---
-controllers:
+# yaml-language-server: $schema=../../../common/values.schema.json
+components:
   main:
     containers:
       main:

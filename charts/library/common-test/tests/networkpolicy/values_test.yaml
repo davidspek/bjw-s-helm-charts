@@ -4,7 +4,7 @@ suite: NetworkPolicy values
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: main networkpolicy is disabled by default
     asserts:
@@ -18,7 +18,7 @@ tests:
   - it: main networkpolicy can be enabled
     set:
       networkpolicies.main:
-        controller: main
+        component: main
         policyTypes:
           - Ingress
           - Egress
@@ -33,11 +33,11 @@ tests:
         isKind:
           of: NetworkPolicy
 
-  - it: networkpolicy targets the correct controller
+  - it: networkpolicy targets the correct component
     set:
       networkpolicies:
         main:
-          controller: main
+          component: main
           policyTypes:
             - Ingress
             - Egress
@@ -59,7 +59,7 @@ tests:
     set:
       networkpolicies:
         main:
-          controller: main
+          component: main
           policyTypes:
             - Ingress
             - Egress
@@ -78,7 +78,7 @@ tests:
     set:
       networkpolicies:
         main:
-          controller: main
+          component: main
           policyTypes:
             - Ingress
             - Egress

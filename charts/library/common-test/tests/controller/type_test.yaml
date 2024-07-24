@@ -1,10 +1,10 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
-suite: controller types
+suite: component types
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: default should pass
     asserts:
@@ -20,9 +20,9 @@ tests:
           path: metadata.labels['app.kubernetes.io/component']
           value: main
 
-  - it: additional controllers should pass
+  - it: additional components should pass
     set:
-      controllers:
+      components:
         second:
           containers:
             main:
@@ -55,9 +55,9 @@ tests:
           path: metadata.labels['app.kubernetes.io/component']
           value: second
 
-  - it: additional controllers with nameOverride should pass
+  - it: additional components with nameOverride should pass
     set:
-      controllers:
+      components:
         main:
           nameOverride: "{{ .Release.Name }}"
         second:
@@ -95,44 +95,44 @@ tests:
 
   - it: daemonset should pass
     set:
-      controllers.main.type: daemonset
+      components.main.type: daemonset
     asserts:
-      - documentIndex: &ControllerDoc 0
+      - documentIndex: &ComponentDoc 0
         isKind:
           of: DaemonSet
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: metadata.name
           value: RELEASE-NAME
 
   - it: statefulset should pass
     set:
-      controllers.main.type: statefulset
+      components.main.type: statefulset
     asserts:
-      - documentIndex: &ControllerDoc 0
+      - documentIndex: &ComponentDoc 0
         isKind:
           of: StatefulSet
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: metadata.name
           value: RELEASE-NAME
 
   - it: cronjob should pass
     set:
-      controllers.main.type: cronjob
-      controllers.main.cronjob.schedule: "*/20 * * * *"
+      components.main.type: cronjob
+      components.main.cronjob.schedule: "*/20 * * * *"
     asserts:
-      - documentIndex: &ControllerDoc 0
+      - documentIndex: &ComponentDoc 0
         isKind:
           of: CronJob
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: metadata.name
           value: RELEASE-NAME
 
   - it: disabled should pass
     set:
-      controllers.main.enabled: false
+      components.main.enabled: false
     asserts:
       - hasDocuments:
           count: 0

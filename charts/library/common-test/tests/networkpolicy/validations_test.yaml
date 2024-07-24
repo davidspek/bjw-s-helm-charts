@@ -4,23 +4,23 @@ suite: NetworkPolicy validations
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
-  - it: networkpolicy requires either controller reference or podSelector
+  - it: networkpolicy requires either component reference or podSelector
     set:
       networkpolicies:
         main:
-          controller: ""
+          component: ""
           rules: {}
     asserts:
       - failedTemplate:
-          errorMessage: "controller reference or podSelector is required for NetworkPolicy. (NetworkPolicy main)"
+          errorMessage: "component reference or podSelector is required for NetworkPolicy. (NetworkPolicy main)"
 
   - it: policyTypes is required
     set:
       networkpolicies:
         main:
-          controller: main
+          component: main
           policyTypes: []
           rules: {}
     asserts:
@@ -31,7 +31,7 @@ tests:
     set:
       networkpolicies:
         main:
-          controller: main
+          component: main
           policyTypes:
             - test
           rules: {}

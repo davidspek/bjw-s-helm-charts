@@ -3,16 +3,16 @@ Returns the value for initContainers
 */ -}}
 {{- define "bjw-s.common.lib.pod.field.initContainers" -}}
   {{- $rootContext := .ctx.rootContext -}}
-  {{- $controllerObject := .ctx.controllerObject -}}
+  {{- $componentObject := .ctx.componentObject -}}
 
   {{- /* Default to empty list */ -}}
   {{- $graph := dict -}}
   {{- $containers := list -}}
 
-  {{- /* Fetch configured containers for this controller */ -}}
+  {{- /* Fetch configured containers for this component */ -}}
   {{- $renderedContainers := dict -}}
 
-  {{- range $key, $containerValues := $controllerObject.initContainers -}}
+  {{- range $key, $containerValues := $componentObject.initContainers -}}
     {{- /* Enable container by default, but allow override */ -}}
     {{- $containerEnabled := true -}}
     {{- if hasKey $containerValues "enabled" -}}
@@ -24,10 +24,10 @@ Returns the value for initContainers
       {{- $containerObject := (include "bjw-s.common.lib.container.valuesToObject" (dict "rootContext" $rootContext "id" $key "values" $containerValues)) | fromYaml -}}
 
       {{- /* Perform validations on the Container before rendering */ -}}
-      {{- include "bjw-s.common.lib.container.validate" (dict "rootContext" $ "controllerObject" $controllerObject "containerObject" $containerObject) -}}
+      {{- include "bjw-s.common.lib.container.validate" (dict "rootContext" $ "componentObject" $componentObject "containerObject" $containerObject) -}}
 
       {{- /* Generate the Container spec */ -}}
-      {{- $renderedContainer := include "bjw-s.common.lib.container.spec" (dict "rootContext" $rootContext "controllerObject" $controllerObject "containerObject" $containerObject) | fromYaml -}}
+      {{- $renderedContainer := include "bjw-s.common.lib.container.spec" (dict "rootContext" $rootContext "componentObject" $componentObject "containerObject" $containerObject) | fromYaml -}}
       {{- $_ := set $renderedContainers $key $renderedContainer -}}
 
       {{- /* Determine the Container order */ -}}

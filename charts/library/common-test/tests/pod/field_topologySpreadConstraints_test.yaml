@@ -4,7 +4,7 @@ suite: pod topologySpreadConstraints
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: default should pass
     asserts:
@@ -50,7 +50,7 @@ tests:
             labelSelector:
               matchLabels:
                 app: foo
-      controllers:
+      components:
         main:
           pod:
             topologySpreadConstraints:

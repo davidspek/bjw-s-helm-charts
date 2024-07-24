@@ -20,17 +20,9 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     steps:
-      - name: "Generate Short Lived OAuth App Token (ghs_*)"
-        uses: actions/create-github-app-token@v1.10.3
-        id: app-token
-        with:
-          app-id: "${{ secrets.BJWS_APP_ID }}"
-          private-key: "${{ secrets.BJWS_APP_PRIVATE_KEY }}"
-
       - name: Checkout main branch
         uses: actions/checkout@v4
         with:
-          token: ${{ steps.app-token.outputs.token }}
           fetch-depth: 0
 
       - uses: actions/setup-python@v5
@@ -47,8 +39,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4.0.0
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
-          github_token: ${{ steps.app-token.outputs.token }}
           publish_dir: ./site
           destination_dir: docs
-          user_name: "bjw-s-bot[bot]"
-          user_email: "bjw-s-bot <87358111+bjw-s-bot[bot]@users.noreply.github.com>"
+          user_name: "davidspek-bot[bot]"
+          user_email: "davidspek-bot <87358111+davidspek-bot[bot]@users.noreply.github.com>"

@@ -4,47 +4,47 @@ suite: cronjob configuration
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: default cronjob configuration should pass
     set:
-      controllers.main.type: cronjob
-      controllers.main.cronjob.schedule: "*/20 * * * *"
+      components.main.type: cronjob
+      components.main.cronjob.schedule: "*/20 * * * *"
     asserts:
-      - documentIndex: &ControllerDoc 0
+      - documentIndex: &ComponentDoc 0
         isKind:
           of: CronJob
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: spec.suspend
           value: false
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: spec.schedule
           value: "*/20 * * * *"
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: spec.concurrencyPolicy
           value: Forbid
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: spec.successfulJobsHistoryLimit
           value: 1
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: spec.failedJobsHistoryLimit
           value: 1
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         notExists:
           path: spec.jobTemplate.spec.ttlSecondsAfterFinished
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: spec.jobTemplate.spec.template.spec.restartPolicy
           value: Never
 
   - it: custom cronjob configuration should pass
     set:
-      controllers:
+      components:
         main:
           type: cronjob
           pod:
@@ -58,38 +58,38 @@ tests:
             ttlSecondsAfterFinished: &ttlSecondsAfterFinished 3600
             parallelism: &CronJobParallelism 3
     asserts:
-      - documentIndex: &ControllerDoc 0
+      - documentIndex: &ComponentDoc 0
         isKind:
           of: CronJob
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: spec.suspend
           value: *CronJobSuspended
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: spec.schedule
           value: *CronJobSchedule
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: spec.concurrencyPolicy
           value: *CronJobConcurrencyPolicy
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: spec.successfulJobsHistoryLimit
           value: *CronJobSuccessfulJobsHistory
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: spec.failedJobsHistoryLimit
           value: *CronJobFailedJobsHistory
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: spec.jobTemplate.spec.ttlSecondsAfterFinished
           value: *ttlSecondsAfterFinished
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: spec.jobTemplate.spec.template.spec.restartPolicy
           value: OnFailure
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: spec.jobTemplate.spec.parallelism
           value: *CronJobParallelism

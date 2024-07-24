@@ -10,12 +10,20 @@ defaultPodOptions:
     fsGroup: 568
     fsGroupChangePolicy: "OnRootMismatch"
 
-controllers:
-  # Configure the main controller
+components:
+  # Configure the main component
   main:
     type: statefulset
     annotations:
       reloader.stakater.com/auto: "true"
+
+    topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: "kubernetes.io/hostname"
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          app.kubernetes.io/component: main
 
     containers:
       # Configure the main application container
@@ -50,7 +58,7 @@ controllers:
 service:
   # Configure a service for the main application
   main:
-    controller: main
+    component: main
     type: ClusterIP
     ports:
       http:
@@ -58,7 +66,7 @@ service:
   # Configure a service for the code-server sidecar
   code:
     type: ClusterIP
-    controller: main
+    component: main
     ports:
       http:
         port: 8081

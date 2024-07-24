@@ -49,13 +49,13 @@ spec:
   serviceName: {{ include "bjw-s.common.lib.chart.names.fullname" $rootContext }}
   template:
     metadata:
-      {{- with (include "bjw-s.common.lib.pod.metadata.annotations" (dict "rootContext" $rootContext "controllerObject" $statefulsetObject)) }}
+      {{- with (include "bjw-s.common.lib.pod.metadata.annotations" (dict "rootContext" $rootContext "componentObject" $statefulsetObject)) }}
       annotations: {{ . | nindent 8 }}
       {{- end -}}
-      {{- with (include "bjw-s.common.lib.pod.metadata.labels" (dict "rootContext" $rootContext "controllerObject" $statefulsetObject)) }}
+      {{- with (include "bjw-s.common.lib.pod.metadata.labels" (dict "rootContext" $rootContext "componentObject" $statefulsetObject)) }}
       labels: {{ . | nindent 8 }}
       {{- end }}
-    spec: {{ include "bjw-s.common.lib.pod.spec" (dict "rootContext" $rootContext "controllerObject" $statefulsetObject) | nindent 6 }}
+    spec: {{ include "bjw-s.common.lib.pod.spec" (dict "rootContext" $rootContext "componentObject" $statefulsetObject) | nindent 6 }}
   {{- with (include "bjw-s.common.lib.statefulset.volumeclaimtemplates" (dict "rootContext" $rootContext "statefulsetObject" $statefulsetObject)) }}
   volumeClaimTemplates: {{ . | nindent 4 }}
   {{- end }}

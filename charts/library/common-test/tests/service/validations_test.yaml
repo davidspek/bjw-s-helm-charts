@@ -4,13 +4,13 @@ suite: Service validations
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
-  - it: invalid controller reference should fail
+  - it: invalid component reference should fail
     set:
       service:
         main:
-          controller: other
+          component: other
     asserts:
       - failedTemplate:
-          errorMessage: "No enabled controller found with this identifier. (service: 'main', controller: 'other')"
+          errorMessage: "No enabled component found with this identifier. (service: 'main', component: 'other')"

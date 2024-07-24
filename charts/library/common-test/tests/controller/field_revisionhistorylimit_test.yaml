@@ -1,15 +1,15 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
-suite: controller revisionHistoryLimit
+suite: component revisionHistoryLimit
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   # Deployment
   - it: default should pass for Deployment
     set:
-      controllers.main.type: deployment
+      components.main.type: deployment
     asserts:
       - documentIndex: 0
         isKind:
@@ -21,7 +21,7 @@ tests:
 
   - it: custom revisionHistoryLimit should pass for Deployment
     set:
-      controllers.main:
+      components.main:
         type: deployment
         revisionHistoryLimit: 8
     asserts:
@@ -35,7 +35,7 @@ tests:
 
   - it: explicit revisionHistoryLimit 0 should pass for Deployment
     set:
-      controllers.main:
+      components.main:
         type: deployment
         revisionHistoryLimit: 0
     asserts:
@@ -50,7 +50,7 @@ tests:
   # StatefulSet
   - it: default should pass for StatefulSet
     set:
-      controllers.main.type: statefulset
+      components.main.type: statefulset
     asserts:
       - documentIndex: 0
         isKind:
@@ -62,7 +62,7 @@ tests:
 
   - it: custom revisionHistoryLimit should pass for StatefulSet
     set:
-      controllers.main:
+      components.main:
         type: statefulset
         revisionHistoryLimit: 8
     asserts:
@@ -76,7 +76,7 @@ tests:
 
   - it: explicit revisionHistoryLimit 0 should pass for StatefulSet
     set:
-      controllers.main:
+      components.main:
         type: statefulset
         revisionHistoryLimit: 0
     asserts:
@@ -91,7 +91,7 @@ tests:
   # DaemonSet
   - it: default should pass for DaemonSet
     set:
-      controllers.main.type: daemonset
+      components.main.type: daemonset
     asserts:
       - documentIndex: 0
         isKind:
@@ -103,7 +103,7 @@ tests:
 
   - it: custom revisionHistoryLimit should pass for DaemonSet
     set:
-      controllers.main:
+      components.main:
         type: daemonset
         revisionHistoryLimit: 8
     asserts:
@@ -117,7 +117,7 @@ tests:
 
   - it: explicit revisionHistoryLimit 0 should pass for DaemonSet
     set:
-      controllers.main:
+      components.main:
         type: daemonset
         revisionHistoryLimit: 0
     asserts:

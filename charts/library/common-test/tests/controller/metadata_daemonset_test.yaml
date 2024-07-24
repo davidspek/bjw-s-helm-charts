@@ -1,22 +1,22 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
-suite: controller metadata daemonset
+suite: component metadata daemonset
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: default metadata should pass
     set:
-      controllers.main.type: daemonset
+      components.main.type: daemonset
     asserts:
-      - documentIndex: &ControllerDoc 0
+      - documentIndex: &ComponentDoc 0
         isKind:
           of: DaemonSet
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         notExists:
           path: metadata.annotations
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: metadata.labels
           value:
@@ -28,7 +28,7 @@ tests:
 
   - it: custom metadata should pass
     set:
-      controllers:
+      components:
         main:
           type: daemonset
           annotations:
@@ -36,15 +36,15 @@ tests:
           labels:
             test_label: test
     asserts:
-      - documentIndex: &ControllerDoc 0
+      - documentIndex: &ComponentDoc 0
         isKind:
           of: DaemonSet
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: metadata.annotations
           value:
             test_annotation: test
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: metadata.labels
           value:
@@ -62,7 +62,7 @@ tests:
           global_label: test
         annotations:
           global_annotation: test
-      controllers:
+      components:
         main:
           type: daemonset
           annotations:
@@ -70,16 +70,16 @@ tests:
           labels:
             test_label: test
     asserts:
-      - documentIndex: &ControllerDoc 0
+      - documentIndex: &ComponentDoc 0
         isKind:
           of: DaemonSet
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: metadata.annotations
           value:
             global_annotation: test
             test_annotation: test
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: metadata.labels
           value:

@@ -1,12 +1,12 @@
 ---
 # Project information
-site_name: bjw-s Helm Charts
-site_url: https://bjw-s.github.io/helm-charts/
-site_author: bjw-s
+site_name: davidspek bjw-s Helm Charts
+site_url: https://davidspek.github.io/bjw-s-helm-charts/
+site_author: davidspek
 
 # Repository
-repo_name: bjw-s/helm-charts
-repo_url: https://github.com/bjw-s/helm-charts
+repo_name: davidspek/bjw-s-helm-charts/
+repo_url: https://github.com/davidspek/bjw-s-helm-charts/
 
 # Configuration
 docs_dir: ../../docs
@@ -81,7 +81,7 @@ nav:
           - app-template/howto/index.md
           - Helm templates: app-template/howto/helm-templates.md
           - Multiple subPaths for 1 volume: app-template/howto/multiple-subpath.md
-          - Multiple services with 1 or more controllers: app-template/howto/multiple-services.md
+          - Multiple services with 1 or more components: app-template/howto/multiple-services.md
       - Examples:
           - app-template/examples/index.md
           - Home-Assistant with code-server: app-template/examples/home-assistant-codeserver.md

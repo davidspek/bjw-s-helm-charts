@@ -71,12 +71,12 @@
         "type": "boolean",
         "default": false
       },
-      "controller": {
+      "component": {
         "type": "string"
       },
       "extraSelectorLabels": {}
     },
-    "required": ["controller"]
+    "required": ["component"]
   },
 
   "servicePort": {

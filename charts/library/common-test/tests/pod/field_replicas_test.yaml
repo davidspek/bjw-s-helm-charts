@@ -4,7 +4,7 @@ suite: pod replicas
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: default should pass
     asserts:
@@ -18,7 +18,7 @@ tests:
 
   - it: nil should pass
     set:
-      controllers.main.replicas: null
+      components.main.replicas: null
     asserts:
       - documentIndex: 0
         isKind:
@@ -29,7 +29,7 @@ tests:
 
   - it: custom replicas should pass
     set:
-      controllers.main.replicas: 3
+      components.main.replicas: 3
     asserts:
       - documentIndex: 0
         isKind:

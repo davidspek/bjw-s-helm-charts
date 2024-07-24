@@ -4,11 +4,11 @@ suite: persistence volumeclaimtemplates
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: default should pass
     set:
-      controllers.main:
+      components.main:
         type: statefulset
     asserts:
       - documentIndex: &StatefulSetDoc 0
@@ -20,7 +20,7 @@ tests:
 
   - it: volumeClaimTemplates should pass
     set:
-      controllers.main:
+      components.main:
         type: statefulset
         statefulset:
           volumeClaimTemplates:
@@ -46,7 +46,7 @@ tests:
 
   - it: volumeClaimTemplates with dataSource should pass
     set:
-      controllers.main:
+      components.main:
         type: statefulset
         statefulset:
           volumeClaimTemplates:
@@ -71,7 +71,7 @@ tests:
 
   - it: volumeClaimTemplates with templated dataSource name should pass
     set:
-      controllers.main:
+      components.main:
         type: statefulset
         statefulset:
           volumeClaimTemplates:

@@ -4,11 +4,11 @@ suite: pod sidecar containers
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: with default order
     set:
-      controllers.main.containers:
+      components.main.containers:
         main:
           image:
             repository: test
@@ -44,7 +44,7 @@ tests:
 
   - it: with dependsOn
     set:
-      controllers.main.containers:
+      components.main.containers:
         additional1:
           dependsOn: additional3
           image:

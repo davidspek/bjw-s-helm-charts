@@ -3,14 +3,14 @@ Returns the value for containers
 */ -}}
 {{- define "bjw-s.common.lib.pod.field.containers" -}}
   {{- $rootContext := .ctx.rootContext -}}
-  {{- $controllerObject := .ctx.controllerObject -}}
+  {{- $componentObject := .ctx.componentObject -}}
 
   {{- /* Default to empty list */ -}}
   {{- $graph := dict -}}
   {{- $containers := list -}}
 
-  {{- /* Fetch configured containers for this controller */ -}}
-  {{- $enabledContainers := include "bjw-s.common.lib.controller.enabledContainers" (dict "rootContext" $rootContext "controllerObject" $controllerObject) | fromYaml }}
+  {{- /* Fetch configured containers for this component */ -}}
+  {{- $enabledContainers := include "bjw-s.common.lib.component.enabledContainers" (dict "rootContext" $rootContext "componentObject" $componentObject) | fromYaml }}
   {{- $renderedContainers := dict -}}
 
   {{- range $key, $containerValues := $enabledContainers -}}
@@ -18,10 +18,10 @@ Returns the value for containers
     {{- $containerObject := (include "bjw-s.common.lib.container.valuesToObject" (dict "rootContext" $rootContext "id" $key "values" $containerValues)) | fromYaml -}}
 
     {{- /* Perform validations on the Container before rendering */ -}}
-    {{- include "bjw-s.common.lib.container.validate" (dict "rootContext" $ "controllerObject" $controllerObject "containerObject" $containerObject) -}}
+    {{- include "bjw-s.common.lib.container.validate" (dict "rootContext" $ "componentObject" $componentObject "containerObject" $containerObject) -}}
 
     {{- /* Generate the Container spec */ -}}
-    {{- $renderedContainer := include "bjw-s.common.lib.container.spec" (dict "rootContext" $rootContext "controllerObject" $controllerObject "containerObject" $containerObject) | fromYaml -}}
+    {{- $renderedContainer := include "bjw-s.common.lib.container.spec" (dict "rootContext" $rootContext "componentObject" $componentObject "containerObject" $containerObject) | fromYaml -}}
     {{- $_ := set $renderedContainers $key $renderedContainer -}}
 
     {{- /* Determine the Container order */ -}}

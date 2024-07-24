@@ -3,7 +3,7 @@ Returns the value for volumes
 */ -}}
 {{- define "bjw-s.common.lib.pod.field.volumes" -}}
   {{- $rootContext := .ctx.rootContext -}}
-  {{- $controllerObject := .ctx.controllerObject -}}
+  {{- $componentObject := .ctx.componentObject -}}
 
   {{- /* Default to empty list */ -}}
   {{- $persistenceItemsToProcess := dict -}}
@@ -22,7 +22,7 @@ Returns the value for volumes
       {{- $globalMounts := dig "globalMounts" list $persistenceValues -}}
 
       {{- $hasAdvancedMounts := not (empty $persistenceValues.advancedMounts) -}}
-      {{- $advancedMounts := dig "advancedMounts" $controllerObject.identifier list $persistenceValues -}}
+      {{- $advancedMounts := dig "advancedMounts" $componentObject.identifier list $persistenceValues -}}
 
       {{ if or
         ($hasglobalMounts)

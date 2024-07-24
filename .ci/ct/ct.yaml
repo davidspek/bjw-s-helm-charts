@@ -8,8 +8,7 @@ helm-extra-args: --timeout 600s
 
 chart-dirs:
   - charts/library
-  - charts/apps
   - charts/other
 
 chart-repos:
-  - bjw-s=https://bjw-s.github.io/helm-charts
+  - bjw-s=https://davidspek.github.io/bjw-s-helm-charts
