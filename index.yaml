@@ -12,7 +12,7 @@ entries:
             - name: Common library chart definition
               url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
     apiVersion: v2
-    created: "2024-07-24T10:06:46.101717397Z"
+    created: "2024-07-24T10:22:51.322556305Z"
     dependencies:
     - name: common
       repository: https://bjw-s.github.io/helm-charts
@@ -26,7 +26,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://davidspek.github.io/davidspek-helm-charts/other/app-template-3.2.2.tgz
+    - https://davidspek.github.io/bjw-s-helm-charts/other/app-template-3.2.2.tgz
     version: 3.2.2
   common:
   - annotations:
@@ -47,7 +47,41 @@ entries:
           description: |-
             Fixed networkPolicies not rendering correctly
     apiVersion: v2
-    created: "2024-07-24T10:06:46.099215817Z"
+    created: "2024-07-24T10:22:51.319464369Z"
+    description: Function library for Helm charts
+    digest: 3337ddeca7a740835cd89fcc22d0e06c5f084dc2ee588450d4e00f21494ef049
+    home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
+    keywords:
+    - common
+    - library
+    kubeVersion: '>=1.22.0-0'
+    maintainers:
+    - email: me@bjw-s.dev
+      name: bjw-s
+    name: common
+    type: library
+    urls:
+    - https://davidspek.github.io/bjw-s-helm-charts/library/common-4.0.1.tgz
+    version: 4.0.1
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: added
+          description: |-
+            Support templating in annotation and label values for all objects (fixed in v3.2.1)
+        - kind: added
+          description: |-
+            Support activeDeadlineSeconds field on CronJobs and Jobs
+        - kind: added
+          description: |-
+            Support excluding secrets and configMaps from pod checksum annotation
+        - kind: fixed
+          description: |-
+            Fixed failing ServiceMonitor test
+        - kind: fixed
+          description: |-
+            Fixed networkPolicies not rendering correctly
+    apiVersion: v2
+    created: "2024-07-24T10:22:51.317626855Z"
     description: Function library for Helm charts
     digest: d01f8835c6b7b9aa9888eaaba73c30c25aae2e87180171f7f3ba0359ce032848
     home: https://github.com/bjw-s/helm-charts/tree/main/charts/library/common
@@ -61,6 +95,6 @@ entries:
     name: common
     type: library
     urls:
-    - https://davidspek.github.io/davidspek-helm-charts/library/common-4.0.0.tgz
+    - https://davidspek.github.io/bjw-s-helm-charts/library/common-4.0.0.tgz
     version: 4.0.0
-generated: "2024-07-24T10:06:46.096192705Z"
+generated: "2024-07-24T10:22:51.315530307Z"
