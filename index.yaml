@@ -1,0 +1,38 @@
+apiVersion: v1
+entries:
+  common:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: added
+          description: |-
+            Support templating in annotation and label values for all objects (fixed in v3.2.1)
+        - kind: added
+          description: |-
+            Support activeDeadlineSeconds field on CronJobs and Jobs
+        - kind: added
+          description: |-
+            Support excluding secrets and configMaps from pod checksum annotation
+        - kind: fixed
+          description: |-
+            Fixed failing ServiceMonitor test
+        - kind: fixed
+          description: |-
+            Fixed networkPolicies not rendering correctly
+    apiVersion: v2
+    created: "2024-07-24T10:05:47.131074826Z"
+    description: Function library for Helm charts
+    digest: d01f8835c6b7b9aa9888eaaba73c30c25aae2e87180171f7f3ba0359ce032848
+    home: https://github.com/bjw-s/helm-charts/tree/main/charts/library/common
+    keywords:
+    - common
+    - library
+    kubeVersion: '>=1.22.0-0'
+    maintainers:
+    - email: me@bjw-s.dev
+      name: bjw-s
+    name: common
+    type: library
+    urls:
+    - https://davidspek.github.io/davidspek-helm-charts/library/common-4.0.0.tgz
+    version: 4.0.0
+generated: "2024-07-24T10:05:47.128138655Z"
