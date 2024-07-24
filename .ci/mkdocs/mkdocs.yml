@@ -1,12 +1,12 @@
 ---
 # Project information
-site_name: bjw-s Helm Charts
-site_url: https://bjw-s.github.io/helm-charts/
-site_author: bjw-s
+site_name: davidspek bjw-s Helm Charts
+site_url: https://davidspek.github.io/bjw-s-helm-charts/
+site_author: davidspek
 
 # Repository
-repo_name: bjw-s/helm-charts
-repo_url: https://github.com/bjw-s/helm-charts
+repo_name: davidspek/bjw-s-helm-charts/
+repo_url: https://github.com/davidspek/bjw-s-helm-charts/
 
 # Configuration
 docs_dir: ../../docs
