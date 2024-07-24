@@ -67,6 +67,12 @@ Returns the value for annotations
   {{- end -}}
 
   {{- if not (empty $annotations) -}}
-    {{- $annotations | toYaml -}}
+    {{- $outAnnotations := dict -}}
+    {{- with $annotations -}}
+      {{- range $key, $value := . -}}
+      {{- $outAnnotations = merge $outAnnotations (dict $key (tpl $value $rootContext | toYaml )) -}}
+      {{- end -}}
+    {{- end -}}
+    {{- $outAnnotations | toYaml -}}
   {{- end -}}
 {{- end -}}

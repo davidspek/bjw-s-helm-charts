@@ -31,6 +31,12 @@ Returns the value for labels
   {{- end -}}
 
   {{- if not (empty $labels) -}}
-    {{- $labels | toYaml -}}
+    {{- $outLabels := dict -}}
+    {{- with $labels -}}
+      {{- range $key, $value := . -}}
+      {{- $outLabels = merge $outLabels (dict $key (tpl $value $rootContext | toYaml )) -}}
+      {{- end -}}
+    {{- end -}}
+    {{- $outLabels | toYaml -}}
   {{- end -}}
 {{- end -}}
