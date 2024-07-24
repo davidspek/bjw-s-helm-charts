@@ -1,8 +1,8 @@
-{{- define "bjw-s.common.lib.controller.metadata.labels" -}}
+{{- define "bjw-s.common.lib.component.metadata.labels" -}}
   {{-
     $labels := (
       merge
-        (.Values.controller.labels | default dict)
+        (.Values.component.labels | default dict)
         (include "bjw-s.common.lib.metadata.allLabels" $ | fromYaml)
     )
   -}}
@@ -11,11 +11,11 @@
   {{- end -}}
 {{- end -}}
 
-{{- define "bjw-s.common.lib.controller.metadata.annotations" -}}
+{{- define "bjw-s.common.lib.component.metadata.annotations" -}}
   {{-
     $annotations := (
       merge
-        (.Values.controller.annotations | default dict)
+        (.Values.component.annotations | default dict)
         (include "bjw-s.common.lib.metadata.globalAnnotations" $ | fromYaml)
     )
   -}}

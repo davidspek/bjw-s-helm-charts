@@ -4,7 +4,7 @@ suite: container volumeMounts
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: no persistence should pass
     asserts:
@@ -34,7 +34,7 @@ tests:
 
   - it: advanced mount config should pass
     set:
-      controllers:
+      components:
         main:
           containers:
             second-container:
@@ -202,7 +202,7 @@ tests:
 
   - it: volumeClaimTemplates with default mounts should pass
     set:
-      controllers.main:
+      components.main:
         type: statefulset
         statefulset:
           volumeClaimTemplates:
@@ -223,7 +223,7 @@ tests:
 
   - it: volumeClaimTemplates with globalMounts should pass
     set:
-      controllers.main:
+      components.main:
         type: statefulset
         statefulset:
           volumeClaimTemplates:
@@ -253,7 +253,7 @@ tests:
 
   - it: volumeClaimTemplates with advancedMounts should pass
     set:
-      controllers.main:
+      components.main:
         type: statefulset
         statefulset:
           volumeClaimTemplates:

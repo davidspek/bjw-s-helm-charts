@@ -3,7 +3,7 @@ Returns the value for annotations
 */ -}}
 {{- define "bjw-s.common.lib.pod.metadata.annotations" -}}
   {{- $rootContext := .rootContext -}}
-  {{- $controllerObject := .controllerObject -}}
+  {{- $componentObject := .componentObject -}}
 
   {{- /* Default annotations */ -}}
   {{- $annotations := dict -}}
@@ -15,8 +15,8 @@ Returns the value for annotations
   {{- end -}}
 
   {{- /* See if a pod-specific override is set */ -}}
-  {{- if hasKey $controllerObject "pod" -}}
-    {{- $podOption := get $controllerObject.pod "annotations" -}}
+  {{- if hasKey $componentObject "pod" -}}
+    {{- $podOption := get $componentObject.pod "annotations" -}}
     {{- if not (empty $podOption) -}}
       {{- $annotations = merge $podOption $annotations -}}
     {{- end -}}

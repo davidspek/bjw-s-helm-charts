@@ -4,32 +4,32 @@ suite: job configuration
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: default job configuration should pass
     set:
-      controllers:
+      components:
         main:
           type: job
     asserts:
-      - documentIndex: &ControllerDoc 0
+      - documentIndex: &ComponentDoc 0
         isKind:
           of: Job
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: spec.suspend
           value: false
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         notExists:
           path: spec.ttlSecondsAfterFinished
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: spec.template.spec.restartPolicy
           value: Never
 
   - it: custom job configuration should pass
     set:
-      controllers:
+      components:
         main:
           type: job
           pod:
@@ -40,26 +40,26 @@ tests:
             backoffLimit: 3
             parallelism: &JobParallelism 3
     asserts:
-      - documentIndex: &ControllerDoc 0
+      - documentIndex: &ComponentDoc 0
         isKind:
           of: Job
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: spec.suspend
           value: *JobSuspended
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: spec.ttlSecondsAfterFinished
           value: *ttlSecondsAfterFinished
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: spec.template.spec.restartPolicy
           value: OnFailure
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: spec.backoffLimit
           value: 3
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: spec.parallelism
           value: *JobParallelism

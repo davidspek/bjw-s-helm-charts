@@ -5,13 +5,13 @@ Validate Service values
   {{- $rootContext := .rootContext -}}
   {{- $serviceObject := .object -}}
 
-  {{- if empty (get $serviceObject "controller") -}}
-    {{- fail (printf "controller field is required for Service. (service: %s)" $serviceObject.identifier) -}}
+  {{- if empty (get $serviceObject "component") -}}
+    {{- fail (printf "component field is required for Service. (service: %s)" $serviceObject.identifier) -}}
   {{- end -}}
 
-  {{- $serviceController := include "bjw-s.common.lib.controller.getByIdentifier" (dict "rootContext" $rootContext "id" $serviceObject.controller) -}}
-  {{- if empty $serviceController -}}
-    {{- fail (printf "No enabled controller found with this identifier. (service: '%s', controller: '%s')" $serviceObject.identifier $serviceObject.controller) -}}
+  {{- $serviceComponent := include "bjw-s.common.lib.component.getByIdentifier" (dict "rootContext" $rootContext "id" $serviceObject.component) -}}
+  {{- if empty $serviceComponent -}}
+    {{- fail (printf "No enabled component found with this identifier. (service: '%s', component: '%s')" $serviceObject.identifier $serviceObject.component) -}}
   {{- end -}}
 
   {{- /* Validate Service type */ -}}

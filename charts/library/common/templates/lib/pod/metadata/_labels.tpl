@@ -3,11 +3,11 @@ Returns the value for labels
 */ -}}
 {{- define "bjw-s.common.lib.pod.metadata.labels" -}}
   {{- $rootContext := .rootContext -}}
-  {{- $controllerObject := .controllerObject -}}
+  {{- $componentObject := .componentObject -}}
 
   {{- /* Default labels */ -}}
   {{- $labels := merge
-    (dict "app.kubernetes.io/component" $controllerObject.identifier)
+    (dict "app.kubernetes.io/component" $componentObject.identifier)
   -}}
 
   {{- /* Fetch the Pod selectorLabels */ -}}
@@ -23,8 +23,8 @@ Returns the value for labels
   {{- end -}}
 
   {{- /* See if a pod-specific override is set */ -}}
-  {{- if hasKey $controllerObject "pod" -}}
-    {{- $podOption := get $controllerObject.pod "labels" -}}
+  {{- if hasKey $componentObject "pod" -}}
+    {{- $podOption := get $componentObject.pod "labels" -}}
     {{- if not (empty $podOption) -}}
       {{- $labels = merge $podOption $labels -}}
     {{- end -}}

@@ -4,7 +4,7 @@ suite: container envFrom values
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: default should pass
     asserts:
@@ -17,7 +17,7 @@ tests:
 
   - it: explicit envFrom should pass
     set:
-      controllers.main.containers.main.envFrom:
+      components.main.containers.main.envFrom:
         - secretRef:
             name: myCustomSecret
           prefix: test
@@ -43,7 +43,7 @@ tests:
 
   - it: envFrom configmap identifier reference should pass
     set:
-      controllers.main.containers.main.envFrom:
+      components.main.containers.main.envFrom:
         - configMap: config
           prefix: test
         - configMapRef:
@@ -72,7 +72,7 @@ tests:
 
   - it: envFrom Secret identifier reference should pass
     set:
-      controllers.main.containers.main.envFrom:
+      components.main.containers.main.envFrom:
         - secret: secret
           prefix: test
         - secretRef:
@@ -103,7 +103,7 @@ tests:
 
   - it: envFrom with templated name reference should pass
     set:
-      controllers.main.containers.main.envFrom:
+      components.main.containers.main.envFrom:
         - configMap: "{{ .Release.Name }}-config"
         - configMapRef:
             name: "{{ .Release.Name }}-config2"

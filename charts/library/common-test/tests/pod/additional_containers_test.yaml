@@ -4,11 +4,11 @@ suite: pod with multiple containers
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: with explicit name should pass
     set:
-      controllers.main.containers:
+      components.main.containers:
         additional1:
           nameOverride: template-test
           dependsOn: main
@@ -26,7 +26,7 @@ tests:
 
   - it: with implicit name should pass
     set:
-      controllers.main.containers:
+      components.main.containers:
         additional1:
           dependsOn: main
           image:
@@ -43,7 +43,7 @@ tests:
 
   - it: with templated name should pass
     set:
-      controllers.main.containers:
+      components.main.containers:
         additional1:
           nameOverride: "{{ .Release.Name }}-container"
           dependsOn: main
@@ -61,7 +61,7 @@ tests:
 
   - it: with custom env vars dict should pass
     set:
-      controllers.main.containers:
+      components.main.containers:
         main:
           env:
             main_env: value

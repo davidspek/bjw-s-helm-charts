@@ -5,8 +5,8 @@
 defaultPodOptions:
   automountServiceAccountToken: false
 
-controllers:
-  # Configure the main controller
+components:
+  # Configure the main component
   main:
     annotations:
       reloader.stakater.com/auto: "true"
@@ -68,7 +68,7 @@ controllers:
 service:
   # Configure a service for the main application
   main:
-    controller: main
+    component: main
     type: ClusterIP
     ports:
       http:

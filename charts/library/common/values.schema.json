@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema",
+  "$schema": "https://json-schema.org/draft-07/schema",
   "$id": "https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.2.1/charts/library/common/values.schema.json",
 
   "type": "object",
@@ -24,9 +24,9 @@
     "defaultPodOptions": {
       "$ref": "schemas/pod.json#/options"
     },
-    "controllers": {
+    "components": {
       "additionalProperties": {
-        "$ref": "schemas/controllers.json#/instance"
+        "$ref": "schemas/components.json#/instance"
       }
     },
     "serviceAccount": {

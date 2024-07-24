@@ -4,13 +4,13 @@ suite: networkPolicy names
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: default should pass
     set:
       networkpolicies:
         main:
-          controller: main
+          component: main
           policyTypes:
             - Ingress
             - Egress
@@ -30,7 +30,7 @@ tests:
     set:
       networkpolicies:
         main:
-          controller: main
+          component: main
           policyTypes:
             - Ingress
             - Egress
@@ -49,13 +49,13 @@ tests:
     set:
       networkpolicies:
         primary:
-          controller: main
+          component: main
           policyTypes:
             - Ingress
             - Egress
           rules: {}
         secondary:
-          controller: main
+          component: main
           policyTypes:
             - Ingress
             - Egress
