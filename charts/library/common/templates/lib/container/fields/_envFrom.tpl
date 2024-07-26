@@ -42,6 +42,15 @@ Env field used by the container.
         {{- else -}}
           {{- $_ := set $item "secretRef" (dict "name" (tpl .secretRef.name $rootContext)) -}}
         {{- end -}}
+
+      {{- else if hasKey . "externalsecret" -}}
+        {{- $externalsecret := include "bjw-s.common.lib.externalsecret.getByIdentifier" (dict "rootContext" $rootContext "id" .externalsecret) | fromYaml -}}
+        {{- $externalsecretName := default (tpl .externalsecret $rootContext) $externalsecret.name -}}
+        {{- if not (empty (dig "target" "name" nil $externalsecret)) -}}
+          {{- $_ := set $item "secretRef" (dict "name" $externalsecret.target.name) -}}
+        {{- else -}}
+          {{- $_ := set $item "secretRef" (dict "name" $externalsecretName) -}}
+        {{- end -}}
       {{- end -}}
 
       {{- if not (empty (dig "prefix" nil .)) -}}

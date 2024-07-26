@@ -15,7 +15,6 @@ within the common library.
     (include "bjw-s.common.lib.metadata.globalAnnotations" $rootContext | fromYaml)
   -}}
 
-{{- if .Capabilities.APIVersions.Has "external-secrets.io/v1beta1" -}}
 ---
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
@@ -40,7 +39,7 @@ spec:
   {{- with $externalsecretObject.secretStoreRef }}
   secretStoreRef:
     name: {{ .name }}
-    namespace: {{ .namespace }}
+    kind: {{ .kind }}
   {{- end }}
   {{- with $externalsecretObject.target }}
   target:
@@ -91,5 +90,4 @@ spec:
   dataFrom:
     {{- tpl (toYaml .) $rootContext | nindent 2 }}
   {{- end }}
-{{- end -}}
 {{- end -}}

@@ -59,6 +59,19 @@ Returns the value for annotations
       {{- $_ := set $secretsFound $name (toYaml $secret.stringData | sha256sum) -}}
     {{- end -}}
   {{- end -}}
+  {{- range $name, $externalsecret := $rootContext.Values.externalsecrets -}}
+    {{- $externalsecretEnabled := true -}}
+    {{- if hasKey $externalsecret "enabled" -}}
+      {{- $externalsecretEnabled = $externalsecret.enabled -}}
+    {{- end -}}
+    {{- $externalsecretIncludeInChecksum := true -}}
+    {{- if hasKey $externalsecret "includeInChecksum" -}}
+      {{- $externalsecretIncludeInChecksum = $externalsecret.includeInChecksum -}}
+    {{- end -}}
+    {{- if and $externalsecretEnabled $externalsecretIncludeInChecksum -}}
+      {{- $_ := set $secretsFound $name (toYaml $externalsecret | sha256sum) -}}
+    {{- end -}}
+  {{- end -}}
   {{- if $secretsFound -}}
     {{- $annotations = merge
       (dict "checksum/secrets" (toYaml $secretsFound | sha256sum))

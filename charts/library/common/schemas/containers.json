@@ -83,6 +83,9 @@
             "secret": {
               "type": "string"
             },
+            "externalsecret": {
+              "type": "string"
+            },
             "secretRef": {
               "type": "object",
               "additionalProperties": false,

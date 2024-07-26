@@ -101,6 +101,45 @@ tests:
               name: RELEASE-NAME-secret
             prefix: test
 
+  - it: envFrom ExternalSecret identifier reference should pass
+    set:
+      components.main.containers.main.envFrom:
+        - externalsecret: externalsecret
+          prefix: test
+        - externalsecret: externalsecret_with_target_name
+          prefix: test
+      externalsecrets:
+        externalsecret:
+          data:
+          - secretKey: username
+            remoteRef:
+              key: database-credentials
+        externalsecret_with_target_name:
+          target:
+            name: target-secret
+          data:
+          - secretKey: username
+            remoteRef:
+              key: database-credentials
+    asserts:
+      - documentIndex: &DeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].envFrom[0]
+          value:
+            secretRef:
+              name: RELEASE-NAME-externalsecret
+            prefix: test
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].envFrom[1]
+          value:
+            secretRef:
+              name: target-secret
+            prefix: test
+
   - it: envFrom with templated name reference should pass
     set:
       components.main.containers.main.envFrom:
