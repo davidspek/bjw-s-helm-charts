@@ -385,6 +385,10 @@ secrets:
   # secret:
   #   # -- Enables or disables the Secret
   #   enabled: false
+  #   # -- Include the secret in checksums
+  #   includeInChecksum: true
+  #   # -- Overrides the default secret name
+  #   nameOverride: ""
   #   # -- Labels to add to the Secret
   #   labels: {}
   #   # -- Annotations to add to the Secret
@@ -393,6 +397,101 @@ secrets:
   #   stringData:
   #     {}
   #     # foo: bar
+
+# -- Use this to populate externalsecrets with the values you specify.
+# Additional ExternalSecrets can be added by adding a dictionary key similar to the 'externalsecret' object.
+# @default -- See below
+externalsecrets:
+  {}
+  # externalsecret:
+  #   # -- Enables or disables the Secret
+  #   enabled: false
+  #   # -- Include the secret in checksums
+  #   includeInChecksum: true
+  #   # -- Overrides the default secret name
+  #   nameOverride: ""
+  #   # -- Labels to add to the Secret
+  #   labels: {}
+  #   # -- Annotations to add to the Secret
+  #   annotations: {}
+  #   # -- The refresh interval for the ExternalSecret
+  #   refreshInterval: 1h
+  #   # -- The secret store reference
+  #   secretStoreRef:
+  #     kind: ClusterSecretStore
+  #     name: cluster-secret-store
+  #   # -- The target secret
+  #   target:
+  #     # -- The optional name of the target secret. Defaults to the name of the ExternalSecret
+  #     name: ""
+  #     # -- The creation policy for the target secret
+  #     creationPolicy: Owner
+  #     # -- The deletion policy for the target secret
+  #     deletionPolicy: Delete
+  #     # -- The optional template for the target secret
+  #     template:
+  #       # -- The optional type of the secret
+  #       type: Opaque
+  #       metadata:
+  #         labels: {}
+  #         annotations: {}
+  #       # -- The optional templated data for the ExternalSecret
+  #       data:
+  #         config.yml: |
+  #           database:
+  #             connection: postgres://{{ .username }}:{{ .password }}@{{ .database_host }}:5432/payments
+  #       # -- The optional templateFrom to use for the ExternalSecret
+  #       templateFrom:
+  #       - configMap:
+  #           name: application-config-tmpl
+  #           items:
+  #           - key: config.yml
+  #  # -- The data for the ExternalSecret
+  #   data:
+  #   - secretKey: username
+  #     remoteRef:
+  #       key: database-credentials
+  #       version: v1
+  #       property: username
+  #       decodingStrategy: None # can be None, Base64, Base64URL or Auto
+  #     # -- define the source of the secret. Can be a SecretStore or a Generator kind
+  #     sourceRef:
+  #       # -- point to a SecretStore that should be used to fetch a secret.
+  #       # -- must be defined if no spec.secretStoreRef is defined.
+  #       storeRef:
+  #         name: aws-secretstore
+  #         kind: ClusterSecretStore
+  #  # -- The dataFrom for the ExternalSecret
+  #   dataFrom:
+  #   - sourceRef:
+  #       generatorRef:
+  #         apiVersion: generators.external-secrets.io/v1alpha1
+  #         kind: ECRAuthorizationToken
+  #         name: "my-ecr"
+  # # -- Or
+  #   - extract:
+  #       key: database-credentials
+  #       version: v1
+  #        property: data
+  #       conversionStrategy: Default
+  #       decodingStrategy: Auto
+  #     rewrite:
+  #     - regexp:
+  #         source: "exp-(.*?)-ression"
+  #         target: "rewriting-${1}-with-groups"
+  #   - find:
+  #       path: path-to-filter
+  #       name:
+  #         regexp: ".*foobar.*"
+  #       tags:
+  #         foo: bar
+  #       conversionStrategy: Unicode
+  #       decodingStrategy: Base64
+  #     rewrite:
+  #     - regexp:
+  #         source: "foo"
+  #         target: "bar"
+
 
 # -- Configure configMaps for the chart here.
 # Additional configMaps can be added by adding a dictionary key similar to the 'config' object.
