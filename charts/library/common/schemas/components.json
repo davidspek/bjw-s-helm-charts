@@ -170,13 +170,13 @@
       "advancedMounts": {
         "type": "object",
         "additionalProperties": {
-          "$ref": "persistence.json#/mountPathCollection"
+          "$ref": "mounts.json#/mountPathCollection"
         }
       },
       "annotations": {"$ref": "definitions.json#/annotations"},
       "dataSource": {"$ref": "persistence.json#/dataSourceReference"},
       "dataSourceRef": {"$ref": "persistence.json#/dataSourceReference"},
-      "globalMounts": {"$ref": "persistence.json#/globalMounts"},
+      "globalMounts": {"$ref": "mounts.json#/globalMounts"},
       "labels": {"$ref": "definitions.json#/labels"},
       "name": {
         "type": "string"

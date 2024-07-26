@@ -52,8 +52,8 @@
       "volumeName": {
         "type": "string"
       },
-      "advancedMounts": {"$ref": "#/advancedMounts"},
-      "globalMounts": {"$ref": "#/globalMounts"}
+      "advancedMounts": {"$ref": "mounts.json#/advancedMounts"},
+      "globalMounts": {"$ref": "mounts.json#/globalMounts"}
     },
     "required": ["accessMode", "size"]
   },
