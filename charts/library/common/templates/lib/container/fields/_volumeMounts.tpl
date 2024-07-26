@@ -24,6 +24,19 @@ volumeMounts used by the container.
     {{- end -}}
   {{- end -}}
 
+  {{- /* Collect config items */ -}}
+  {{- range $identifier, $configsValues := $rootContext.Values.configs -}}
+    {{- /* Enable config item by default, but allow override */ -}}
+    {{- $configEnabled := true -}}
+    {{- if hasKey $configsValues "enabled" -}}
+      {{- $configEnabled = $configsValues.enabled -}}
+    {{- end -}}
+
+    {{- if $configEnabled -}}
+      {{- $_ := set $persistenceItemsToProcess $identifier $configsValues -}}
+    {{- end -}}
+  {{- end -}}
+
   {{- /* Collect volumeClaimTemplates */ -}}
   {{- if not (empty (dig "statefulset" "volumeClaimTemplates" nil $componentObject)) -}}
     {{- range $persistenceValues := $componentObject.statefulset.volumeClaimTemplates -}}

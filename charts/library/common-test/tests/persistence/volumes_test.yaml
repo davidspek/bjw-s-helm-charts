@@ -57,6 +57,9 @@ tests:
               main:
                 - path: /config
                   readOnly: false
+        no-mounts:
+          existingClaim: test
+      configs:
         data:
           type: configMap
           name: myConfigMap
@@ -76,8 +79,6 @@ tests:
                 - path: /second-pod/config.yaml
                   readOnly: false
                   subPath: config.yaml
-        no-mounts:
-          existingClaim: test
 
     asserts:
       - documentIndex: &FirstDeploymentDoc 0

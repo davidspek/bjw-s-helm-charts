@@ -34,6 +34,31 @@ Returns the value for volumes
     {{- end -}}
   {{- end -}}
 
+  {{- /* Loop over configs values */ -}}
+  {{- range $identifier, $configsValues := $rootContext.Values.configs -}}
+    {{- /* Enable config item by default, but allow override */ -}}
+    {{- $configEnabled := true -}}
+    {{- if hasKey $configsValues "enabled" -}}
+      {{- $configEnabled = $configsValues.enabled -}}
+    {{- end -}}
+
+    {{- if $configEnabled -}}
+      {{- $hasglobalMounts := not (empty $configsValues.globalMounts) -}}
+      {{- $globalMounts := dig "globalMounts" list $configsValues -}}
+
+      {{- $hasAdvancedMounts := not (empty $configsValues.advancedMounts) -}}
+      {{- $advancedMounts := dig "advancedMounts" $componentObject.identifier list $configsValues -}}
+
+      {{ if or
+        ($hasglobalMounts)
+        (and ($hasAdvancedMounts) (not (empty $advancedMounts)))
+        (and (not $hasglobalMounts) (not $hasAdvancedMounts))
+      -}}
+        {{- $_ := set $persistenceItemsToProcess $identifier $configsValues -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+
   {{- /* Loop over persistence items */ -}}
   {{- range $identifier, $persistenceValues := $persistenceItemsToProcess -}}
     {{- $volume := dict "name" $identifier -}}
@@ -56,7 +81,7 @@ Returns the value for volumes
       {{- end -}}
       {{- $_ := set $volume "persistentVolumeClaim" (dict "claimName" $pvcName) -}}
 
-    {{- /* configMap persistence type */ -}}
+    {{- /* configMap configs type */ -}}
     {{- else if eq $persistenceValues.type "configMap" -}}
       {{- $objectName := "" -}}
       {{- if $persistenceValues.name -}}
@@ -64,7 +89,7 @@ Returns the value for volumes
       {{- else if $persistenceValues.identifier -}}
         {{- $object := (include "bjw-s.common.lib.configMap.getByIdentifier" (dict "rootContext" $rootContext "id" $persistenceValues.identifier) | fromYaml ) -}}
         {{- if not $object -}}
-          {{fail (printf "No configmap found with this identifier. (persistence item '%s', identifier '%s')" $identifier $persistenceValues.identifier)}}
+          {{fail (printf "No configmap found with this identifier. (configs item '%s', identifier '%s')" $identifier $persistenceValues.identifier)}}
         {{- end -}}
         {{- $objectName = $object.name -}}
       {{- end -}}
@@ -77,7 +102,7 @@ Returns the value for volumes
         {{- $_ := set $volume.configMap "items" . -}}
       {{- end -}}
 
-    {{- /* Secret persistence type */ -}}
+    {{- /* Secret configs type */ -}}
     {{- else if eq $persistenceValues.type "secret" -}}
       {{- $objectName := "" -}}
       {{- if $persistenceValues.name -}}
@@ -85,7 +110,7 @@ Returns the value for volumes
       {{- else if $persistenceValues.identifier -}}
         {{- $object := (include "bjw-s.common.lib.secret.getByIdentifier" (dict "rootContext" $rootContext "id" $persistenceValues.identifier) | fromYaml ) -}}
         {{- if not $object -}}
-          {{fail (printf "No secret found with this identifier. (persistence item '%s', identifier '%s')" $identifier $persistenceValues.identifier)}}
+          {{fail (printf "No secret found with this identifier. (configs item '%s', identifier '%s')" $identifier $persistenceValues.identifier)}}
         {{- end -}}
         {{- $objectName = $object.name -}}
       {{- end -}}

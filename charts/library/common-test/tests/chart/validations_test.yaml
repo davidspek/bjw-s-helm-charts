@@ -10,8 +10,7 @@ tests:
     set:
       persistence:
         data:
-          type: configMap
-          name: myConfigMap
+          type: emptyDir
           advancedMounts:
             test:
               main:
