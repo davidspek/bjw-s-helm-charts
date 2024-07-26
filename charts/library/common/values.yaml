@@ -735,7 +735,7 @@ persistence:
   #   enabled: false
 
   #   # -- Sets the persistence type
-  #   # Valid options are persistentVolumeClaim, emptyDir, nfs, hostPath, secret, configMap or custom
+  #   # Valid options are persistentVolumeClaim, emptyDir, nfs, hostPath or custom
   #   type: persistentVolumeClaim
 
   #   # -- Storage Class for the config volume.
@@ -765,6 +765,47 @@ persistence:
 
   #   # -- Set to true to retain the PVC upon `helm uninstall`
   #   retain: false
+
+  #   # -- Configure mounts to all components and containers. By default the persistence item
+  #   # will be mounted to `/<name_of_the_peristence_item>`.
+  #   # Example:
+  #   # globalMounts:
+  #   #   - path: /config
+  #   #     readOnly: false
+  #   globalMounts: []
+
+  #   # -- Explicitly configure mounts for specific components and containers.
+  #   # Example:
+  #   # advancedMounts:
+  #   #   main: # the component with the "main" identifier
+  #   #     main: # the container with the "main" identifier
+  #   #       - path: /data/config.yaml
+  #   #         readOnly: true
+  #   #         mountPropagation: None
+  #   #         subPath: config.yaml
+  #   #     second-container: # the container with the "second-container" identifier
+  #   #       - path: /appdata/config
+  #   #         readOnly: true
+  #   #   second-component: # the component with the "second-component" identifier
+  #   #     main: # the container with the "main" identifier
+  #   #       - path: /data/config.yaml
+  #   #         readOnly: false
+  #   #         subPath: config.yaml
+  #   advancedMounts: {}
+
+# -- Configure configs for the chart here.
+# Additional items can be added by adding a dictionary key similar to the 'config' key.
+# [[ref]](https://bjw-s.github.io/helm-charts/docs/common-library/common-library-storage)
+# @default -- See below
+configs:
+  {}
+  # config:
+  #   # -- Enables or disables the persistence item. Defaults to true
+  #   enabled: false
+
+  #   # -- Sets the persistence type
+  #   # Valid options are secret or configMap
+  #   type: configMap
 
   #   # -- Configure mounts to all components and containers. By default the persistence item
   #   # will be mounted to `/<name_of_the_peristence_item>`.
