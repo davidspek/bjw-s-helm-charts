@@ -12,7 +12,7 @@ entries:
             - name: Common library chart definition
               url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
     apiVersion: v2
-    created: "2024-07-26T13:17:58.614888383Z"
+    created: "2024-07-26T14:25:58.806438236Z"
     dependencies:
     - name: common
       repository: https://bjw-s.github.io/helm-charts
@@ -47,7 +47,41 @@ entries:
           description: |-
             Fixed networkPolicies not rendering correctly
     apiVersion: v2
-    created: "2024-07-26T13:17:58.612332913Z"
+    created: "2024-07-26T14:25:58.802785323Z"
+    description: Function library for Helm charts
+    digest: 6ef702f4e7d8cee4b6069dc87677c03e299fd50143da9cea046ac1df2b04fbee
+    home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
+    keywords:
+    - common
+    - library
+    kubeVersion: '>=1.22.0-0'
+    maintainers:
+    - email: me@bjw-s.dev
+      name: bjw-s
+    name: common
+    type: library
+    urls:
+    - https://davidspek.github.io/bjw-s-helm-charts/library/common-4.3.0.tgz
+    version: 4.3.0
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: added
+          description: |-
+            Support templating in annotation and label values for all objects (fixed in v3.2.1)
+        - kind: added
+          description: |-
+            Support activeDeadlineSeconds field on CronJobs and Jobs
+        - kind: added
+          description: |-
+            Support excluding secrets and configMaps from pod checksum annotation
+        - kind: fixed
+          description: |-
+            Fixed failing ServiceMonitor test
+        - kind: fixed
+          description: |-
+            Fixed networkPolicies not rendering correctly
+    apiVersion: v2
+    created: "2024-07-26T14:25:58.800836464Z"
     description: Function library for Helm charts
     digest: f7d629858bb7c19cbb0fa91f7f1d776eb213c5943afd3e4e180ef364d522e548
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -81,7 +115,7 @@ entries:
           description: |-
             Fixed networkPolicies not rendering correctly
     apiVersion: v2
-    created: "2024-07-26T13:17:58.610384178Z"
+    created: "2024-07-26T14:25:58.798929513Z"
     description: Function library for Helm charts
     digest: b2f1bb2243986ad747a6b9e05c32c0a5032ed4b8e5b64c6d0c2dcba945afa819
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -115,7 +149,7 @@ entries:
           description: |-
             Fixed networkPolicies not rendering correctly
     apiVersion: v2
-    created: "2024-07-26T13:17:58.608410547Z"
+    created: "2024-07-26T14:25:58.796298982Z"
     description: Function library for Helm charts
     digest: 99bc67eb4d270943f61d22149984734a8b772b7c6e65cd8020c57da39cf3acdb
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -149,7 +183,7 @@ entries:
           description: |-
             Fixed networkPolicies not rendering correctly
     apiVersion: v2
-    created: "2024-07-26T13:17:58.605564746Z"
+    created: "2024-07-26T14:25:58.794359289Z"
     description: Function library for Helm charts
     digest: 2227e0359c66aecf546e0c9cd362b1389e87165c8f6f50f9cbe28febe668c9f5
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -183,7 +217,7 @@ entries:
           description: |-
             Fixed networkPolicies not rendering correctly
     apiVersion: v2
-    created: "2024-07-26T13:17:58.603715647Z"
+    created: "2024-07-26T14:25:58.79248016Z"
     description: Function library for Helm charts
     digest: 3337ddeca7a740835cd89fcc22d0e06c5f084dc2ee588450d4e00f21494ef049
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -217,7 +251,7 @@ entries:
           description: |-
             Fixed networkPolicies not rendering correctly
     apiVersion: v2
-    created: "2024-07-26T13:17:58.601849245Z"
+    created: "2024-07-26T14:25:58.790613864Z"
     description: Function library for Helm charts
     digest: d01f8835c6b7b9aa9888eaaba73c30c25aae2e87180171f7f3ba0359ce032848
     home: https://github.com/bjw-s/helm-charts/tree/main/charts/library/common
@@ -233,4 +267,4 @@ entries:
     urls:
     - https://davidspek.github.io/bjw-s-helm-charts/library/common-4.0.0.tgz
     version: 4.0.0
-generated: "2024-07-26T13:17:58.599750572Z"
+generated: "2024-07-26T14:25:58.787502513Z"
