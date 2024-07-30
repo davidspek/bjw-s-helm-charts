@@ -397,6 +397,10 @@ secrets:
   #   stringData:
   #     {}
   #     # foo: bar
+  #   # -- Secret data content. Helm template enabled.
+  #   data:
+  #     {}
+  #     # foo: YmFyCg==
 
 # -- Use this to populate externalsecrets with the values you specify.
 # Additional ExternalSecrets can be added by adding a dictionary key similar to the 'externalsecret' object.
