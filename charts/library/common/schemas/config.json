@@ -2,7 +2,8 @@
   "item": {
     "oneOf": [
       {"$ref": "#/configMapItem"},
-      {"$ref": "#/secretItem"}
+      {"$ref": "#/secretItem"},
+      {"$ref": "#/externalsecretItem"}
     ]
   },
 
@@ -67,6 +68,60 @@
     "properties": {
       "type": {
         "const": "secret"
+      },
+      "enabled": {
+        "type": "boolean",
+        "default": true
+      },
+      "name": {
+        "type": "string"
+      },
+      "identifier": {
+        "type": "string"
+      },
+      "defaultMode": {
+        "type": "integer",
+        "format": "int32"
+      },
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string"
+            },
+            "mode": {
+              "format": "int32",
+              "type": "integer"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "advancedMounts": {"$ref": "mounts.json#/advancedMounts"},
+      "globalMounts": {"$ref": "mounts.json#/globalMounts"}
+    },
+    "oneOf": [{"required": ["name"]}, {"required": ["identifier"]}],
+    "dependencies": {
+      "name": {
+        "not": {"required": ["identifier"]}
+      },
+      "identifier": {
+        "not": {"required": ["name"]}
+      }
+    }
+  },
+
+  "externalsecretItem": {
+    "type": "object",
+    "additionalProperties": false,
+
+    "properties": {
+      "type": {
+        "const": "externalsecret"
       },
       "enabled": {
         "type": "boolean",

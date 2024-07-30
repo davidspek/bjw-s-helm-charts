@@ -123,6 +123,31 @@ Returns the value for volumes
         {{- $_ := set $volume.secret "items" . -}}
       {{- end -}}
 
+      {{- /* ExternalSecret configs type */ -}}
+    {{- else if eq $persistenceValues.type "externalsecret" -}}
+      {{- $objectName := "" -}}
+      {{- if $persistenceValues.name -}}
+        {{- $objectName = tpl $persistenceValues.name $rootContext -}}
+      {{- else if $persistenceValues.identifier -}}
+        {{- $object := (include "bjw-s.common.lib.externalsecret.getByIdentifier" (dict "rootContext" $rootContext "id" $persistenceValues.identifier) | fromYaml ) -}}
+        {{- if not $object -}}
+          {{fail (printf "No externalsecret found with this identifier. (configs item '%s', identifier '%s')" $identifier $persistenceValues.identifier)}}
+        {{- end -}}
+        {{- if not (empty (dig "target" "name" nil $object)) -}}
+          {{- $objectName = $object.target.name -}}
+        {{- else -}}
+          {{- $objectName = $object.name -}}
+        {{- end -}}
+      {{- end -}}
+      {{- $_ := set $volume "secret" dict -}}
+      {{- $_ := set $volume.secret "secretName" $objectName -}}
+      {{- with $persistenceValues.defaultMode -}}
+        {{- $_ := set $volume.secret "defaultMode" . -}}
+      {{- end -}}
+      {{- with $persistenceValues.items -}}
+        {{- $_ := set $volume.secret "items" . -}}
+      {{- end -}}
+
     {{- /* emptyDir persistence type */ -}}
     {{- else if eq $persistenceValues.type "emptyDir" -}}
       {{- $_ := set $volume "emptyDir" dict -}}
