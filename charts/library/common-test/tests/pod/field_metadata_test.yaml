@@ -151,3 +151,37 @@ tests:
             app.kubernetes.io/component: main
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/name: RELEASE-NAME
+  - it: custom metadata with should not create double quotes
+    set:
+      components:
+        main:
+          type: deployment
+          pod:
+            annotations:
+              test_annotation: "true"
+            labels:
+              test_label: "true"
+    asserts:
+      - documentIndex: &ComponentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.template.metadata.annotations
+          value:
+            test_annotation: "true"
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.template.metadata.labels
+          value:
+            app.kubernetes.io/component: main
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+            test_label: "true"
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.selector.matchLabels
+          value:
+            app.kubernetes.io/component: main
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME

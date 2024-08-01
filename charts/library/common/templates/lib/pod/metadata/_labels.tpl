@@ -34,7 +34,7 @@ Returns the value for labels
     {{- $outLabels := dict -}}
     {{- with $labels -}}
       {{- range $key, $value := . -}}
-      {{- $outLabels = merge $outLabels (dict $key (tpl $value $rootContext | toYaml )) -}}
+      {{- $outLabels = merge $outLabels (dict $key (tpl $value $rootContext)) -}}
       {{- end -}}
     {{- end -}}
     {{- $outLabels | toYaml -}}

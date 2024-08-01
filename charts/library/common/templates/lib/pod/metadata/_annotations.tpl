@@ -83,7 +83,7 @@ Returns the value for annotations
     {{- $outAnnotations := dict -}}
     {{- with $annotations -}}
       {{- range $key, $value := . -}}
-      {{- $outAnnotations = merge $outAnnotations (dict $key (tpl $value $rootContext | toYaml )) -}}
+      {{- $outAnnotations = merge $outAnnotations (dict $key (tpl $value $rootContext)) -}}
       {{- end -}}
     {{- end -}}
     {{- $outAnnotations | toYaml -}}
