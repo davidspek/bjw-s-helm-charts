@@ -22,7 +22,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ $serviceObject.name }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ $rootContext.Release.Namespace }}
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}

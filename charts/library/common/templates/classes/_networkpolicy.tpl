@@ -29,7 +29,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: {{ $networkPolicyObject.name }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ $rootContext.Release.Namespace }}
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}
