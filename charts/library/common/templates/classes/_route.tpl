@@ -9,7 +9,7 @@ within the common library.
   {{- $routeKind := $routeObject.kind | default "HTTPRoute" -}}
   {{- $apiVersion := "gateway.networking.k8s.io/v1" -}}
   {{- if $rootContext.Capabilities.APIVersions.Has (printf "gateway.networking.k8s.io/v1alpha2/%s" $routeKind) }}
-    {{- $apiVersion = "gateway.networking.k8s.io/v1" -}}
+    {{- $apiVersion = "gateway.networking.k8s.io/v1alpha2" -}}
   {{- end -}}
   {{- if $rootContext.Capabilities.APIVersions.Has (printf "gateway.networking.k8s.io/v1beta1/%s" $routeKind) }}
     {{- $apiVersion = "gateway.networking.k8s.io/v1beta1" -}}
