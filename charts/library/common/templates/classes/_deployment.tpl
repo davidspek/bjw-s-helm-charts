@@ -20,6 +20,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ $deploymentObject.name }}
+  namespace: {{ .Release.Namespace }}
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}

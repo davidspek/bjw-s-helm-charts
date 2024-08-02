@@ -19,6 +19,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ $configMapObject.name }}
+  namespace: {{ .Release.Namespace }}
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}

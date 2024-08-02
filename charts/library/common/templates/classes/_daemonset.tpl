@@ -20,6 +20,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: {{ $daemonsetObject.name }}
+  namespace: {{ .Release.Namespace }}
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}

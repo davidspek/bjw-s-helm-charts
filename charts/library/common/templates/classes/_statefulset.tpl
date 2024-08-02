@@ -20,6 +20,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ $statefulsetObject.name }}
+  namespace: {{ .Release.Namespace }}
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}

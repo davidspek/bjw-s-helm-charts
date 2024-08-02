@@ -20,6 +20,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ $ingressObject.name }}
+  namespace: {{ .Release.Namespace }}
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}

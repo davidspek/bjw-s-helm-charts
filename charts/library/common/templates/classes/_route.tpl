@@ -30,6 +30,7 @@ apiVersion: {{ $apiVersion }}
 kind: {{ $routeKind }}
 metadata:
   name: {{ $routeObject.name }}
+  namespace: {{ .Release.Namespace }}
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}

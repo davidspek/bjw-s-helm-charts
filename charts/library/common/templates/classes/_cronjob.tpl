@@ -27,6 +27,7 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: {{ $cronjobObject.name }}
+  namespace: {{ .Release.Namespace }}
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}

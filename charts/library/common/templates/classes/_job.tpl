@@ -22,6 +22,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ $jobObject.name }}
+  namespace: {{ .Release.Namespace }}
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}
