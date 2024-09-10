@@ -80,6 +80,9 @@
       "component": {
         "type": "string"
       },
+      "container": {
+        "type": "string"
+      },
       "extraSelectorLabels": {}
     },
     "required": ["component"]
