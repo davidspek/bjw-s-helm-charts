@@ -57,12 +57,7 @@
         "enum": ["overwrite", "merge"]
       },
       "autoscaling": {
-        "type": "object",
-        "properties": {
-          "additionalProperties": {
-            "$ref": "autoscaling.json#/autoscaling.v2.HorizontalPodAutoscaler"
-          }
-        }
+        "$ref": "autoscaling.json#/autoscaling.v2.HorizontalPodAutoscaler"
       },
       "defaultContainerOptions": {
         "type": "object",
