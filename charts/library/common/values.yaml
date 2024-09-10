@@ -248,6 +248,19 @@ components: {}
 #         # -- Override the working directory for the container
 #         workingDir:
 
+#         # -- Ports variables. Template enabled.
+#         # Syntax options:
+#         # A) http: 8080
+#         # B) https: '{{ .Release.Name }}'
+#         # C) http:
+#         #      containerPort: 8080
+#         #      name: name-override
+#         #      protocol: TCP
+#         # D) - name: http
+#         #      containerPort: 8080
+#         #      protocol: TCP
+#         ports:
+
 #         # -- Environment variables. Template enabled.
 #         # Syntax options:
 #         # A) TZ: UTC
