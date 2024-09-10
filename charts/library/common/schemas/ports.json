@@ -1,5 +1,5 @@
 {
     "portValue": {
-      "type": "number"
+      "type": ["string", "number"]
     }
 }
