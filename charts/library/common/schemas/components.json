@@ -63,7 +63,14 @@
             "type": "boolean",
             "default": false
           },
-          "$ref": "autoscaling.json#/autoscaling.v2.HorizontalPodAutoscaler"
+          "type": {
+            "type": "string",
+            "enum": ["hpa"],
+            "default": "hpa"
+          },
+          "hpa": {
+            "$ref": "autoscaling.json#/autoscaling.v2.HorizontalPodAutoscaler"
+          }
         }
       },
       "defaultContainerOptions": {
