@@ -50,6 +50,14 @@ spec:
   loadBalancerSourceRanges:
     {{ toYaml $serviceObject.loadBalancerSourceRanges | nindent 4 }}
   {{- end -}}
+  {{- if $serviceObject.loadBalancerClass }}
+  loadBalancerClass: {{ $serviceObject.loadBalancerClass }}
+  {{- end -}}
+  {{- else if eq $svcType "ExternalName" }}
+  type: {{ $svcType }}
+  {{- if $serviceObject.externalName }}
+  externalName: {{ $serviceObject.externalName }}
+  {{- end }}
   {{- else }}
   type: {{ $svcType }}
   {{- end }}
@@ -94,7 +102,7 @@ spec:
       protocol: TCP
         {{- end }}
       name: {{ $name }}
-        {{- if (and (eq $svcType "NodePort") (not (empty $port.nodePort))) }}
+        {{- if (not (empty $port.nodePort)) }}
       nodePort: {{ $port.nodePort }}
         {{ end }}
         {{- if (not (empty $port.appProtocol)) }}

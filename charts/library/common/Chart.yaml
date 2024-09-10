@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 4.6.0
+version: 4.7.0
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -16,16 +16,16 @@ annotations:
   artifacthub.io/changes: |-
     - kind: added
       description: |-
-        Support templating in annotation and label values for all objects (fixed in v3.2.1)
+        Add configMapsFromFolderBasePath to create ConfigMaps from a folder
     - kind: added
       description: |-
-        Support activeDeadlineSeconds field on CronJobs and Jobs
+        Added support for setting `defaultContainerOptions`.
+      links:
+        - name: Documentation
+          url: https://bjw-s.github.io/helm-charts/docs/common-library/howto/default-container-options
     - kind: added
       description: |-
-        Support excluding secrets and configMaps from pod checksum annotation
+        Added support for `loadBalancerClass`.
     - kind: fixed
       description: |-
-        Fixed failing ServiceMonitor test
-    - kind: fixed
-      description: |-
-        Fixed networkPolicies not rendering correctly
+        Fixed volume name reference when persistence key matches release name.

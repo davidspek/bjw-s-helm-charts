@@ -22,12 +22,18 @@
       "clusterIP": {
         "type": "string"
       },
+      "externalName": {
+        "type": "string"
+      },
       "loadBalancerIP": {
         "type": "string"
       },
       "loadBalancerSourceRanges": {
         "type": "array",
         "items": {"type": "string"}
+      },
+      "loadBalancerClass": {
+        "type": "string"
       },
       "externalTrafficPolicy": {
         "type": "string",
