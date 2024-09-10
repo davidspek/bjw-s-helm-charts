@@ -349,7 +349,7 @@
         ]
       },
       "selector": {
-        "$ref": "k8s-api.json#/#/meta.v1.LabelSelector",
+        "$ref": "k8s-api.json#/meta.v1.LabelSelector",
         "description": "selector is the string-encoded form of a standard kubernetes label selector for the given metric When set, it is passed as an additional parameter to the metrics server for more specific metrics scoping. When unset, just the metricName will be used to gather metrics."
       }
     },
