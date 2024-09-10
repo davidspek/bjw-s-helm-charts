@@ -4,7 +4,7 @@ suite: controller defaultContainerOptions
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: default should pass
     asserts:
@@ -17,12 +17,12 @@ tests:
 
   - it: defaultContainerOption with implicit strategy should pass
     set:
-      controllers.main.defaultContainerOptions:
+      components.main.defaultContainerOptions:
         resources:
           requests:
             memory: 1Gi
             cpu: 150m
-      controllers.main.containers.main.resources:
+      components.main.containers.main.resources:
         requests:
           memory: 2Gi
     asserts:
@@ -38,13 +38,13 @@ tests:
 
   - it: defaultContainerOption with overwrite strategy should pass
     set:
-      controllers.main.defaultContainerOptionsStrategy: overwrite
-      controllers.main.defaultContainerOptions:
+      components.main.defaultContainerOptionsStrategy: overwrite
+      components.main.defaultContainerOptions:
         resources:
           requests:
             memory: 1Gi
             cpu: 150m
-      controllers.main.containers.main.resources:
+      components.main.containers.main.resources:
         requests:
           memory: 2Gi
     asserts:
@@ -60,13 +60,13 @@ tests:
 
   - it: defaultContainerOption with merge strategy should pass
     set:
-      controllers.main.defaultContainerOptionsStrategy: merge
-      controllers.main.defaultContainerOptions:
+      components.main.defaultContainerOptionsStrategy: merge
+      components.main.defaultContainerOptions:
         resources:
           requests:
             memory: 1Gi
             cpu: 150m
-      controllers.main.containers.main.resources:
+      components.main.containers.main.resources:
         requests:
           memory: 2Gi
     asserts:
@@ -83,11 +83,11 @@ tests:
 
   - it: Default applyDefaultContainerOptionsToInitContainers (true) should pass
     set:
-      controllers.main.defaultContainerOptions:
+      components.main.defaultContainerOptions:
         resources:
           requests:
             memory: 1Gi
-      controllers.main.initContainers:
+      components.main.initContainers:
         test:
           image:
             repository: ghcr.io/mendhak/http-https-echo
@@ -111,12 +111,12 @@ tests:
 
   - it: applyDefaultContainerOptionsToInitContainers false should pass
     set:
-      controllers.main.applyDefaultContainerOptionsToInitContainers: false
-      controllers.main.defaultContainerOptions:
+      components.main.applyDefaultContainerOptionsToInitContainers: false
+      components.main.defaultContainerOptions:
         resources:
           requests:
             memory: 1Gi
-      controllers.main.initContainers:
+      components.main.initContainers:
         test:
           image:
             repository: ghcr.io/mendhak/http-https-echo

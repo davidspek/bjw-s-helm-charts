@@ -43,7 +43,7 @@ tests:
 
   - it: envFrom from defaultContainerOptions should pass
     set:
-      controllers.main.defaultContainerOptions:
+      components.main.defaultContainerOptions:
         envFrom:
           - secretRef:
               name: myCustomSecret
@@ -70,14 +70,14 @@ tests:
 
   - it: envFrom from defaultContainerOptions with container override should pass
     set:
-      controllers.main.defaultContainerOptions:
+      components.main.defaultContainerOptions:
         envFrom:
           - secretRef:
               name: myCustomSecret
             prefix: test
           - configMapRef:
               name: myCustomConfig
-      controllers.main.containers.main.envFrom:
+      components.main.containers.main.envFrom:
         - secretRef:
             name: myCustomSecretOverride
           prefix: test

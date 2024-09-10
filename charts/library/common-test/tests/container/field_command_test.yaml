@@ -76,7 +76,7 @@ tests:
 
   - it: command from defaultContainerOptions should pass
     set:
-      controllers.main.defaultContainerOptions:
+      components.main.defaultContainerOptions:
         command: value_of_command
     asserts:
       - documentIndex: &DeploymentDoc 0
@@ -90,9 +90,9 @@ tests:
 
   - it: command from defaultContainerOptions with container override should pass
     set:
-      controllers.main.defaultContainerOptions:
+      components.main.defaultContainerOptions:
         command: value_of_command
-      controllers.main.containers.main.command:
+      components.main.containers.main.command:
         - value 1
         - value 2
     asserts:

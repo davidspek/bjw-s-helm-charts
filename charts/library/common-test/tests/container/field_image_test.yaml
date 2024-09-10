@@ -6,7 +6,7 @@ templates:
 tests:
   - it: string tag should pass
     values:
-      - ../_values/controllers_main_default_container.yaml
+      - ../_values/components_main_default_container.yaml
     set:
       components.main.containers.main.image:
         repository: ghcr.io/mendhak/http-https-echo
@@ -22,7 +22,7 @@ tests:
 
   - it: integer tag should pass
     values:
-      - ../_values/controllers_main_default_container.yaml
+      - ../_values/components_main_default_container.yaml
     set:
       components.main.containers.main.image:
         repository: ghcr.io/mendhak/http-https-echo
@@ -38,7 +38,7 @@ tests:
 
   - it: template tag should pass
     values:
-      - ../_values/controllers_main_default_container.yaml
+      - ../_values/components_main_default_container.yaml
     set:
       components.main.containers.main.image:
         repository: ghcr.io/mendhak/http-https-echo
@@ -54,7 +54,7 @@ tests:
 
   - it: tag from defaultContainerOptions should pass
     set:
-      controllers.main:
+      components.main:
         defaultContainerOptions:
           image:
             repository: ghcr.io/mendhak/http-https-echo
@@ -72,10 +72,10 @@ tests:
 
   - it: tag from defaultContainerOptions with container override should pass
     set:
-      controllers.main.defaultContainerOptions.image:
+      components.main.defaultContainerOptions.image:
         repository: ghcr.io/mendhak/http-https-echo
         tag: 32
-      controllers.main.containers.main.image:
+      components.main.containers.main.image:
         repository: ghcr.io/mendhak/http-https-echo-override
         tag: 33
     asserts:

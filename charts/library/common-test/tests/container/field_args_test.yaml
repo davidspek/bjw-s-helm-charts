@@ -78,7 +78,7 @@ tests:
 
   - it: args from defaultContainerOptions should pass
     set:
-      controllers.main.defaultContainerOptions:
+      components.main.defaultContainerOptions:
         args: value_of_args
     asserts:
       - documentIndex: &DeploymentDoc 0
@@ -92,9 +92,9 @@ tests:
 
   - it: args from defaultContainerOptions with container override should pass
     set:
-      controllers.main.defaultContainerOptions:
+      components.main.defaultContainerOptions:
         args: value_of_args
-      controllers.main.containers.main.args:
+      components.main.containers.main.args:
         - value 1
         - value 2
     asserts:
