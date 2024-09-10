@@ -49,7 +49,7 @@ nodeSelector: {{ . | nindent 2 }}
   {{- with (include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "affinity")) }}
 affinity: {{ . | nindent 2 }}
   {{- end -}}
-  {{- with (include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "topologySpreadConstraints")) }}
+  {{- with (include "bjw-s.common.lib.pod.field.topologySpreadConstraints" (dict "ctx" $ctx "rootContext" $rootContext)) }}
 topologySpreadConstraints: {{ . | nindent 2 }}
   {{- end -}}
   {{- with (include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "tolerations")) }}
