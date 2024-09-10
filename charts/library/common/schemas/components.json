@@ -57,7 +57,7 @@
         "enum": ["overwrite", "merge"]
       },
       "autoscaling": {
-        "$ref": "k8s-api.json#/autoscaling.v2.HorizontalPodAutoscaler"
+        "$ref": "autoscaling.json#/autoscaling.v2.HorizontalPodAutoscaler"
       },
       "defaultContainerOptions": {
         "type": "object",
