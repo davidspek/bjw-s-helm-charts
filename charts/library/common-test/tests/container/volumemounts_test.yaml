@@ -4,7 +4,7 @@ suite: container volumeMounts
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: no persistence should pass
     asserts:
@@ -34,7 +34,7 @@ tests:
 
   - it: advanced mount config should pass
     set:
-      controllers:
+      components:
         main:
           containers:
             second-container:
@@ -48,10 +48,30 @@ tests:
                 repository: ghcr.io/mendhak/http-https-echo
                 tag: 31
 
+      configs:
+        configData:
+          type: configMap
+          name: configData
+          globalMounts:
+            - path: /globalTest
+          advancedMounts:
+            main:
+              main:
+                - path: /data/config.yaml
+                  readOnly: false
+                  mountPropagation: HostToContainer
+                  subPath: config.yaml
+              second-container:
+                - path: /appdata/config
+                  readOnly: true
+            second:
+              first-container:
+                - path: /second-pod/config.yaml
+                  readOnly: false
+                  subPath: config.yaml
       persistence:
         data:
-          type: configMap
-          name: myConfigMap
+          type: emptyDir
           globalMounts:
             - path: /globalTest
           advancedMounts:
@@ -79,6 +99,12 @@ tests:
           path: spec.template.spec.containers[0].volumeMounts
           value:
             - mountPath: /globalTest
+              name: configData
+            - mountPath: /data/config.yaml
+              mountPropagation: HostToContainer
+              name: configData
+              subPath: config.yaml
+            - mountPath: /globalTest
               name: data
             - mountPath: /data/config.yaml
               name: data
@@ -88,6 +114,11 @@ tests:
         equal:
           path: spec.template.spec.containers[1].volumeMounts
           value:
+            - mountPath: /globalTest
+              name: configData
+            - mountPath: /appdata/config
+              name: configData
+              readOnly: true
             - mountPath: /globalTest
               name: data
             - mountPath: /appdata/config
@@ -100,6 +131,11 @@ tests:
         equal:
           path: spec.template.spec.containers[0].volumeMounts
           value:
+            - mountPath: /globalTest
+              name: configData
+            - mountPath: /second-pod/config.yaml
+              name: configData
+              subPath: config.yaml
             - mountPath: /globalTest
               name: data
             - mountPath: /second-pod/config.yaml
@@ -202,7 +238,7 @@ tests:
 
   - it: volumeClaimTemplates with default mounts should pass
     set:
-      controllers.main:
+      components.main:
         type: statefulset
         statefulset:
           volumeClaimTemplates:
@@ -223,7 +259,7 @@ tests:
 
   - it: volumeClaimTemplates with globalMounts should pass
     set:
-      controllers.main:
+      components.main:
         type: statefulset
         statefulset:
           volumeClaimTemplates:
@@ -253,7 +289,7 @@ tests:
 
   - it: volumeClaimTemplates with advancedMounts should pass
     set:
-      controllers.main:
+      components.main:
         type: statefulset
         statefulset:
           volumeClaimTemplates:

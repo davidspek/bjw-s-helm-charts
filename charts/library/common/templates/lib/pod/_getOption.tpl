@@ -3,7 +3,7 @@ Returns the value for the specified field
 */ -}}
 {{- define "bjw-s.common.lib.pod.getOption" -}}
   {{- $rootContext := .ctx.rootContext -}}
-  {{- $controllerObject := .ctx.controllerObject -}}
+  {{- $componentObject := .ctx.componentObject -}}
   {{- $option := .option -}}
   {{- $default := default "" .default -}}
 
@@ -18,7 +18,7 @@ Returns the value for the specified field
   {{- end -}}
 
   {{- /* See if a pod-specific override is needed */ -}}
-  {{- $podOption := dig $option nil (default dict $controllerObject.pod) -}}
+  {{- $podOption := dig $option nil (default dict $componentObject.pod) -}}
   {{- if kindIs "bool" $podOption -}}
     {{- $value = $podOption -}}
   {{- else if not (empty $podOption) -}}

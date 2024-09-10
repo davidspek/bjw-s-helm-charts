@@ -4,7 +4,7 @@ suite: container args override
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: default should pass
     asserts:
@@ -17,7 +17,7 @@ tests:
 
   - it: single string should pass
     set:
-      controllers.main.containers.main.args: sleep infinity
+      components.main.containers.main.args: sleep infinity
     asserts:
       - documentIndex: 0
         isKind:
@@ -30,7 +30,7 @@ tests:
 
   - it: multiline string should pass
     set:
-      controllers.main.containers.main.args: |
+      components.main.containers.main.args: |
         echo hello
         echo world
     asserts:
@@ -47,7 +47,7 @@ tests:
 
   - it: single quoted string should pass
     set:
-      controllers.main.containers.main.args: "sleep infinity"
+      components.main.containers.main.args: "sleep infinity"
     asserts:
       - documentIndex: 0
         isKind:
@@ -60,7 +60,7 @@ tests:
 
   - it: list of strings should pass
     set:
-      controllers.main.containers.main.args:
+      components.main.containers.main.args:
         - sleep
         - infinity
         - "test"

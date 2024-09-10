@@ -1,0 +1,122 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: secret names
+templates:
+  - common.yaml
+values:
+  - ../_values/components_main_default_container.yaml
+tests:
+  - it: default should pass
+    asserts:
+      - hasDocuments:
+          count: 1
+      - documentIndex: 0
+        not: true
+        isKind:
+          of: ExternalSecret
+
+  - it: with disabled secret should pass
+    set:
+      externalsecrets:
+        externalsecret:
+          enabled: false
+          data:
+          - secretKey: username
+            remoteRef:
+              key: database-credentials
+    asserts:
+      - hasDocuments:
+          count: 1
+      - documentIndex: 0
+        not: true
+        isKind:
+          of: ExternalSecret
+
+  - it: with multiple secrets should pass
+    set:
+      externalsecrets:
+        externalsecret:
+          data:
+          - secretKey: username
+            remoteRef:
+              key: database-credentials
+        secondary:
+          data:
+          - secretKey: username
+            remoteRef:
+              key: database-credentials
+    asserts:
+      - hasDocuments:
+          count: 3
+      - documentIndex: &FirstSecretDocument 1
+        isKind:
+          of: ExternalSecret
+      - documentIndex: *FirstSecretDocument
+        isNotNullOrEmpty:
+          path: metadata.name
+      - documentIndex: &SecondSecretDocument 2
+        isKind:
+          of: ExternalSecret
+      - documentIndex: *SecondSecretDocument
+        isNotNullOrEmpty:
+          path: metadata.name
+
+  - it: default name should pass
+    set:
+      externalsecrets:
+        externalsecret:
+          data:
+          - secretKey: username
+            remoteRef:
+              key: database-credentials
+    asserts:
+      - hasDocuments:
+          count: 2
+      - documentIndex: &SecretDocument 1
+        isKind:
+          of: ExternalSecret
+      - documentIndex: *SecretDocument
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME-externalsecret
+
+  - it: with nameOverride should pass
+    set:
+      externalsecrets:
+        externalsecret:
+          nameOverride: http
+          data:
+          - secretKey: username
+            remoteRef:
+              key: database-credentials
+    asserts:
+      - hasDocuments:
+          count: 2
+      - documentIndex: &SecretDocument 1
+        isKind:
+          of: ExternalSecret
+      - documentIndex: *SecretDocument
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME-http
+
+  - it: with target name should pass
+    set:
+      externalsecrets:
+        externalsecret:
+          target:
+            name: target-name
+          data:
+          - secretKey: username
+            remoteRef:
+              key: database-credentials
+    asserts:
+      - hasDocuments:
+          count: 2
+      - documentIndex: &SecretDocument 1
+        isKind:
+          of: ExternalSecret
+      - documentIndex: *SecretDocument
+        equal:
+          path: spec.target.name
+          value: target-name

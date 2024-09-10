@@ -22,6 +22,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ $serviceObject.name }}
+  namespace: {{ $rootContext.Release.Namespace }}
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}
@@ -110,7 +111,7 @@ spec:
       {{- end -}}
   {{- with (merge
     ($serviceObject.extraSelectorLabels | default dict)
-    (dict "app.kubernetes.io/component" $serviceObject.controller)
+    (dict "app.kubernetes.io/component" $serviceObject.component)
     (include "bjw-s.common.lib.metadata.selectorLabels" $rootContext | fromYaml)
   ) }}
   selector: {{- toYaml . | nindent 4 }}

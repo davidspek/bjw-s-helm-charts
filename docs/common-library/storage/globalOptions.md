@@ -22,7 +22,7 @@ Valid options are:
 
 ## globalMounts
 
-Configure mounts to all controllers and containers. By default the persistence item
+Configure mounts to all components and containers. By default the persistence item
 will be mounted to `/<name_of_the_peristence_item>`.
 
 **Example**
@@ -47,7 +47,7 @@ Specifies a sub-path inside the referenced volume instead of its root.
 
 ## advancedMounts
 
-Explicitly configure mounts for specific controllers and containers.
+Explicitly configure mounts for specific components and containers.
 
 **Example**
 
@@ -62,17 +62,17 @@ advancedMounts:
       - path: /appdata/config
         readOnly: true
 
-  second-controller: # (4)!
+  second-component: # (4)!
     main: # (5)!
       - path: /data/config.yaml
         readOnly: false
         subPath: config.yaml
 ```
 
-1.  the controller with the "main" identifier
+1.  the component with the "main" identifier
 2.  the container with the "main" identifier
 3.  the container with the "second-container" identifier
-4.  the controller with the "second-controller" identifier
+4.  the component with the "second-component" identifier
 5.  the container with the "main" identifier
 
 ### path

@@ -8,7 +8,7 @@ tests:
     values:
       - ../_values/controllers_main_default_container.yaml
     set:
-      controllers.main.containers.main.image:
+      components.main.containers.main.image:
         repository: ghcr.io/mendhak/http-https-echo
         tag: latest
     asserts:
@@ -24,7 +24,7 @@ tests:
     values:
       - ../_values/controllers_main_default_container.yaml
     set:
-      controllers.main.containers.main.image:
+      components.main.containers.main.image:
         repository: ghcr.io/mendhak/http-https-echo
         tag: 1.23
     asserts:
@@ -40,7 +40,7 @@ tests:
     values:
       - ../_values/controllers_main_default_container.yaml
     set:
-      controllers.main.containers.main.image:
+      components.main.containers.main.image:
         repository: ghcr.io/mendhak/http-https-echo
         tag: "{{.Chart.Version}}"
     asserts:

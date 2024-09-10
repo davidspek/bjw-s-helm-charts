@@ -1,23 +1,23 @@
 {{/*
-Return the enabled controllers.
+Return the enabled components.
 */}}
-{{- define "bjw-s.common.lib.controller.enabledControllers" -}}
+{{- define "bjw-s.common.lib.component.enabledComponents" -}}
   {{- $rootContext := .rootContext -}}
-  {{- $enabledControllers := dict -}}
+  {{- $enabledComponents := dict -}}
 
-  {{- range $name, $controller := $rootContext.Values.controllers -}}
-    {{- if kindIs "map" $controller -}}
+  {{- range $name, $component := $rootContext.Values.components -}}
+    {{- if kindIs "map" $component -}}
       {{- /* Enable by default, but allow override */ -}}
-      {{- $controllerEnabled := true -}}
-      {{- if hasKey $controller "enabled" -}}
-        {{- $controllerEnabled = $controller.enabled -}}
+      {{- $componentEnabled := true -}}
+      {{- if hasKey $component "enabled" -}}
+        {{- $componentEnabled = $component.enabled -}}
       {{- end -}}
 
-      {{- if $controllerEnabled -}}
-        {{- $_ := set $enabledControllers $name . -}}
+      {{- if $componentEnabled -}}
+        {{- $_ := set $enabledComponents $name . -}}
       {{- end -}}
     {{- end -}}
   {{- end -}}
 
-  {{- $enabledControllers | toYaml -}}
+  {{- $enabledComponents | toYaml -}}
 {{- end -}}

@@ -4,7 +4,7 @@ suite: pod dnsConfig
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: default should pass
     asserts:
@@ -41,7 +41,7 @@ tests:
           options:
             - name: ndots
               value: "1"
-      controllers:
+      components:
         main:
           pod:
             dnsConfig:

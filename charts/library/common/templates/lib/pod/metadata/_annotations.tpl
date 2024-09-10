@@ -3,7 +3,7 @@ Returns the value for annotations
 */ -}}
 {{- define "bjw-s.common.lib.pod.metadata.annotations" -}}
   {{- $rootContext := .rootContext -}}
-  {{- $controllerObject := .controllerObject -}}
+  {{- $componentObject := .componentObject -}}
 
   {{- /* Default annotations */ -}}
   {{- $annotations := dict -}}
@@ -15,8 +15,8 @@ Returns the value for annotations
   {{- end -}}
 
   {{- /* See if a pod-specific override is set */ -}}
-  {{- if hasKey $controllerObject "pod" -}}
-    {{- $podOption := get $controllerObject.pod "annotations" -}}
+  {{- if hasKey $componentObject "pod" -}}
+    {{- $podOption := get $componentObject.pod "annotations" -}}
     {{- if not (empty $podOption) -}}
       {{- $annotations = merge $podOption $annotations -}}
     {{- end -}}
@@ -59,6 +59,19 @@ Returns the value for annotations
       {{- $_ := set $secretsFound $name (toYaml $secret.stringData | sha256sum) -}}
     {{- end -}}
   {{- end -}}
+  {{- range $name, $externalsecret := $rootContext.Values.externalsecrets -}}
+    {{- $externalsecretEnabled := true -}}
+    {{- if hasKey $externalsecret "enabled" -}}
+      {{- $externalsecretEnabled = $externalsecret.enabled -}}
+    {{- end -}}
+    {{- $externalsecretIncludeInChecksum := true -}}
+    {{- if hasKey $externalsecret "includeInChecksum" -}}
+      {{- $externalsecretIncludeInChecksum = $externalsecret.includeInChecksum -}}
+    {{- end -}}
+    {{- if and $externalsecretEnabled $externalsecretIncludeInChecksum -}}
+      {{- $_ := set $secretsFound $name (toYaml $externalsecret | sha256sum) -}}
+    {{- end -}}
+  {{- end -}}
   {{- if $secretsFound -}}
     {{- $annotations = merge
       (dict "checksum/secrets" (toYaml $secretsFound | sha256sum))
@@ -67,6 +80,12 @@ Returns the value for annotations
   {{- end -}}
 
   {{- if not (empty $annotations) -}}
-    {{- $annotations | toYaml -}}
+    {{- $outAnnotations := dict -}}
+    {{- with $annotations -}}
+      {{- range $key, $value := . -}}
+      {{- $outAnnotations = merge $outAnnotations (dict $key (tpl $value $rootContext)) -}}
+      {{- end -}}
+    {{- end -}}
+    {{- $outAnnotations | toYaml -}}
   {{- end -}}
 {{- end -}}

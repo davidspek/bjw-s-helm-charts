@@ -1,0 +1,39 @@
+{
+  "globalMounts": {
+    "type": "array",
+    "items": {
+      "$ref": "#/mountPath"
+    }
+  },
+  "advancedMounts": {
+    "additionalProperties": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/mountPathCollection"
+      }
+    }
+  },
+  "mountPathCollection": {
+    "type": "array",
+    "items": {
+      "$ref": "#/mountPath"
+    }
+  },
+  "mountPath": {
+    "additionalProperties": false,
+    "properties": {
+      "path": {
+        "type": "string"
+      },
+      "readOnly": {
+        "type": "boolean"
+      },
+      "subPath": {
+        "type": "string"
+      },
+      "mountPropagation": {
+        "type": "string"
+      }
+    }
+  }
+}

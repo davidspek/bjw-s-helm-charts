@@ -5,13 +5,13 @@ templates:
   - common.yaml
 values:
   - ../_values/ingress_main_default_hosts.yaml
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: default should pass
     set:
       service:
         main:
-          controller: main
+          component: main
           ports:
             http:
               port: &httpPort 8081
@@ -78,7 +78,7 @@ tests:
     set:
       service:
         main:
-          controller: main
+          component: main
           ports:
             http:
               port: &httpPort 8081

@@ -1,0 +1,187 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: pod metadata
+templates:
+  - common.yaml
+values:
+  - ../_values/components_main_default_container.yaml
+tests:
+  - it: default metadata should pass
+    set:
+      components.main.type: deployment
+    asserts:
+      - documentIndex: &ComponentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *ComponentDoc
+        notExists:
+          path: spec.template.metadata.annotations
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.template.metadata.labels
+          value:
+            app.kubernetes.io/component: main
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.selector.matchLabels
+          value:
+            app.kubernetes.io/component: main
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+
+  - it: custom metadata should pass
+    set:
+      components:
+        main:
+          type: deployment
+          pod:
+            annotations:
+              test_annotation: test
+            labels:
+              test_label: test
+    asserts:
+      - documentIndex: &ComponentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.template.metadata.annotations
+          value:
+            test_annotation: test
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.template.metadata.labels
+          value:
+            app.kubernetes.io/component: main
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+            test_label: test
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.selector.matchLabels
+          value:
+            app.kubernetes.io/component: main
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+
+  - it: custom metadata with defaultPodOptions metadata should pass
+    set:
+      defaultPodOptions:
+        labels:
+          pod_default_label: test
+        annotations:
+          pod_default_annotation: test
+      components:
+        main:
+          type: deployment
+          pod:
+            annotations:
+              test_annotation: test
+            labels:
+              test_label: test
+    asserts:
+      - documentIndex: &ComponentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.template.metadata.annotations
+          value:
+            pod_default_annotation: test
+            test_annotation: test
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.template.metadata.labels
+          value:
+            app.kubernetes.io/component: main
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+            pod_default_label: test
+            test_label: test
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.selector.matchLabels
+          value:
+            app.kubernetes.io/component: main
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+  - it: custom templated metadata should pass
+    set:
+      custom_metadata:
+        custom_label: test
+        custom_annotation: test
+      defaultPodOptions:
+        labels:
+          pod_default_label: "{{ .Values.custom_metadata.custom_label }}"
+        annotations:
+          pod_default_annotation: "{{ .Values.custom_metadata.custom_annotation }}"
+      components:
+        main:
+          type: deployment
+          pod:
+            annotations:
+              test_annotation: "{{ .Values.custom_metadata.custom_annotation }}"
+            labels:
+              test_label: "{{ .Values.custom_metadata.custom_label }}"
+    asserts:
+      - documentIndex: &ComponentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.template.metadata.annotations
+          value:
+            pod_default_annotation: test
+            test_annotation: test
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.template.metadata.labels
+          value:
+            app.kubernetes.io/component: main
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+            test_label: test
+            pod_default_label: test
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.selector.matchLabels
+          value:
+            app.kubernetes.io/component: main
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+  - it: custom metadata with should not create double quotes
+    set:
+      components:
+        main:
+          type: deployment
+          pod:
+            annotations:
+              test_annotation: "true"
+            labels:
+              test_label: "true"
+    asserts:
+      - documentIndex: &ComponentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.template.metadata.annotations
+          value:
+            test_annotation: "true"
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.template.metadata.labels
+          value:
+            app.kubernetes.io/component: main
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+            test_label: "true"
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.selector.matchLabels
+          value:
+            app.kubernetes.io/component: main
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME

@@ -4,7 +4,7 @@ suite: pod topologySpreadConstraints
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: default should pass
     asserts:
@@ -50,7 +50,7 @@ tests:
             labelSelector:
               matchLabels:
                 app: foo
-      controllers:
+      components:
         main:
           pod:
             topologySpreadConstraints:
@@ -74,3 +74,86 @@ tests:
               labelSelector:
                 matchLabels:
                   app: foo
+
+  - it: topologySpreadConstraints without label selector should pass
+    set:
+      components:
+        main:
+          pod:
+            topologySpreadConstraints:
+              - maxSkew: 2
+                topologyKey: kubernetes.io/hostname
+                whenUnsatisfiable: DoNotSchedule
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.topologySpreadConstraints
+          value:
+            - maxSkew: 2
+              topologyKey: kubernetes.io/hostname
+              whenUnsatisfiable: DoNotSchedule
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/component: main
+                  app.kubernetes.io/name: RELEASE-NAME
+                  app.kubernetes.io/instance: RELEASE-NAME
+
+  - it: defaultPodOption without label selector should pass
+    set:
+      defaultPodOptions:
+        topologySpreadConstraints:
+          - maxSkew: 1
+            topologyKey: kubernetes.io/hostname
+            whenUnsatisfiable: DoNotSchedule
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.topologySpreadConstraints
+          value:
+            - maxSkew: 1
+              topologyKey: kubernetes.io/hostname
+              whenUnsatisfiable: DoNotSchedule
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/component: main
+                  app.kubernetes.io/name: RELEASE-NAME
+                  app.kubernetes.io/instance: RELEASE-NAME
+
+  - it: topologySpreadConstraints with matchExpressions selector should pass
+    set:
+      components:
+        main:
+          pod:
+            topologySpreadConstraints:
+              - maxSkew: 2
+                topologyKey: kubernetes.io/hostname
+                whenUnsatisfiable: DoNotSchedule
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/component
+                      operator: In
+                      values:
+                        - main
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.topologySpreadConstraints
+          value:
+            - maxSkew: 2
+              topologyKey: kubernetes.io/hostname
+              whenUnsatisfiable: DoNotSchedule
+              labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/component
+                    operator: In
+                    values:
+                      - main

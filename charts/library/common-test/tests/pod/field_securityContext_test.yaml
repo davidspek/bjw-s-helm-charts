@@ -4,7 +4,7 @@ suite: pod securityContext
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: default should pass
     asserts:
@@ -44,7 +44,7 @@ tests:
           runAsGroup: 1000
           fsGroup: 1000
           fsGroupChangePolicy: OnRootMismatch
-      controllers:
+      components:
         main:
           pod:
             securityContext:

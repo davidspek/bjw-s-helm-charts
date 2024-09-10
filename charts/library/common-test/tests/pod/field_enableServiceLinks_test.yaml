@@ -4,7 +4,7 @@ suite: pod enableServiceLinks
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: default should pass
     asserts:
@@ -30,7 +30,7 @@ tests:
 
   - it: enabled in pod options should pass
     set:
-      controllers.main.pod.enableServiceLinks: true
+      components.main.pod.enableServiceLinks: true
     asserts:
       - documentIndex: 0
         isKind:

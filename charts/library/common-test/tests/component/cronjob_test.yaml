@@ -1,0 +1,95 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: cronjob configuration
+templates:
+  - common.yaml
+values:
+  - ../_values/components_main_default_container.yaml
+tests:
+  - it: default cronjob configuration should pass
+    set:
+      components.main.type: cronjob
+      components.main.cronjob.schedule: "*/20 * * * *"
+    asserts:
+      - documentIndex: &ComponentDoc 0
+        isKind:
+          of: CronJob
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.suspend
+          value: false
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.schedule
+          value: "*/20 * * * *"
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.concurrencyPolicy
+          value: Forbid
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.successfulJobsHistoryLimit
+          value: 1
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.failedJobsHistoryLimit
+          value: 1
+      - documentIndex: *ComponentDoc
+        notExists:
+          path: spec.jobTemplate.spec.ttlSecondsAfterFinished
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.jobTemplate.spec.template.spec.restartPolicy
+          value: Never
+
+  - it: custom cronjob configuration should pass
+    set:
+      components:
+        main:
+          type: cronjob
+          pod:
+            restartPolicy: OnFailure
+          cronjob:
+            suspend: &CronJobSuspended true
+            schedule: &CronJobSchedule "0 3 * * *"
+            concurrencyPolicy: &CronJobConcurrencyPolicy "Test"
+            failedJobsHistory: &CronJobFailedJobsHistory 2
+            successfulJobsHistory: &CronJobSuccessfulJobsHistory 3
+            ttlSecondsAfterFinished: &ttlSecondsAfterFinished 3600
+            parallelism: &CronJobParallelism 3
+    asserts:
+      - documentIndex: &ComponentDoc 0
+        isKind:
+          of: CronJob
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.suspend
+          value: *CronJobSuspended
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.schedule
+          value: *CronJobSchedule
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.concurrencyPolicy
+          value: *CronJobConcurrencyPolicy
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.successfulJobsHistoryLimit
+          value: *CronJobSuccessfulJobsHistory
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.failedJobsHistoryLimit
+          value: *CronJobFailedJobsHistory
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.jobTemplate.spec.ttlSecondsAfterFinished
+          value: *ttlSecondsAfterFinished
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.jobTemplate.spec.template.spec.restartPolicy
+          value: OnFailure
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.jobTemplate.spec.parallelism
+          value: *CronJobParallelism

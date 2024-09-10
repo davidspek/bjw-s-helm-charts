@@ -4,7 +4,7 @@ suite: configmap Pod metadata
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: default metadata should pass
     set:
@@ -25,10 +25,10 @@ tests:
           data:
             test: value 1
     asserts:
-      - documentIndex: &ControllerDoc 0
+      - documentIndex: &ComponentDoc 0
         isKind:
           of: Deployment
-      - documentIndex: *ControllerDoc
+      - documentIndex: *ComponentDoc
         equal:
           path: spec.template.metadata.annotations
           value:

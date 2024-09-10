@@ -19,6 +19,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: {{ $serviceAccountObject.name }}
+  namespace: {{ $rootContext.Release.Namespace }}
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}

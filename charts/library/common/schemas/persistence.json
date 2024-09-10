@@ -3,8 +3,6 @@
     "oneOf": [
       {"$ref": "#/persistentVolumeClaimItem"},
       {"$ref": "#/persistentVolumeClaimWithExistingClaimItem"},
-      {"$ref": "#/configMapItem"},
-      {"$ref": "#/secretItem"},
       {"$ref": "#/nfsItem"},
       {"$ref": "#/emptyDirItem"},
       {"$ref": "#/hostPathItem"},
@@ -54,8 +52,8 @@
       "volumeName": {
         "type": "string"
       },
-      "advancedMounts": {"$ref": "#/advancedMounts"},
-      "globalMounts": {"$ref": "#/globalMounts"}
+      "advancedMounts": {"$ref": "mounts.json#/advancedMounts"},
+      "globalMounts": {"$ref": "mounts.json#/globalMounts"}
     },
     "required": ["accessMode", "size"]
   },
@@ -75,118 +73,10 @@
       "existingClaim": {
         "type": "string"
       },
-      "advancedMounts": {"$ref": "#/advancedMounts"},
-      "globalMounts": {"$ref": "#/globalMounts"}
+      "advancedMounts": {"$ref": "mounts.json#/advancedMounts"},
+      "globalMounts": {"$ref": "mounts.json#/globalMounts"}
     },
     "required": ["existingClaim"]
-  },
-
-  "configMapItem": {
-    "type": "object",
-    "additionalProperties": false,
-
-    "properties": {
-      "type": {
-        "const": "configMap"
-      },
-      "enabled": {
-        "type": "boolean",
-        "default": true
-      },
-      "name": {
-        "type": "string"
-      },
-      "identifier": {
-        "type": "string"
-      },
-      "defaultMode": {
-        "type": "integer",
-        "format": "int32"
-      },
-      "items": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "key": {
-              "type": "string"
-            },
-            "mode": {
-              "format": "int32",
-              "type": "integer"
-            },
-            "path": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "advancedMounts": {"$ref": "#/advancedMounts"},
-      "globalMounts": {"$ref": "#/globalMounts"}
-    },
-    "oneOf": [{"required": ["name"]}, {"required": ["identifier"]}],
-    "dependencies": {
-      "name": {
-        "not": {"required": ["identifier"]}
-      },
-      "identifier": {
-        "not": {"required": ["name"]}
-      }
-    }
-  },
-
-  "secretItem": {
-    "type": "object",
-    "additionalProperties": false,
-
-    "properties": {
-      "type": {
-        "const": "secret"
-      },
-      "enabled": {
-        "type": "boolean",
-        "default": true
-      },
-      "name": {
-        "type": "string"
-      },
-      "identifier": {
-        "type": "string"
-      },
-      "defaultMode": {
-        "type": "integer",
-        "format": "int32"
-      },
-      "items": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "key": {
-              "type": "string"
-            },
-            "mode": {
-              "format": "int32",
-              "type": "integer"
-            },
-            "path": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "advancedMounts": {"$ref": "#/advancedMounts"},
-      "globalMounts": {"$ref": "#/globalMounts"}
-    },
-    "oneOf": [{"required": ["name"]}, {"required": ["identifier"]}],
-    "dependencies": {
-      "name": {
-        "not": {"required": ["identifier"]}
-      },
-      "identifier": {
-        "not": {"required": ["name"]}
-      }
-    }
   },
 
   "nfsItem": {
@@ -207,8 +97,8 @@
       "server": {
         "type": "string"
       },
-      "advancedMounts": {"$ref": "#/advancedMounts"},
-      "globalMounts": {"$ref": "#/globalMounts"}
+      "advancedMounts": {"$ref": "mounts.json#/advancedMounts"},
+      "globalMounts": {"$ref": "mounts.json#/globalMounts"}
     },
     "required": ["server", "path"]
   },
@@ -231,8 +121,8 @@
       "sizeLimit": {
         "type": "string"
       },
-      "advancedMounts": {"$ref": "#/advancedMounts"},
-      "globalMounts": {"$ref": "#/globalMounts"}
+      "advancedMounts": {"$ref": "mounts.json#/advancedMounts"},
+      "globalMounts": {"$ref": "mounts.json#/globalMounts"}
     }
   },
 
@@ -254,8 +144,8 @@
       "hostPathType": {
         "type": "string"
       },
-      "advancedMounts": {"$ref": "#/advancedMounts"},
-      "globalMounts": {"$ref": "#/globalMounts"}
+      "advancedMounts": {"$ref": "mounts.json#/advancedMounts"},
+      "globalMounts": {"$ref": "mounts.json#/globalMounts"}
     }
   },
 
@@ -274,8 +164,8 @@
       "volumeSpec": {
         "type": "object"
       },
-      "globalMounts": {"$ref": "#/globalMounts"},
-      "advancedMounts": {"$ref": "#/advancedMounts"}
+      "globalMounts": {"$ref": "mounts.json#/globalMounts"},
+      "advancedMounts": {"$ref": "mounts.json#/advancedMounts"}
     },
     "required": ["volumeSpec"]
   },
@@ -295,44 +185,5 @@
       }
     },
     "required": ["kind", "name"]
-  },
-
-  "globalMounts": {
-    "type": "array",
-    "items": {
-      "$ref": "#/mountPath"
-    }
-  },
-
-  "advancedMounts": {
-    "additionalProperties": {
-      "type": "object",
-      "additionalProperties": {
-        "$ref": "#/mountPathCollection"
-      }
-    }
-  },
-
-  "mountPathCollection": {
-    "type": "array",
-    "items": {"$ref": "#/mountPath"}
-  },
-
-  "mountPath": {
-    "additionalProperties": false,
-    "properties": {
-      "path": {
-        "type": "string"
-      },
-      "readOnly": {
-        "type": "boolean"
-      },
-      "subPath": {
-        "type": "string"
-      },
-      "mountPropagation": {
-        "type": "string"
-      }
-    }
   }
 }

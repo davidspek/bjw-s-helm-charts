@@ -6,6 +6,6 @@ Validate Deployment values
   {{- $deploymentValues := .object -}}
 
   {{- if and (ne $deploymentValues.strategy "Recreate") (ne $deploymentValues.strategy "RollingUpdate") -}}
-    {{- fail (printf "Not a valid strategy type for Deployment. (controller: %s, strategy: %s)" $deploymentValues.identifier $deploymentValues.strategy) }}
+    {{- fail (printf "Not a valid strategy type for Deployment. (component: %s, strategy: %s)" $deploymentValues.identifier $deploymentValues.strategy) }}
   {{- end -}}
 {{- end -}}
