@@ -39,10 +39,7 @@
         "type": "string"
       },
       "ports": {
-        "type": "array",
-        "items": {
-          "$ref": "k8s-api.json#/core.v1.ContainerPort"
-        }
+        "$ref": "#/ports"
       },
       "probes": {
         "type": "object",
@@ -127,6 +124,26 @@
             {"$ref": "envVars.json#/envVarValue"},
             {"$ref": "envVars.json#/envVarItem"},
             {"$ref": "envVars.json#/valueFromItem"}
+          ]
+        }
+      }
+    ]
+  },
+
+  "ports": {
+    "oneOf": [
+      {
+        "type": "array",
+        "items": {
+          "$ref": "k8s-api.json#/core.v1.ContainerPort"
+        }
+      },
+      {
+        "type": "object",
+        "additionalProperties": {
+          "anyOf": [
+            {"$ref": "ports.json#/portValue"},
+            {"$ref": "k8s-api.json#/core.v1.ContainerPort"}
           ]
         }
       }
