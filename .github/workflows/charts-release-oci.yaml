@@ -65,5 +65,5 @@ jobs:
             cosign sign --yes "${{ env.TARGET_REGISTRY }}/${{ github.actor }}/helm/${CHART_NAME}:${CHART_VERSION}@${CHART_DIGEST}"
             cosign verify "${{ env.TARGET_REGISTRY }}/${{ github.actor }}/helm/${CHART_NAME}:${CHART_VERSION}@${CHART_DIGEST}" \
               --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
-              --certificate-identity "https://github.com/bjw-s/helm-charts/.github/workflows/charts-release-oci.yaml@refs/heads/main"
+              --certificate-identity "https://github.com/davidspek/bjw-s-helm-charts/.github/workflows/charts-release-oci.yaml@refs/heads/main"
           done
