@@ -13,18 +13,28 @@ Env field used by the container.
   {{- /* See if an override is desired */ -}}
   {{- if not (empty $portValues) -}}
     {{- if kindIs "slice" $portValues -}}
-      {{- /* Ports is a list so we assume the order is already as desired */ -}}
+      {{- /* Ports is a list so we assume it is valid */ -}}
+      {{- range $idx, $port := $portValues -}}
+        {{- if kindIs "int" $idx -}}
+          {{- $idx = required "ports as a list of maps require a containerPort field" $port.containerPort -}}
+        {{- end -}}
+      {{- end -}}
       {{- $portList = $portValues -}}
     {{- else -}}
       {{- /* Ports is a map so we must parse the different */ -}}
 
       {{- range $name, $portValue := $portValues -}}
-        {{- $portItem := dict "name" $name -}}
+        {{- $portName := $name -}}
+        {{- $portItem := dict "name" $portName -}}
 
         {{- if kindIs "map" $portValue -}}
-          {{- $portItem := merge $portItem $portValues -}}
+          {{- $portItem := mergeOverwrite $portItem $portValue -}}
         {{- else -}}
-          {{- $_ := set $portItem "containerPort" $portValue -}}
+          {{- if kindIs "string" $portValue -}}
+            {{- $_ := set $portItem "containerPort" (tpl $portValue $rootContext | int64) -}}
+          {{- else -}}
+            {{- $_ := set $portItem "containerPort" $portValue -}}
+          {{- end -}}
         {{- end -}}
 
         {{- $portList = append $portList $portItem -}}
@@ -37,11 +47,7 @@ Env field used by the container.
     {{- $output := list -}}
     {{- range $portList -}}
       {{- if hasKey . "containerPort" -}}
-        {{- if kindIs "string" .value -}}
-          {{- $output = append $output (dict "name" .name "containerPort" (tpl .containerPort $rootContext)) -}}
-        {{- else -}}
-          {{- $output = append $output (dict "name" .name "containerPort" .containerPort) -}}
-        {{- end -}}
+        {{- $output = append $output (merge . (dict "name" .name "containerPort" .containerPort)) -}}
       {{- end -}}
     {{- end -}}
     {{- $output | toYaml -}}
