@@ -35,7 +35,13 @@ metadata:
   {{- end }}
 spec:
   revisionHistoryLimit: {{ include "bjw-s.common.lib.defaultKeepNonNullValue" (dict "value" $statefulsetObject.revisionHistoryLimit "default" 3) }}
+  {{- if hasKey $statefulsetObject "replicas" }}
+    {{- if not (eq $statefulsetObject.replicas nil) }}
   replicas: {{ $statefulsetObject.replicas }}
+    {{- end }}
+  {{- else }}
+  replicas: 1
+  {{- end }}
   podManagementPolicy: {{ dig "statefulset" "podManagementPolicy" "OrderedReady" $statefulsetObject }}
   updateStrategy:
     type: {{ $statefulsetObject.strategy }}

@@ -31,7 +31,7 @@ Renders the component objects required by the chart.
         {{- $daemonsetObject := (include "bjw-s.common.lib.daemonset.valuesToObject" (dict "rootContext" $ "id" $key "values" $componentObject)) | fromYaml -}}
         {{- include "bjw-s.common.lib.daemonset.validate" (dict "rootContext" $ "object" $daemonsetObject) -}}
         {{- include "bjw-s.common.class.daemonset" (dict "rootContext" $ "object" $daemonsetObject) | nindent 0 -}}
-      {{- else if eq $componentObject.type "statefulset"  -}}
+      {{- else if eq $componentObject.type "statefulset" -}}
         {{- $statefulsetObject := (include "bjw-s.common.lib.statefulset.valuesToObject" (dict "rootContext" $ "id" $key "values" $componentObject)) | fromYaml -}}
         {{- include "bjw-s.common.lib.statefulset.validate" (dict "rootContext" $ "object" $statefulsetObject) -}}
         {{- include "bjw-s.common.class.statefulset" (dict "rootContext" $ "object" $statefulsetObject) | nindent 0 -}}
@@ -39,6 +39,14 @@ Renders the component objects required by the chart.
         {{- $jobObject := (include "bjw-s.common.lib.job.valuesToObject" (dict "rootContext" $ "id" $key "values" $componentObject)) | fromYaml -}}
         {{- include "bjw-s.common.lib.job.validate" (dict "rootContext" $ "object" $jobObject) -}}
         {{- include "bjw-s.common.class.job" (dict "rootContext" $ "object" $jobObject) | nindent 0 -}}
+      {{- end -}}
+
+      {{- if $componentObject.autoscaling.enabled -}}
+        {{- if eq $componentObject.autoscaling.type "hpa" -}}
+          {{- $hpaObject := (include "bjw-s.common.lib.hpa.valuesToObject" (dict "rootContext" $ "id" $key "values" $componentObject.autoscaling)) | fromYaml -}}
+          {{- include "bjw-s.common.lib.hpa.validate" (dict "rootContext" $ "object" $hpaObject) -}}
+          {{- include "bjw-s.common.class.hpa" (dict "rootContext" $ "object" $hpaObject) | nindent 0 -}}
+        {{- end -}}
       {{- end -}}
     {{- end -}}
   {{- end -}}
