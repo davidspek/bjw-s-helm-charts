@@ -1,25 +1,12 @@
 {{/*
-Convert component values to an object
+Convert HorizontalPodAutoscaler values to an object
 */}}
-{{- define "bjw-s.common.lib.component.valuesToObject" -}}
+{{- define "bjw-s.common.lib.hpa.valuesToObject" -}}
   {{- $rootContext := .rootContext -}}
   {{- $identifier := .id -}}
   {{- $objectValues := .values -}}
 
-  {{- /* Default the component type to Deployment */ -}}
-  {{- if empty (dig "type" nil $objectValues) -}}
-    {{- $_ := set $objectValues "type" "deployment" -}}
-  {{- end -}}
-
-  {{- /* Default the component autoscaling section */ -}}
-  {{- if empty (dig "autoscaling" "enabled" nil $objectValues) -}}
-    {{- $objectValues = merge $objectValues (dict "autoscaling" (dict "enabled" false)) -}}
-  {{- end -}}
-  {{- if empty (dig "autoscaling" "type" nil $objectValues) -}}
-    {{- $objectValues = merge $objectValues (dict "autoscaling" (dict "type" "hpa")) -}}
-  {{- end -}}
-
-  {{- /* Determine and inject the component name */ -}}
+  {{- /* Determine and inject the HorizontalPodAutoscaler name */ -}}
   {{- $objectName := (include "bjw-s.common.lib.chart.names.fullname" $rootContext) -}}
 
   {{- if $objectValues.nameOverride -}}
@@ -38,6 +25,6 @@ Convert component values to an object
   {{- $_ := set $objectValues "name" $objectName -}}
   {{- $_ := set $objectValues "identifier" $identifier -}}
 
-  {{- /* Return the component object */ -}}
+  {{- /* Return the HorizontalPodAutoscaler object */ -}}
   {{- $objectValues | toYaml -}}
 {{- end -}}

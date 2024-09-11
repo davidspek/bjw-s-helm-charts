@@ -8,6 +8,9 @@ Convert StatefulSet values to an object
 
   {{- $strategy := default "RollingUpdate" $objectValues.strategy -}}
   {{- $_ := set $objectValues "strategy" $strategy -}}
+  {{- if (dig "autoscaling" "enabled" false $objectValues) -}}
+  {{- $_ := set $objectValues "replicas" nil -}}
+  {{- end -}}
 
   {{- /* Return the StatefulSet object */ -}}
   {{- $objectValues | toYaml -}}
