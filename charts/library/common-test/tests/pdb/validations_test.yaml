@@ -11,6 +11,7 @@ tests:
       podDisruptionBudgets:
         main:
           component: other
+          minAvailable: 1
     asserts:
       - failedTemplate:
-          errorMessage: "No enabled component found with this identifier. (service: 'main', component: 'other')"
+          errorMessage: "No enabled component found with this identifier. (pdb: 'main', component: 'other')"

@@ -40,7 +40,7 @@ spec:
   type: ClusterIP
   {{- if $serviceObject.clusterIP }}
   clusterIP: {{ $serviceObject.clusterIP }}
-  {{end}}
+  {{- end }}
   {{- else if eq $svcType "LoadBalancer" }}
   type: {{ $svcType }}
   {{- if $serviceObject.loadBalancerIP }}
@@ -104,10 +104,10 @@ spec:
       name: {{ $name }}
         {{- if (not (empty $port.nodePort)) }}
       nodePort: {{ $port.nodePort }}
-        {{ end }}
+        {{- end }}
         {{- if (not (empty $port.appProtocol)) }}
       appProtocol: {{ $port.appProtocol }}
-        {{ end }}
+        {{- end }}
       {{- end -}}
   {{- with (merge
     ($serviceObject.extraSelectorLabels | default dict)
