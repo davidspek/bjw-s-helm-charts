@@ -3,15 +3,6 @@
     "type": "object",
     "description": "HorizontalPodAutoscalerSpec describes the desired functionality of the HorizontalPodAutoscaler.",
     "properties": {
-      "annotations": {
-        "$ref": "definitions.json#/annotations"
-      },
-      "labels": {
-        "$ref": "definitions.json#/labels"
-      },
-      "nameOverride": {
-        "type": "string"
-      },
       "behavior": {
         "$ref": "#/autoscaling.v2.HorizontalPodAutoscalerBehavior",
         "description": "behavior configures the scaling behavior of the target in both Up and Down directions (scaleUp and scaleDown fields respectively). If not set, the default HPAScalingRules for scale up and scale down are used."
