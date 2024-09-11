@@ -201,8 +201,8 @@ tests:
     set:
       components.main.autoscaling:
         enabled: true
+        nameOverride: hpa-name
         hpa:
-          nameOverride: hpa-name
           behavior:
             scaleDown:
               stabilizationWindowSeconds: 300
@@ -237,11 +237,11 @@ tests:
     set:
       components.main.autoscaling:
         enabled: true
+        labels:
+          foo: bar
+        annotations:
+          key: value
         hpa:
-          labels:
-            foo: bar
-          annotations:
-            key: value
           maxReplicas: 10
           metrics:
           - type: Resource

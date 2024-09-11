@@ -4,17 +4,18 @@ within the common library.
 */}}
 {{- define "bjw-s.common.class.hpa" -}}
   {{- $rootContext := .rootContext -}}
-  {{- $hpaObject := .object -}}
+  {{- $autoscalingObject := .object -}}
+  {{- $hpaObject := $autoscalingObject.hpa -}}
 
   {{- $labels := merge
-    ($hpaObject.labels | default dict)
+    ($autoscalingObject.labels | default dict)
     (include "bjw-s.common.lib.metadata.allLabels" $rootContext | fromYaml)
   -}}
   {{- $annotations := merge
-    ($hpaObject.annotations | default dict)
+    ($autoscalingObject.annotations | default dict)
     (include "bjw-s.common.lib.metadata.globalAnnotations" $rootContext | fromYaml)
   -}}
-  {{- $componentObject := include "bjw-s.common.lib.component.getByIdentifier" (dict "rootContext" $rootContext "id" $hpaObject.identifier) | fromYaml -}}
+  {{- $componentObject := include "bjw-s.common.lib.component.getByIdentifier" (dict "rootContext" $rootContext "id" $autoscalingObject.identifier) | fromYaml -}}
   {{ $targetKind := "Deployment" }}
   {{- if eq $componentObject.type "statefulset" }}
   {{ $targetKind = "StatefulSet" }}
@@ -23,7 +24,7 @@ within the common library.
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ $hpaObject.name }}
+  name: {{ $autoscalingObject.name }}
   namespace: {{ $rootContext.Release.Namespace }}
   {{- with $labels }}
   labels:

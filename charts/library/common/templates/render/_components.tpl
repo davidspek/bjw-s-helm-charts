@@ -43,7 +43,7 @@ Renders the component objects required by the chart.
 
       {{- if $componentObject.autoscaling.enabled -}}
         {{- if eq $componentObject.autoscaling.type "hpa" -}}
-          {{- $hpaObject := (include "bjw-s.common.lib.hpa.valuesToObject" (dict "rootContext" $ "id" $key "values" $componentObject.autoscaling.hpa)) | fromYaml -}}
+          {{- $hpaObject := (include "bjw-s.common.lib.hpa.valuesToObject" (dict "rootContext" $ "id" $key "values" $componentObject.autoscaling)) | fromYaml -}}
           {{- include "bjw-s.common.lib.hpa.validate" (dict "rootContext" $ "object" $hpaObject) -}}
           {{- include "bjw-s.common.class.hpa" (dict "rootContext" $ "object" $hpaObject) | nindent 0 -}}
         {{- end -}}
