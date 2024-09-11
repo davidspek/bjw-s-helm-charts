@@ -87,7 +87,7 @@
         "$ref": "schemas/externalsecret.json#/instance"
       }
     },
-    "podDisruptionBudget": {
+    "podDisruptionBudgets": {
       "additionalProperties": {
         "$ref": "schemas/pdb.json#/instance"
       }
