@@ -176,7 +176,7 @@ Returns the value for volumes
 
     {{- /* custom persistence type */ -}}
     {{- else if eq $persistenceValues.type "custom" -}}
-      {{- $volume = $persistenceValues.volumeSpec -}}
+      {{- $volume = tpl (toYaml $persistenceValues.volumeSpec) $rootContext | fromYaml -}}
       {{- $_ := set $volume "name" $identifier -}}
 
     {{- /* Fail otherwise */ -}}
