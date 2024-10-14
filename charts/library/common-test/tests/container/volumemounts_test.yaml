@@ -256,6 +256,19 @@ tests:
           value:
             name: storage
             mountPath: /storage
+      - documentIndex: *StatefulSetDoc
+        equal:
+          path: spec.volumeClaimTemplates
+          value:
+          - metadata:
+              name: storage
+            spec:
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 10Gi
+              storageClassName: storage
 
   - it: volumeClaimTemplates with disabled should pass
     set:
