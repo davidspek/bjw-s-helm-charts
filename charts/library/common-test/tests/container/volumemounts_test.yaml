@@ -257,6 +257,28 @@ tests:
             name: storage
             mountPath: /storage
 
+  - it: volumeClaimTemplates with disabled should pass
+    set:
+      components.main:
+        type: statefulset
+        statefulset:
+          volumeClaimTemplates:
+            - name: "storage"
+              enabled: false
+              accessMode: "ReadWriteOnce"
+              size: "10Gi"
+              storageClass: "storage"
+    asserts:
+      - documentIndex: &StatefulSetDoc 0
+        isKind:
+          of: StatefulSet
+      - documentIndex: *StatefulSetDoc
+        notExists:
+          path: spec.template.spec.containers[0].volumeMounts
+      - documentIndex: *StatefulSetDoc
+        notExists:
+          path: spec.volumeClaimTemplates
+
   - it: volumeClaimTemplates with globalMounts should pass
     set:
       components.main:
