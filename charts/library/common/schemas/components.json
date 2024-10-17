@@ -392,7 +392,7 @@
         "$ref": "persistence.json#/dataSourceReference"
       },
       "globalMounts": {
-        "$ref": "persistence.json#/globalMounts"
+        "$ref": "mounts.json#/globalMounts"
       },
       "labels": {
         "$ref": "definitions.json#/labels"
