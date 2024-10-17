@@ -5,7 +5,7 @@ hide:
 
 # Setting default container options
 
-It is possible to configure default container options under the `components.*.defaultContainerOptions` key. These options will be applied to all containers within the controller.
+It is possible to configure default container options under the `components.*.defaultContainerOptions` key. These options will be applied to all containers within the component.
 
 The following fields can be configured on this level:
 

@@ -3,9 +3,25 @@ Returns the value for serviceAccountName
 */ -}}
 {{- define "bjw-s.common.lib.pod.field.serviceAccountName" -}}
   {{- $rootContext := .ctx.rootContext -}}
+  {{- $componentObject := .ctx.componentObject -}}
 
-  {{- $serviceAccountValues := (mustDeepCopy $rootContext.Values.serviceAccount) -}}
-  {{- $serviceAccountObject := (include "bjw-s.common.lib.serviceAccount.valuesToObject" (dict "rootContext" $rootContext "id" "default" "values" $serviceAccountValues)) | fromYaml -}}
-  {{- $serviceAccountObject.name -}}
+  {{- $serviceAccountName := "default" -}}
+
+  {{- if $rootContext.Values.enforceServiceAccountCreation -}}
+    {{- if (get (include "bjw-s.common.lib.serviceAccount.getByIdentifier" (dict "rootContext" $rootContext "id" "default") | fromYaml) "create") -}}
+      {{- $serviceAccountName = get (include "bjw-s.common.lib.serviceAccount.getByIdentifier" (dict "rootContext" $rootContext "id" "default") | fromYaml) "name" -}}
+    {{- end -}}
+  {{- else -}}
+      {{- $serviceAccountName = get (include "bjw-s.common.lib.serviceAccount.getByIdentifier" (dict "rootContext" $rootContext "id" "default") | fromYaml) "name" -}}
+  {{- end -}}
+
+  {{- with $componentObject.serviceAccount -}}
+    {{- if hasKey . "identifier" -}}
+      {{- $serviceAccountName = get (include "bjw-s.common.lib.serviceAccount.getByIdentifier" (dict "rootContext" $rootContext "id" .identifier) | fromYaml) "name" -}}
+    {{- else if hasKey . "name" -}}
+      {{- $serviceAccountName = .name -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $serviceAccountName -}}
 
 {{- end -}}

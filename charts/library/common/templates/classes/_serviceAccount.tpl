@@ -33,5 +33,5 @@ metadata:
     {{- end }}
   {{- end }}
 secrets:
-  - name: {{ include "bjw-s.common.lib.chart.names.fullname" $rootContext }}-sa-token
+  - name: {{ get (include "bjw-s.common.lib.secret.getByIdentifier" (dict "rootContext" $rootContext "id" (printf "%s-sa-token" $serviceAccountObject.identifier) ) | fromYaml) "name"}}
 {{- end -}}
