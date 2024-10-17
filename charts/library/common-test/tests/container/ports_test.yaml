@@ -4,7 +4,7 @@ suite: container ports
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: default should pass
     asserts:
@@ -17,7 +17,7 @@ tests:
 
   - it: custom port should pass
     set:
-      controllers:
+      components:
         main:
           containers:
             main:
@@ -37,3 +37,115 @@ tests:
             containerPort: 8080
             name: http
             protocol: TCP
+
+  - it: custom port map should pass
+    set:
+      components:
+        main:
+          containers:
+            main:
+              ports:
+                http:
+                  containerPort: 8080
+                  protocol: TCP
+
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].ports[0]
+          value:
+            containerPort: 8080
+            name: http
+            protocol: TCP
+
+  - it: custom port map with name should pass
+    set:
+      components:
+        main:
+          containers:
+            main:
+              ports:
+                http:
+                  name: other
+                  containerPort: 8080
+                  protocol: TCP
+
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].ports[0]
+          value:
+            containerPort: 8080
+            name: other
+            protocol: TCP
+
+  - it: custom port map with name should pass
+    set:
+      components:
+        main:
+          containers:
+            main:
+              ports:
+                http:
+                  name: other
+                  containerPort: 8080
+                  protocol: TCP
+
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].ports[0]
+          value:
+            containerPort: 8080
+            name: other
+            protocol: TCP
+
+  - it: KeyValue port should pass
+    set:
+      components:
+        main:
+          containers:
+            main:
+              ports:
+                http: 8080
+
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].ports[0]
+          value:
+            containerPort: 8080
+            name: http
+
+  - it: KeyValue port with templated containerPort should pass
+    set:
+      portNumber: 8080
+      components:
+        main:
+          containers:
+            main:
+              ports:
+                http: "{{ .Values.portNumber }}"
+
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].ports[0]
+          value:
+            containerPort: 8080
+            name: http

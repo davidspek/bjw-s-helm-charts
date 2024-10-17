@@ -4,11 +4,11 @@ suite: pod initContainers
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: with custom env vars dict should pass
     set:
-      controllers.main.initContainers:
+      components.main.initContainers:
         init1:
           image:
             repository: ghcr.io/mendhak/http-https-echo
@@ -49,7 +49,7 @@ tests:
 
   - it: disabled should pass
     set:
-      controllers.main.initContainers:
+      components.main.initContainers:
         init1:
           enabled: false
           image:
@@ -65,7 +65,7 @@ tests:
 
   - it: with dependsOn
     set:
-      controllers.main.initContainers:
+      components.main.initContainers:
         init1:
           dependsOn: init2
           image:
@@ -94,7 +94,7 @@ tests:
 
   - it: with custom restartPolicy (sidecar)
     set:
-      controllers.main.initContainers:
+      components.main.initContainers:
         test:
           image:
             repository: ghcr.io/mendhak/http-https-echo

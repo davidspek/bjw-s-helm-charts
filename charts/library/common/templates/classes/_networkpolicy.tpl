@@ -20,7 +20,7 @@ within the common library.
   {{- else -}}
     {{- $podSelector = dict "matchLabels" (merge
       ($networkPolicyObject.extraSelectorLabels | default dict)
-      (dict "app.kubernetes.io/component" $networkPolicyObject.controller)
+      (dict "app.kubernetes.io/component" $networkPolicyObject.component)
       (include "bjw-s.common.lib.metadata.selectorLabels" $rootContext | fromYaml)
     ) -}}
   {{- end -}}
@@ -29,6 +29,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: {{ $networkPolicyObject.name }}
+  namespace: {{ $rootContext.Release.Namespace }}
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}

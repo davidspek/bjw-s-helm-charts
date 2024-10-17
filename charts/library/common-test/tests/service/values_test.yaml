@@ -4,14 +4,14 @@ suite: service values
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: ports and services are enabled by default
     set:
       service:
         second:
           type: ClusterIP
-          controller: main
+          component: main
           ports:
             first:
               port: 80

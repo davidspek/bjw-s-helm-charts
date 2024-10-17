@@ -8,7 +8,7 @@ Secondary entrypoint and primary loader for the common chart
   {{- /* Build the templates */ -}}
   {{- include "bjw-s.common.render.pvcs" . | nindent 0 -}}
   {{- include "bjw-s.common.render.serviceAccount" . | nindent 0 -}}
-  {{- include "bjw-s.common.render.controllers" . | nindent 0 -}}
+  {{- include "bjw-s.common.render.components" . | nindent 0 -}}
   {{- include "bjw-s.common.render.services" . | nindent 0 -}}
   {{- include "bjw-s.common.render.ingresses" . | nindent 0 -}}
   {{- include "bjw-s.common.render.serviceMonitors" . | nindent 0 -}}
@@ -19,4 +19,6 @@ Secondary entrypoint and primary loader for the common chart
   {{- include "bjw-s.common.render.networkpolicies" . | nindent 0 -}}
   {{- include "bjw-s.common.render.rawResources" . | nindent 0 -}}
   {{- include "bjw-s.common.render.rbac" . | nindent 0 -}}
+  {{- include "bjw-s.common.render.externalsecrets" . | nindent 0 -}}
+  {{- include "bjw-s.common.render.pdb" . | nindent 0 -}}
 {{- end -}}

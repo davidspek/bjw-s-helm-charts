@@ -3,7 +3,7 @@ Returns the value for dnsPolicy
 */ -}}
 {{- define "bjw-s.common.lib.pod.field.dnsPolicy" -}}
   {{- $ctx := .ctx -}}
-  {{- $controllerObject := $ctx.controllerObject -}}
+  {{- $componentObject := $ctx.componentObject -}}
 
   {{- /* Default to "ClusterFirst" */ -}}
   {{- $dnsPolicy := "ClusterFirst" -}}

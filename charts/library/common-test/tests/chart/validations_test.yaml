@@ -4,14 +4,13 @@ suite: Chart validations
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
-  - it: advancedMounts invalid controller reference should fail
+  - it: advancedMounts invalid component reference should fail
     set:
       persistence:
         data:
-          type: configMap
-          name: myConfigMap
+          type: emptyDir
           advancedMounts:
             test:
               main:
@@ -21,4 +20,4 @@ tests:
                   subPath: config.yaml
     asserts:
       - failedTemplate:
-          errorMessage: "No enabled controller found with this identifier. (persistence item: 'data', controller: 'test')"
+          errorMessage: "No enabled component found with this identifier. (persistence item: 'data', component: 'test')"

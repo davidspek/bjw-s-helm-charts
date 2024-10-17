@@ -9,8 +9,8 @@ global:
   # -- Set additional global annotations. Helm templates can be used.
   annotations: {}
 
-# -- Set default options for all controllers / pods here
-# Each of these options can be overridden on a Controller level
+# -- Set default options for all components / pods here
+# Each of these options can be overridden on a Component level
 defaultPodOptions:
   # -- Defines affinity constraint rules.
   # [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
@@ -62,7 +62,7 @@ defaultPodOptions:
   priorityClassName: ""
 
   # -- Set Container restart policy.
-  # @default -- `Always`. When `controller.type` is `cronjob` it defaults to `Never`.
+  # @default -- `Always`. When `component.type` is `cronjob` it defaults to `Never`.
   restartPolicy: ""
 
   # -- Allow specifying a runtimeClassName other than the default one (ie: nvidia)
@@ -86,12 +86,12 @@ defaultPodOptions:
   # [[ref]](https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/)
   topologySpreadConstraints: []
 
-controllers: {}
+components: {}
 #   main:
-#     # -- enable the controller.
+#     # -- enable the component.
 #     enabled: true
 
-#     # -- Set the controller type.
+#     # -- Set the component type.
 #     # Valid options are deployment, daemonset, statefulset, cronjob or job
 #     type: deployment
 #     # -- Set annotations on the deployment/statefulset/daemonset/cronjob/job
@@ -100,7 +100,7 @@ controllers: {}
 #     labels: {}
 #     # -- Number of desired pods. When using a HorizontalPodAutoscaler, set this to `null`.
 #     replicas: 1
-#     # -- Set the controller upgrade strategy
+#     # -- Set the component upgrade strategy
 #     # For Deployments, valid values are Recreate (default) and RollingUpdate.
 #     # For StatefulSets, valid values are OnDelete and RollingUpdate (default).
 #     # DaemonSets/CronJobs/Jobs ignore this.
@@ -116,19 +116,19 @@ controllers: {}
 #     # -- ReplicaSet revision history limit
 #     revisionHistoryLimit: 3
 
-#     # -- Set the controller service account name
-#     # This is entirely optional, if empty or `null` the controller will use the default service account
+#     # -- Set the component service account name
+#     # This is entirely optional, if empty or `null` the component will use the default service account
 #     serviceAccount:
 #       # -- Only use one of `name` or `identifier`. In case both are specified it will prioritize `identifier`.
 #       # -- Reference a service account identifier from this values.yaml
 #       identifier:
 #       # -- Explicitly set the service account name
 #       name:
-#     # -- CronJob configuration. Required only when using `controller.type: cronjob`.
+#     # -- CronJob configuration. Required only when using `component.type: cronjob`.
 #     # @default -- See below
 #     cronjob:
 #       # -- Suspends the CronJob
-#       # [[ref]](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#schedule-suspension)
+#       # [[ref]](https://kubernetes.io/docs/concepts/workloads/components/cron-jobs/#schedule-suspension)
 #       # @default -- false
 #       suspend:
 #       # -- Specifies how to treat concurrent executions of a job that is created by this cron job
@@ -152,11 +152,11 @@ controllers: {}
 #       # -- Specify the number of parallel jobs
 #       parallelism:
 
-#     # -- Job configuration. Required only when using `controller.type: job`.
+#     # -- Job configuration. Required only when using `component.type: job`.
 #     # @default -- See below
 #     job:
 #       # -- Suspends the Job
-#       # [[ref]](https://kubernetes.io/docs/concepts/workloads/controllers/job/#suspending-a-job)
+#       # [[ref]](https://kubernetes.io/docs/concepts/workloads/components/job/#suspending-a-job)
 #       # @default -- false
 #       suspend:
 #       # -- If this field is set, ttlSecondsAfterFinished after the Job finishes, it is eligible to
@@ -171,7 +171,7 @@ controllers: {}
 #       # -- Specify the completionMode for the job
 #       completionMode:
 
-#     # -- StatefulSet configuration. Required only when using `controller.type: statefulset`.
+#     # -- StatefulSet configuration. Required only when using `component.type: statefulset`.
 #     statefulset:
 #       # -- Set podManagementPolicy, valid values are Parallel and OrderedReady (default).
 #       podManagementPolicy:
@@ -199,7 +199,7 @@ controllers: {}
 #       #   size: 2Gi
 #       #   storageClass: cheap-storage-class
 
-#     # Controller-specific overrides for `defaultPodOptions` keys
+#     # Component-specific overrides for `defaultPodOptions` keys
 #     pod: {}
 
 #     # -- Whether to apply defaultContainerOptions to initContainers
@@ -255,6 +255,19 @@ controllers: {}
 #         args: []
 #         # -- Override the working directory for the container
 #         workingDir:
+
+#         # -- Ports variables. Template enabled.
+#         # Syntax options:
+#         # A) http: 8080
+#         # B) https: '{{ .Release.Name }}'
+#         # C) http:
+#         #      containerPort: 8080
+#         #      name: name-override
+#         #      protocol: TCP
+#         # D) - name: http
+#         #      containerPort: 8080
+#         #      protocol: TCP
+#         ports:
 
 #         # -- Environment variables. Template enabled.
 #         # Syntax options:
@@ -399,7 +412,7 @@ controllers: {}
 #     # Each initContainer should have its own key
 #     initContainers: {}
 
-# -- If true forces the controllers to use the `default` ServiceAccount for the namespace if one is not explicitly defined.
+# -- If true forces the components to use the `default` ServiceAccount for the namespace if one is not explicitly defined.
 # This feature flag will be removed on future versions where this will be the default behavior.
 enforceServiceAccountCreation: false
 
@@ -441,6 +454,10 @@ secrets:
   # secret:
   #   # -- Enables or disables the Secret
   #   enabled: false
+  #   # -- Include the secret in checksums
+  #   includeInChecksum: true
+  #   # -- Overrides the default secret name
+  #   nameOverride: ""
   #   # -- Labels to add to the Secret
   #   labels: {}
   #   # -- Annotations to add to the Secret
@@ -449,6 +466,129 @@ secrets:
   #   stringData:
   #     {}
   #     # foo: bar
+  #   # -- Secret data content. Helm template enabled.
+  #   data:
+  #     {}
+  #     # foo: YmFyCg==
+
+# -- Use this to populate externalsecrets with the values you specify.
+# Additional ExternalSecrets can be added by adding a dictionary key similar to the 'externalsecret' object.
+# @default -- See below
+externalsecrets:
+  {}
+  # externalsecret:
+  #   # -- Enables or disables the Secret
+  #   enabled: false
+  #   # -- Include the secret in checksums
+  #   includeInChecksum: true
+  #   # -- Overrides the default secret name
+  #   nameOverride: ""
+  #   # -- Labels to add to the Secret
+  #   labels: {}
+  #   # -- Annotations to add to the Secret
+  #   annotations: {}
+  #   # -- The refresh interval for the ExternalSecret
+  #   refreshInterval: 1h
+  #   # -- The secret store reference
+  #   secretStoreRef:
+  #     kind: ClusterSecretStore
+  #     name: cluster-secret-store
+  #   # -- The target secret
+  #   target:
+  #     # -- The optional name of the target secret. Defaults to the name of the ExternalSecret
+  #     name: ""
+  #     # -- The creation policy for the target secret
+  #     creationPolicy: Owner
+  #     # -- The deletion policy for the target secret
+  #     deletionPolicy: Delete
+  #     # -- The optional template for the target secret
+  #     template:
+  #       # -- The optional type of the secret
+  #       type: Opaque
+  #       metadata:
+  #         labels: {}
+  #         annotations: {}
+  #       # -- The optional templated data for the ExternalSecret
+  #       data:
+  #         config.yml: |
+  #           database:
+  #             connection: postgres://{{ .username }}:{{ .password }}@{{ .database_host }}:5432/payments
+  #       # -- The optional templateFrom to use for the ExternalSecret
+  #       templateFrom:
+  #       - configMap:
+  #           name: application-config-tmpl
+  #           items:
+  #           - key: config.yml
+  #  # -- The data for the ExternalSecret
+  #   data:
+  #   - secretKey: username
+  #     remoteRef:
+  #       key: database-credentials
+  #       version: v1
+  #       property: username
+  #       decodingStrategy: None # can be None, Base64, Base64URL or Auto
+  #     # -- define the source of the secret. Can be a SecretStore or a Generator kind
+  #     sourceRef:
+  #       # -- point to a SecretStore that should be used to fetch a secret.
+  #       # -- must be defined if no spec.secretStoreRef is defined.
+  #       storeRef:
+  #         name: aws-secretstore
+  #         kind: ClusterSecretStore
+  #  # -- The dataFrom for the ExternalSecret
+  #   dataFrom:
+  #   - sourceRef:
+  #       generatorRef:
+  #         apiVersion: generators.external-secrets.io/v1alpha1
+  #         kind: ECRAuthorizationToken
+  #         name: "my-ecr"
+  # # -- Or
+  #   - extract:
+  #       key: database-credentials
+  #       version: v1
+  #        property: data
+  #       conversionStrategy: Default
+  #       decodingStrategy: Auto
+  #     rewrite:
+  #     - regexp:
+  #         source: "exp-(.*?)-ression"
+  #         target: "rewriting-${1}-with-groups"
+  #   - find:
+  #       path: path-to-filter
+  #       name:
+  #         regexp: ".*foobar.*"
+  #       tags:
+  #         foo: bar
+  #       conversionStrategy: Unicode
+  #       decodingStrategy: Base64
+  #     rewrite:
+  #     - regexp:
+  #         source: "foo"
+  #         target: "bar"
+
+
+# -- Configure PodDisruptionBudget for the chart here.
+# Additional PodDisruptionBudgets can be added by adding a dictionary key similar to the 'main' object.
+# @default -- See below
+PodDisruptionBudget:
+  {}
+  # main:
+  #   # -- Enables or disables the PodDisruptionBudget
+  #   enabled: true
+  #   # -- Override the name suffix that is used for this PodDisruptionBudget
+  #   nameOverride: ""
+  #   # -- Configure which component this PodDisruptionBudget should target
+  #   component: main
+  #   # -- Set extra labels for the PodDisruptionBudget
+  #   labels: {}
+  #   # -- Set extra annotations for the PodDisruptionBudget
+  #   annotations: {}
+  #   # -- Set the PodDisruptionBudget maxUnavailable
+  #   maxUnavailable: 1
+  #   # -- Set the PodDisruptionBudget minAvailable
+  #   minAvailable: 1
+  #   # -- Set the PodDisruptionBudget unhealthyPodEvictionPolicy. Can be `IfHealthyBudget` or `AlwaysAllow`
+  #   unhealthyPodEvictionPolicy: IfHealthyBudget
+
 
 # -- Configure configMaps for the chart here.
 # Additional configMaps can be added by adding a dictionary key similar to the 'config' object.
@@ -492,11 +632,11 @@ service:
   #   # -- Override the name suffix that is used for this service
   #   nameOverride: ""
 
-  #   # -- Configure which controller this service should target
-  #   controller: main
+  #   # -- Configure which component this service should target
+  #   component: main
 
-  #   # -- Make this the primary service for this controller (used in probes, notes, etc...).
-  #   # If there is more than 1 service targeting the controller, make sure that only 1 service is
+  #   # -- Make this the primary service for this component (used in probes, notes, etc...).
+  #   # If there is more than 1 service targeting the component, make sure that only 1 service is
   #   # marked as primary.
   #   primary: true
 
@@ -710,7 +850,7 @@ persistence:
   #   enabled: false
 
   #   # -- Sets the persistence type
-  #   # Valid options are persistentVolumeClaim, emptyDir, nfs, hostPath, secret, configMap or custom
+  #   # Valid options are persistentVolumeClaim, emptyDir, nfs, hostPath or custom
   #   type: persistentVolumeClaim
 
   #   # -- Storage Class for the config volume.
@@ -741,7 +881,7 @@ persistence:
   #   # -- Set to true to retain the PVC upon `helm uninstall`
   #   retain: false
 
-  #   # -- Configure mounts to all controllers and containers. By default the persistence item
+  #   # -- Configure mounts to all components and containers. By default the persistence item
   #   # will be mounted to `/<name_of_the_peristence_item>`.
   #   # Example:
   #   # globalMounts:
@@ -749,10 +889,10 @@ persistence:
   #   #     readOnly: false
   #   globalMounts: []
 
-  #   # -- Explicitly configure mounts for specific controllers and containers.
+  #   # -- Explicitly configure mounts for specific components and containers.
   #   # Example:
   #   # advancedMounts:
-  #   #   main: # the controller with the "main" identifier
+  #   #   main: # the component with the "main" identifier
   #   #     main: # the container with the "main" identifier
   #   #       - path: /data/config.yaml
   #   #         readOnly: true
@@ -761,7 +901,48 @@ persistence:
   #   #     second-container: # the container with the "second-container" identifier
   #   #       - path: /appdata/config
   #   #         readOnly: true
-  #   #   second-controller: # the controller with the "second-controller" identifier
+  #   #   second-component: # the component with the "second-component" identifier
+  #   #     main: # the container with the "main" identifier
+  #   #       - path: /data/config.yaml
+  #   #         readOnly: false
+  #   #         subPath: config.yaml
+  #   advancedMounts: {}
+
+# -- Configure configs for the chart here.
+# Additional items can be added by adding a dictionary key similar to the 'config' key.
+# [[ref]](https://bjw-s.github.io/helm-charts/docs/common-library/common-library-storage)
+# @default -- See below
+configs:
+  {}
+  # config:
+  #   # -- Enables or disables the persistence item. Defaults to true
+  #   enabled: false
+
+  #   # -- Sets the persistence type
+  #   # Valid options are secret, externalsecret or configMap
+  #   type: configMap
+
+  #   # -- Configure mounts to all components and containers. By default the persistence item
+  #   # will be mounted to `/<name_of_the_peristence_item>`.
+  #   # Example:
+  #   # globalMounts:
+  #   #   - path: /config
+  #   #     readOnly: false
+  #   globalMounts: []
+
+  #   # -- Explicitly configure mounts for specific components and containers.
+  #   # Example:
+  #   # advancedMounts:
+  #   #   main: # the component with the "main" identifier
+  #   #     main: # the container with the "main" identifier
+  #   #       - path: /data/config.yaml
+  #   #         readOnly: true
+  #   #         mountPropagation: None
+  #   #         subPath: config.yaml
+  #   #     second-container: # the container with the "second-container" identifier
+  #   #       - path: /appdata/config
+  #   #         readOnly: true
+  #   #   second-component: # the component with the "second-component" identifier
   #   #     main: # the container with the "main" identifier
   #   #       - path: /data/config.yaml
   #   #         readOnly: false
@@ -777,10 +958,10 @@ networkpolicies:
   #   # -- Enables or disables the networkPolicy item. Defaults to true
   #   enabled: false
 
-  #   # -- Configure which controller this networkPolicy should target
-  #   controller: main
+  #   # -- Configure which component this networkPolicy should target
+  #   component: main
 
-  #   # -- Define a custom podSelector for the networkPolicy. This takes precedence over targeting a controller.
+  #   # -- Define a custom podSelector for the networkPolicy. This takes precedence over targeting a component.
   #   # podSelector: {}
 
   #   # -- The policyTypes for this networkPolicy

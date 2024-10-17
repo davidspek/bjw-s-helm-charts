@@ -10,11 +10,10 @@ on:
         default: "[]"
         required: false
         type: string
-    secrets:
-      BJWS_APP_ID:
-        required: true
-      BJWS_APP_PRIVATE_KEY:
-        required: true
+
+permissions:
+  contents: write
+  actions: read
 
 env:
   HELM_VERSION: 3.11.2
@@ -24,24 +23,15 @@ jobs:
     name: Release charts
     runs-on: ubuntu-22.04
     steps:
-      - name: "Generate Short Lived OAuth App Token (ghs_*)"
-        uses: actions/create-github-app-token@v1.10.4
-        id: app-token
-        with:
-          app-id: "${{ secrets.BJWS_APP_ID }}"
-          private-key: "${{ secrets.BJWS_APP_PRIVATE_KEY }}"
-
       - name: Checkout charts branch
         uses: actions/checkout@v4
         with:
-          token: ${{ steps.app-token.outputs.token }}
           path: "src"
           fetch-depth: 0
 
       - name: Checkout gh-pages branch
         uses: actions/checkout@v4
         with:
-          token: ${{ steps.app-token.outputs.token }}
           path: "dest"
           ref: "gh-pages"
           fetch-depth: 0
@@ -72,7 +62,7 @@ jobs:
         shell: bash
         working-directory: dest
         run: |
-          helm repo index . --url https://bjw-s.github.io/helm-charts/
+          helm repo index . --url https://davidspek.github.io/bjw-s-helm-charts
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -80,9 +70,9 @@ jobs:
         with:
           repository: dest
           branch: gh-pages
-          commit_user_name: "bjw-s-bot[bot]"
-          commit_user_email: 87358111+bjw-s-bot[bot]@users.noreply.github.com
-          commit_author: bjw-s-bot[bot] <87358111+bjw-s-bot[bot]@users.noreply.github.com>
+          commit_user_name: "davidspek-bot[bot]"
+          commit_user_email: 87358111+davidspek-bot[bot]@users.noreply.github.com
+          commit_author: davidspek-bot[bot] <87358111+davidspek-bot[bot]@users.noreply.github.com>
           file_pattern: "index.yaml **/*.tgz"
           disable_globbing: true
 
@@ -91,6 +81,6 @@ jobs:
         if: ${{ steps.auto-commit.outputs.changes_detected }}
         id: wait-for-deploy
         with:
-          token: ${{ steps.app-token.outputs.token }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ steps.auto-commit.outputs.commit_hash }}
           checkName: deploy

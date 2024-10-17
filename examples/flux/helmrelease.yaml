@@ -20,7 +20,7 @@ spec:
         namespace: flux-system
 
   values:
-    controllers:
+    components:
       main:
         strategy: Recreate
 
@@ -44,7 +44,7 @@ spec:
     # -- Configures service settings for the chart.
     service:
       main:
-        controller: main
+        component: main
         ports:
           http:
             port: &port 80

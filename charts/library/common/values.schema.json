@@ -1,6 +1,7 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.5.1/charts/library/common/values.schema.json",
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "$id": "https://raw.githubusercontent.com/davidspek/bjw-s-helm-charts/common-4.10.1/charts/library/common/values.schema.json",
+
   "type": "object",
   "properties": {
     "global": {
@@ -29,9 +30,9 @@
     "defaultPodOptions": {
       "$ref": "schemas/pod.json#/options"
     },
-    "controllers": {
+    "components": {
       "additionalProperties": {
-        "$ref": "schemas/controllers.json#/instance"
+        "$ref": "schemas/components.json#/instance"
       }
     },
     "enforceServiceAccountCreation": {
@@ -83,6 +84,21 @@
     "rawResources": {
       "additionalProperties": {
         "$ref": "schemas/rawResource.json#/instance"
+      }
+    },
+    "configs": {
+      "additionalProperties": {
+        "$ref": "schemas/config.json#/item"
+      }
+    },
+    "externalsecrets": {
+      "additionalProperties": {
+        "$ref": "schemas/externalsecret.json#/instance"
+      }
+    },
+    "podDisruptionBudgets": {
+      "additionalProperties": {
+        "$ref": "schemas/pdb.json#/instance"
       }
     }
   }

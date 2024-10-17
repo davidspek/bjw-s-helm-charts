@@ -4,7 +4,7 @@ suite: persistence volumes
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: no persistence should pass
     asserts:
@@ -35,7 +35,7 @@ tests:
 
   - it: advanced mount config should pass
     set:
-      controllers:
+      components:
         main:
           containers:
             second-container:
@@ -57,6 +57,9 @@ tests:
               main:
                 - path: /config
                   readOnly: false
+        no-mounts:
+          existingClaim: test
+      configs:
         data:
           type: configMap
           name: myConfigMap
@@ -76,8 +79,6 @@ tests:
                 - path: /second-pod/config.yaml
                   readOnly: false
                   subPath: config.yaml
-        no-mounts:
-          existingClaim: test
 
     asserts:
       - documentIndex: &FirstDeploymentDoc 0

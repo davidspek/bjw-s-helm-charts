@@ -4,11 +4,11 @@ suite: Container validations
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: image repository is required
     set:
-      controllers:
+      components:
         main:
           containers:
             test:
@@ -17,11 +17,11 @@ tests:
                 tag: "test"
     asserts:
       - failedTemplate:
-          errorMessage: "No image repository specified for container. (controller main, container test)"
+          errorMessage: "No image repository specified for container. (component main, container test)"
 
   - it: image tag is required
     set:
-      controllers:
+      components:
         main:
           containers:
             test:
@@ -30,4 +30,4 @@ tests:
                 tag: ""
     asserts:
       - failedTemplate:
-          errorMessage: "No image tag specified for container. (controller main, container test)"
+          errorMessage: "No image tag specified for container. (component main, container test)"

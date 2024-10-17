@@ -6,6 +6,6 @@ Validate CronJob values
   {{- $cronjobValues := .object -}}
 
   {{- if and (ne $cronjobValues.pod.restartPolicy "Never") (ne $cronjobValues.pod.restartPolicy "OnFailure") -}}
-    {{- fail (printf "Not a valid restartPolicy type for CronJob. (controller: %s, restartPolicy: %s)" $cronjobValues.identifier $cronjobValues.pod.restartPolicy) }}
+    {{- fail (printf "Not a valid restartPolicy type for CronJob. (component: %s, restartPolicy: %s)" $cronjobValues.identifier $cronjobValues.pod.restartPolicy) }}
   {{- end -}}
 {{- end -}}

@@ -1,10 +1,10 @@
 {{- /*
-The pod definition included in the controller.
+The pod definition included in the component.
 */ -}}
 {{- define "bjw-s.common.lib.pod.spec" -}}
   {{- $rootContext := .rootContext -}}
-  {{- $controllerObject := .controllerObject -}}
-  {{- $ctx := dict "rootContext" $rootContext "controllerObject" $controllerObject -}}
+  {{- $componentObject := .componentObject -}}
+  {{- $ctx := dict "rootContext" $rootContext "componentObject" $componentObject -}}
 
 enableServiceLinks: {{ include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "enableServiceLinks" "default" false) }}
 serviceAccountName: {{ include "bjw-s.common.lib.pod.field.serviceAccountName" (dict "ctx" $ctx) | trim }}
@@ -49,7 +49,7 @@ nodeSelector: {{ . | nindent 2 }}
   {{- with (include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "affinity")) }}
 affinity: {{ . | nindent 2 }}
   {{- end -}}
-  {{- with (include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "topologySpreadConstraints")) }}
+  {{- with (include "bjw-s.common.lib.pod.field.topologySpreadConstraints" (dict "ctx" $ctx "rootContext" $rootContext)) }}
 topologySpreadConstraints: {{ . | nindent 2 }}
   {{- end -}}
   {{- with (include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "tolerations")) }}

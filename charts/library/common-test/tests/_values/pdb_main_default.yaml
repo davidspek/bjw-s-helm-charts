@@ -1,0 +1,6 @@
+---
+# yaml-language-server: $schema=../../../common/values.schema.json
+podDisruptionBudgets:
+  main:
+    component: main
+    minAvailable: 1

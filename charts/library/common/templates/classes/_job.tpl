@@ -22,6 +22,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ $jobObject.name }}
+  namespace: {{ $rootContext.Release.Namespace }}
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}
@@ -54,11 +55,11 @@ spec:
   backoffLimit: {{ include "bjw-s.common.lib.defaultKeepNonNullValue" (dict "value" $jobSettings.backoffLimit "default" 6) }}
   template:
     metadata:
-      {{- with (include "bjw-s.common.lib.pod.metadata.annotations" (dict "rootContext" $rootContext "controllerObject" $jobObject)) }}
+      {{- with (include "bjw-s.common.lib.pod.metadata.annotations" (dict "rootContext" $rootContext "componentObject" $jobObject)) }}
       annotations: {{ . | nindent 8 }}
       {{- end -}}
-      {{- with (include "bjw-s.common.lib.pod.metadata.labels" (dict "rootContext" $rootContext "controllerObject" $jobObject)) }}
+      {{- with (include "bjw-s.common.lib.pod.metadata.labels" (dict "rootContext" $rootContext "componentObject" $jobObject)) }}
       labels: {{ . | nindent 8 }}
       {{- end }}
-    spec: {{ include "bjw-s.common.lib.pod.spec" (dict "rootContext" $rootContext "controllerObject" $jobObject) | nindent 6 }}
+    spec: {{ include "bjw-s.common.lib.pod.spec" (dict "rootContext" $rootContext "componentObject" $jobObject) | nindent 6 }}
 {{- end -}}

@@ -1,0 +1,75 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: configs configmap
+templates:
+  - common.yaml
+values:
+  - ../_values/components_main_default_container.yaml
+tests:
+  - it: configmap configs type should pass
+    set:
+      configs:
+        configmap:
+          type: configMap
+          name: mySettings
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.volumes[0]
+          value:
+            name: configmap
+            configMap:
+              name: mySettings
+
+  - it: configmap configs type with name template should pass
+    set:
+      configs:
+        configmap:
+          type: configMap
+          name: '{{ include "bjw-s.common.lib.chart.names.fullname" $ }}-config'
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.volumes[0]
+          value:
+            name: configmap
+            configMap:
+              name: RELEASE-NAME-config
+
+  - it: configmap configs type with identifier reference should pass
+    set:
+      configMaps:
+        mySettings:
+          data:
+            test: testvalue
+      configs:
+        configmap:
+          type: configMap
+          identifier: mySettings
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.volumes[0]
+          value:
+            name: configmap
+            configMap:
+              name: RELEASE-NAME-mySettings
+
+  - it: configmap configs type with invalid identifier reference should fail
+    set:
+      configs:
+        configmap:
+          type: configMap
+          identifier: doesNotExist
+    asserts:
+      - failedTemplate:
+          errorMessage: "No configmap found with this identifier. (configs item 'configmap', identifier 'doesNotExist')"

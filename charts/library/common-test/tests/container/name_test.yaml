@@ -4,11 +4,11 @@ suite: container name
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: with explicit name should pass
     set:
-      controllers.main.containers:
+      components.main.containers:
         main:
           nameOverride: template-test
           image:
@@ -24,7 +24,7 @@ tests:
 
   - it: with implicit name should pass
     set:
-      controllers.main.containers:
+      components.main.containers:
         main:
           image:
             repository: ghcr.io/mendhak/http-https-echo
@@ -39,7 +39,7 @@ tests:
 
   - it: with templated name should pass
     set:
-      controllers.main.containers:
+      components.main.containers:
         main:
           nameOverride: "{{ .Release.Name }}-container"
           image:

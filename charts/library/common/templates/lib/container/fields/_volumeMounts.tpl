@@ -4,7 +4,7 @@ volumeMounts used by the container.
 {{- define "bjw-s.common.lib.container.field.volumeMounts" -}}
   {{- $ctx := .ctx -}}
   {{- $rootContext := $ctx.rootContext -}}
-  {{- $controllerObject := $ctx.controllerObject -}}
+  {{- $componentObject := $ctx.componentObject -}}
   {{- $containerObject := $ctx.containerObject -}}
 
   {{- /* Default to empty dict */ -}}
@@ -24,9 +24,22 @@ volumeMounts used by the container.
     {{- end -}}
   {{- end -}}
 
+  {{- /* Collect config items */ -}}
+  {{- range $identifier, $configsValues := $rootContext.Values.configs -}}
+    {{- /* Enable config item by default, but allow override */ -}}
+    {{- $configEnabled := true -}}
+    {{- if hasKey $configsValues "enabled" -}}
+      {{- $configEnabled = $configsValues.enabled -}}
+    {{- end -}}
+
+    {{- if $configEnabled -}}
+      {{- $_ := set $persistenceItemsToProcess $identifier $configsValues -}}
+    {{- end -}}
+  {{- end -}}
+
   {{- /* Collect volumeClaimTemplates */ -}}
-  {{- if not (empty (dig "statefulset" "volumeClaimTemplates" nil $controllerObject)) -}}
-    {{- range $persistenceValues := $controllerObject.statefulset.volumeClaimTemplates -}}
+  {{- if not (empty (dig "statefulset" "volumeClaimTemplates" nil $componentObject)) -}}
+    {{- range $persistenceValues := $componentObject.statefulset.volumeClaimTemplates -}}
       {{- /* Enable persistence item by default, but allow override */ -}}
       {{- $persistenceEnabled := true -}}
       {{- if hasKey $persistenceValues "enabled" -}}
@@ -39,7 +52,7 @@ volumeMounts used by the container.
           {{- $_ := set $mountValues "globalMounts" $persistenceValues.globalMounts -}}
         {{- end -}}
         {{- if not (empty (dig "advancedMounts" nil $persistenceValues)) -}}
-          {{- $_ := set $mountValues "advancedMounts" (dict $controllerObject.identifier $persistenceValues.advancedMounts) -}}
+          {{- $_ := set $mountValues "advancedMounts" (dict $componentObject.identifier $persistenceValues.advancedMounts) -}}
         {{- end -}}
         {{- $_ := set $persistenceItemsToProcess $persistenceValues.name $mountValues -}}
       {{- end -}}
@@ -63,7 +76,7 @@ volumeMounts used by the container.
       {{- end -}}
 
       {{- if hasKey . "advancedMounts" -}}
-        {{- $advancedMounts := dig $controllerObject.identifier $containerObject.identifier list .advancedMounts -}}
+        {{- $advancedMounts := dig $componentObject.identifier $containerObject.identifier list .advancedMounts -}}
         {{- range $advancedMounts -}}
           {{- $mounts = append $mounts . -}}
         {{- end -}}

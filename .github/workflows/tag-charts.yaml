@@ -10,11 +10,10 @@ on:
         default: "[]"
         required: false
         type: string
-    secrets:
-      BJWS_APP_ID:
-        required: true
-      BJWS_APP_PRIVATE_KEY:
-        required: true
+
+permissions:
+  contents: write
+  actions: read
 
 env:
   CHARTS_SRC_DIR: "charts"
@@ -24,17 +23,9 @@ jobs:
     name: Tag charts
     runs-on: ubuntu-22.04
     steps:
-      - name: "Generate Short Lived OAuth App Token (ghs_*)"
-        uses: actions/create-github-app-token@v1.10.4
-        id: app-token
-        with:
-          app-id: "${{ secrets.BJWS_APP_ID }}"
-          private-key: "${{ secrets.BJWS_APP_PRIVATE_KEY }}"
-
       - name: Checkout chart sources
         uses: actions/checkout@v4
         with:
-          token: ${{ steps.app-token.outputs.token }}
           fetch-depth: 0
 
       - name: Create git tag for charts

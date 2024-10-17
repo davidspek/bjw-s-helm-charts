@@ -22,6 +22,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ $serviceObject.name }}
+  namespace: {{ $rootContext.Release.Namespace }}
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}
@@ -39,7 +40,7 @@ spec:
   type: ClusterIP
   {{- if $serviceObject.clusterIP }}
   clusterIP: {{ $serviceObject.clusterIP }}
-  {{end}}
+  {{- end }}
   {{- else if eq $svcType "LoadBalancer" }}
   type: {{ $svcType }}
   {{- if $serviceObject.loadBalancerIP }}
@@ -106,14 +107,14 @@ spec:
       name: {{ $name }}
         {{- if (not (empty $port.nodePort)) }}
       nodePort: {{ $port.nodePort }}
-        {{ end }}
+        {{- end }}
         {{- if (not (empty $port.appProtocol)) }}
       appProtocol: {{ $port.appProtocol }}
-        {{ end }}
+        {{- end }}
       {{- end -}}
   {{- with (merge
     ($serviceObject.extraSelectorLabels | default dict)
-    (dict "app.kubernetes.io/component" $serviceObject.controller)
+    (dict "app.kubernetes.io/component" $serviceObject.component)
     (include "bjw-s.common.lib.metadata.selectorLabels" $rootContext | fromYaml)
   ) }}
   selector: {{- toYaml . | nindent 4 }}

@@ -5,8 +5,8 @@ Validate networkPolicy values
   {{- $rootContext := .rootContext -}}
   {{- $networkpolicyObject := .object -}}
 
-  {{- if and (not (hasKey $networkpolicyObject "podSelector")) (empty (get $networkpolicyObject "controller")) -}}
-    {{- fail (printf "controller reference or podSelector is required for NetworkPolicy. (NetworkPolicy %s)" $networkpolicyObject.identifier) -}}
+  {{- if and (not (hasKey $networkpolicyObject "podSelector")) (empty (get $networkpolicyObject "component")) -}}
+    {{- fail (printf "component reference or podSelector is required for NetworkPolicy. (NetworkPolicy %s)" $networkpolicyObject.identifier) -}}
   {{- end -}}
 
   {{- if empty (get $networkpolicyObject "policyTypes") -}}
