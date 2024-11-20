@@ -23,6 +23,7 @@ tests:
             app.kubernetes.io/component: main
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/version: 1.0.0
       - documentIndex: *ComponentDoc
         equal:
           path: spec.selector.matchLabels
@@ -57,6 +58,7 @@ tests:
             app.kubernetes.io/component: main
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/version: 1.0.0
             test_label: test
       - documentIndex: *ComponentDoc
         equal:
@@ -98,6 +100,7 @@ tests:
             app.kubernetes.io/component: main
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/version: 1.0.0
             pod_default_label: test
             test_label: test
       - documentIndex: *ComponentDoc
@@ -142,6 +145,7 @@ tests:
             app.kubernetes.io/component: main
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/version: 1.0.0
             test_label: test
             pod_default_label: test
       - documentIndex: *ComponentDoc
@@ -177,6 +181,7 @@ tests:
             app.kubernetes.io/component: main
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/version: 1.0.0
             test_label: "true"
       - documentIndex: *ComponentDoc
         equal:

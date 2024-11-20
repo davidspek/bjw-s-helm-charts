@@ -8,6 +8,7 @@ Returns the value for labels
   {{- /* Default labels */ -}}
   {{- $labels := merge
     (dict "app.kubernetes.io/component" $componentObject.identifier)
+    (include "bjw-s.common.lib.metadata.versionLabel" $rootContext | fromYaml)
   -}}
 
   {{- /* Fetch the Pod selectorLabels */ -}}
