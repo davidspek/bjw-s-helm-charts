@@ -20,7 +20,7 @@ Returns the value for labels
   {{- /* Set to the default if it is set */ -}}
   {{- $defaultOption := get (default dict $rootContext.Values.defaultPodOptions) "labels" -}}
   {{- if not (empty $defaultOption) -}}
-    {{- $labels = merge $defaultOption $labels -}}
+    {{- $labels = merge $labels $defaultOption -}}
   {{- end -}}
 
   {{- /* See if a pod-specific override is set */ -}}

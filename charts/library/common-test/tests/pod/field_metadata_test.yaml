@@ -110,6 +110,52 @@ tests:
             app.kubernetes.io/component: main
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/name: RELEASE-NAME
+
+  - it: custom metadata with defaultPodOptions metadata should overwrite pass
+    set:
+      defaultPodOptions:
+        labels:
+          pod_default_label: test
+          test_label: overwrite
+        annotations:
+          pod_default_annotation: test
+          test_annotation: overwrite
+      components:
+        main:
+          type: deployment
+          pod:
+            annotations:
+              test_annotation: test
+            labels:
+              test_label: test
+    asserts:
+      - documentIndex: &ComponentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.template.metadata.annotations
+          value:
+            pod_default_annotation: test
+            test_annotation: test
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.template.metadata.labels
+          value:
+            app.kubernetes.io/component: main
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/version: 1.0.0
+            pod_default_label: test
+            test_label: test
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.selector.matchLabels
+          value:
+            app.kubernetes.io/component: main
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+
   - it: custom templated metadata should pass
     set:
       custom_metadata:
@@ -188,5 +234,90 @@ tests:
           path: spec.selector.matchLabels
           value:
             app.kubernetes.io/component: main
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+
+  - it: setting default pod labels with more components should have correct component in pod metadata
+    set:
+      defaultPodOptions:
+        labels:
+          version: '{{ .Chart.AppVersion }}'
+      components:
+        main:
+          type: deployment
+        second:
+          type: deployment
+          containers:
+            second:
+              image:
+                repository: ghcr.io/mendhak/http-https-echo
+                tag: 31
+        third:
+          type: statefulset
+          pod:
+            labels:
+              test_label: "true"
+          containers:
+            third:
+              image:
+                repository: ghcr.io/mendhak/http-https-echo
+                tag: 31
+    asserts:
+      - documentIndex: &MainComponentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: &SecondComponentDoc 1
+        isKind:
+          of: Deployment
+      - documentIndex: &ThirdComponentDoc 2
+        isKind:
+          of: StatefulSet
+      - documentIndex: *MainComponentDoc
+        equal:
+          path: spec.template.metadata.labels
+          value:
+            app.kubernetes.io/component: main
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/version: 1.0.0
+            version: 1.0.0
+      - documentIndex: *MainComponentDoc
+        equal:
+          path: spec.selector.matchLabels
+          value:
+            app.kubernetes.io/component: main
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+      - documentIndex: *SecondComponentDoc
+        equal:
+          path: spec.template.metadata.labels
+          value:
+            app.kubernetes.io/component: second
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/version: 1.0.0
+            version: 1.0.0
+      - documentIndex: *SecondComponentDoc
+        equal:
+          path: spec.selector.matchLabels
+          value:
+            app.kubernetes.io/component: second
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+      - documentIndex: *ThirdComponentDoc
+        equal:
+          path: spec.template.metadata.labels
+          value:
+            app.kubernetes.io/component: third
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/version: 1.0.0
+            version: 1.0.0
+            test_label: "true"
+      - documentIndex: *ThirdComponentDoc
+        equal:
+          path: spec.selector.matchLabels
+          value:
+            app.kubernetes.io/component: third
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/name: RELEASE-NAME
