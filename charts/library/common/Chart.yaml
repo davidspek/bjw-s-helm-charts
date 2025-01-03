@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 4.13.2
+version: 4.14.0
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -16,4 +16,4 @@ annotations:
   artifacthub.io/changes: |-
     - kind: added
       description: |-
-        Add feature flag to override enforcing the creation of a default ServiceAccount
+        Add feature to be able to template route matches, filters and timeouts

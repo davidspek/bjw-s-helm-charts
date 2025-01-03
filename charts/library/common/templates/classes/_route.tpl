@@ -79,17 +79,17 @@ spec:
     {{- if or (eq $routeKind "HTTPRoute") (eq $routeKind "GRPCRoute") }}
       {{- with .matches }}
     matches:
-        {{- toYaml . | nindent 6 }}
+        {{- tpl (toYaml .) $rootContext | nindent 6 }}
       {{- end }}
         {{- with .filters }}
     filters:
-        {{- toYaml . | nindent 6 }}
+        {{- tpl (toYaml .) $rootContext | nindent 6 }}
       {{- end }}
     {{- end }}
     {{- if (eq $routeKind "HTTPRoute") }}
       {{- with .timeouts }}
     timeouts:
-        {{- toYaml . | nindent 6 }}
+        {{- tpl (toYaml .) $rootContext | nindent 6 }}
       {{- end }}
     {{- end }}
   {{- end }}
