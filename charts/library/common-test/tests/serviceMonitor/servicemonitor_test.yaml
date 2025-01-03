@@ -85,6 +85,7 @@ tests:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/version: 1.0.0
             helm.sh/chart: common-test-1.0.0
             test.label: testvalue
 
