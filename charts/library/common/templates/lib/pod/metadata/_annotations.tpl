@@ -34,7 +34,7 @@ Returns the value for annotations
       {{- $configMapIncludeInChecksum = $configmap.includeInChecksum -}}
     {{- end -}}
     {{- if and $configMapEnabled $configMapIncludeInChecksum -}}
-      {{- $_ := set $configMapsFound $name (toYaml $configmap.data | sha256sum) -}}
+      {{- $_ := set $configMapsFound $name (tpl (toYaml $configmap.data) $rootContext | sha256sum) -}}
     {{- end -}}
   {{- end -}}
   {{- if $configMapsFound -}}
@@ -56,7 +56,11 @@ Returns the value for annotations
       {{- $secretIncludeInChecksum = $secret.includeInChecksum -}}
     {{- end -}}
     {{- if and $secretEnabled $secretIncludeInChecksum -}}
-      {{- $_ := set $secretsFound $name (toYaml $secret.stringData | sha256sum) -}}
+      {{- if hasKey $secret "data" -}}
+        {{- $_ := set $secretsFound $name (tpl (toYaml $secret.data) $rootContext | sha256sum) -}}
+      {{- else if hasKey $secret "stringData" -}}
+        {{- $_ := set $secretsFound $name (tpl (toYaml $secret.stringData) $rootContext | sha256sum) -}}
+      {{- end -}}
     {{- end -}}
   {{- end -}}
   {{- range $name, $externalsecret := $rootContext.Values.externalsecrets -}}

@@ -33,3 +33,33 @@ tests:
           path: spec.template.metadata.annotations
           value:
             checksum/configMaps: 66d23d7a53c4e2a523ba85a969696b4ebb78ec5d79ab9c12c210c1569f48511b
+
+  - it: templated metadata should pass
+    set:
+      configMaps:
+        config:
+          enabled: true
+          data:
+            test: |
+              {{- include "template.test" . | nindent 2 }}
+    asserts:
+      - documentIndex: &ComponentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.template.metadata.annotations
+          value:
+            checksum/configMaps: 464ff2b4da8069feb1eb729e47c433556de95e7a9887c091450fa5300b4b5fc6
+      - documentIndex: &ConfigMapDoc 1
+        isKind:
+          of: ConfigMap
+      - documentIndex: *ConfigMapDoc
+        equal:
+          path: data.test
+          value: |
+            nested:
+              key: value 1
+              key2: value 2
+              key3:
+                key4: value 4

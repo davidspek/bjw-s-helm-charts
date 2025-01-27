@@ -14,18 +14,6 @@ within the common library.
     ($secretObject.annotations | default dict)
     (include "bjw-s.common.lib.metadata.globalAnnotations" $rootContext | fromYaml)
   -}}
-
-  {{- $stringData := "" -}}
-  {{- with $secretObject.stringData -}}
-    {{- $stringData = (toYaml $secretObject.stringData) | trim -}}
-  {{- end -}}
-
-  {{- $data := "" -}}
-  {{- if hasKey $secretObject "data" -}}
-  {{- with $secretObject.data -}}
-    {{- $data = (toYaml $secretObject.data) | trim -}}
-  {{- end -}}
-  {{- end -}}
 ---
 apiVersion: v1
 kind: Secret
@@ -47,13 +35,12 @@ metadata:
     {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
     {{- end }}
   {{- end }}
-{{- if $data }}
-{{- with $data }}
-data: {{- tpl $data $rootContext | nindent 2 }}
+{{- with $secretObject.data }}
+data:
+  {{- tpl (toYaml .) $rootContext | nindent 2 }}
 {{- end }}
-{{- else if $stringData }}
-{{- with $stringData }}
-stringData: {{- tpl $stringData $rootContext | nindent 2 }}
-{{- end }}
+{{- with $secretObject.stringData }}
+stringData:
+  {{- tpl (toYaml .) $rootContext | nindent 2 }}
 {{- end }}
 {{- end -}}

@@ -1,0 +1,7 @@
+{{- define "template.test" -}}
+nested:
+  key: value 1
+  key2: value 2
+  key3:
+    key4: value 4
+{{- end -}}

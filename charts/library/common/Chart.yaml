@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 4.14.0
+version: 4.14.1
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -14,6 +14,6 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
-    - kind: added
+    - kind: fixed
       description: |-
-        Add feature to be able to template route matches, filters and timeouts
+        Have checksums for secrets and configMaps template the data or stringData values

@@ -34,10 +34,10 @@ metadata:
   {{- end }}
 {{- with $configMapObject.data }}
 data:
-    {{- tpl (toYaml .) $rootContext | nindent 2 }}
+  {{- tpl (toYaml .) $rootContext | nindent 2 }}
 {{- end }}
 {{- with $configMapObject.binaryData }}
 binaryData:
-    {{- tpl (toYaml .) $rootContext | nindent 2 }}
+  {{- tpl (toYaml .) $rootContext | nindent 2 }}
 {{- end }}
 {{- end -}}
