@@ -76,7 +76,7 @@ configMaps:
     data:
       test: value 1
 
-persistence:
+configs:
   data:
     type: configMap
     name: |-
