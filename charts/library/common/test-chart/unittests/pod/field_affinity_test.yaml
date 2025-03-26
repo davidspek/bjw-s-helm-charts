@@ -85,7 +85,7 @@ tests:
 
   - it: affinity can be configured with templated valued
     set:
-      controllers:
+      components:
         main:
           pod:
             affinity:

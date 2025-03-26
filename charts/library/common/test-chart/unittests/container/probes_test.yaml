@@ -197,7 +197,7 @@ tests:
   - it: AUTO type probe can be configured
     set:
       service.main.ports.http.protocol: HTTP
-      controllers.main.containers.main.probes:
+      components.main.containers.main.probes:
         liveness:
           enabled: true
           type: AUTO
@@ -222,7 +222,7 @@ tests:
 
   - it: HTTP type probe can be configured
     set:
-      controllers.main.containers.main.probes:
+      components.main.containers.main.probes:
         liveness:
           enabled: true
           type: HTTP
@@ -243,7 +243,7 @@ tests:
 
   - it: HTTPS type probe can be configured
     set:
-      controllers.main.containers.main.probes:
+      components.main.containers.main.probes:
         liveness:
           enabled: true
           type: HTTPS
@@ -264,7 +264,7 @@ tests:
 
   - it: GRPC type probe can be configured without service
     set:
-      controllers.main.containers.main.probes:
+      components.main.containers.main.probes:
         liveness:
           enabled: true
           type: GRPC
@@ -282,7 +282,7 @@ tests:
 
   - it: GRPC type probe can be configured with service
     set:
-      controllers.main.containers.main.probes:
+      components.main.containers.main.probes:
         liveness:
           enabled: true
           type: GRPC
@@ -302,7 +302,7 @@ tests:
 
   - it: custom liveness probe can be configured
     set:
-      controllers.main.containers.main.probes:
+      components.main.containers.main.probes:
         liveness:
           enabled: true
           custom: true
@@ -329,7 +329,7 @@ tests:
 
   - it: custom readiness probe can be configured
     set:
-      controllers.main.containers.main.probes:
+      components.main.containers.main.probes:
         readiness:
           enabled: true
           custom: true
@@ -356,7 +356,7 @@ tests:
 
   - it: custom startup probe can be configured
     set:
-      controllers.main.containers.main.probes:
+      components.main.containers.main.probes:
         startup:
           enabled: true
           custom: true
@@ -383,7 +383,7 @@ tests:
 
   - it: User-defined liveness probe port can be configured
     set:
-      controllers.main.containers.main.probes:
+      components.main.containers.main.probes:
         liveness:
           enabled: true
           port: http
@@ -402,7 +402,7 @@ tests:
 
   - it: User-defined readiness probe port can be configured
     set:
-      controllers.main.containers.main.probes:
+      components.main.containers.main.probes:
         readiness:
           enabled: true
           port: http
@@ -420,7 +420,7 @@ tests:
 
   - it: User-defined startup probe port can be configured
     set:
-      controllers.main.containers.main.probes:
+      components.main.containers.main.probes:
         startup:
           enabled: true
           port: http
