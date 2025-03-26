@@ -3,6 +3,33 @@ entries:
   app-template:
   - annotations:
       artifacthub.io/changes: |-
+        - kind: fixed
+          description: |-
+            Fixed name suffix for HTTPRoute
+        - kind: fixed
+          description: |-
+            Fixed incorrect default backendRefs values in HTTPRoute
+    apiVersion: v2
+    created: "2025-03-26T13:37:34.649078623Z"
+    dependencies:
+    - name: common
+      repository: oci://ghcr.io/davidspek/helm
+      version: 4.14.3
+    description: A common powered chart template. This can be useful for small projects
+      that don't have their own chart.
+    digest: 69dbceb453e6849faa38a3679e427ba0314a4da41e873320c0eef76215eda35b
+    kubeVersion: '>=1.22.0-0'
+    maintainers:
+    - email: me@bjw-s.dev
+      name: bjw-s
+    name: app-template
+    sources:
+    - https://github.com/davidspek/bjw-s-helm-charts
+    urls:
+    - https://davidspek.github.io/bjw-s-helm-charts/other/app-template-4.14.3.tgz
+    version: 4.14.3
+  - annotations:
+      artifacthub.io/changes: |-
         - kind: changed
           description: |
             Updated library version to 3.5.1.
@@ -12,7 +39,7 @@ entries:
             - name: Common library chart definition
               url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
     apiVersion: v2
-    created: "2025-03-26T13:36:41.673439733Z"
+    created: "2025-03-26T13:37:34.644368904Z"
     dependencies:
     - name: common
       repository: https://bjw-s.github.io/helm-charts
@@ -39,7 +66,7 @@ entries:
             - name: Common library chart definition
               url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
     apiVersion: v2
-    created: "2025-03-26T13:36:41.670846935Z"
+    created: "2025-03-26T13:37:34.641762782Z"
     dependencies:
     - name: common
       repository: https://bjw-s.github.io/helm-charts
@@ -66,7 +93,7 @@ entries:
             - name: Common library chart definition
               url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
     apiVersion: v2
-    created: "2025-03-26T13:36:41.668314269Z"
+    created: "2025-03-26T13:37:34.638540708Z"
     dependencies:
     - name: common
       repository: https://bjw-s.github.io/helm-charts
@@ -92,7 +119,7 @@ entries:
           description: |-
             Fixed incorrect default backendRefs values in HTTPRoute
     apiVersion: v2
-    created: "2025-03-26T13:36:41.623795713Z"
+    created: "2025-03-26T13:37:34.594047638Z"
     description: Function library for Helm charts
     digest: 3e5380ffe4d11950627b08a298c602867756f3b6996ce93661ee50d210efaa68
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -116,7 +143,7 @@ entries:
           description: |-
             Have checksums for secrets and configMaps template the data or stringData values
     apiVersion: v2
-    created: "2025-03-26T13:36:41.618561385Z"
+    created: "2025-03-26T13:37:34.589884194Z"
     description: Function library for Helm charts
     digest: baa47e7ee5618807729dd0ca0e35ba49045666b1b9b623cdf8d4d3b03d1bb1ec
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -138,7 +165,7 @@ entries:
           description: |-
             Have checksums for secrets and configMaps template the data or stringData values
     apiVersion: v2
-    created: "2025-03-26T13:36:41.61408862Z"
+    created: "2025-03-26T13:37:34.587546684Z"
     description: Function library for Helm charts
     digest: e78212ad6876e48cafd625dff083ba2c566286e3ceb76eb4411d301d39cb824e
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -160,7 +187,7 @@ entries:
           description: |-
             Have checksums for secrets and configMaps template the data or stringData values
     apiVersion: v2
-    created: "2025-03-26T13:36:41.609666478Z"
+    created: "2025-03-26T13:37:34.585187042Z"
     description: Function library for Helm charts
     digest: b76ec3e0e818e49021ae04fd3dd0dd14a09d467043d131422e3a9915ad2a3559
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -182,7 +209,7 @@ entries:
           description: |-
             Add feature to be able to template route matches, filters and timeouts
     apiVersion: v2
-    created: "2025-03-26T13:36:41.606579981Z"
+    created: "2025-03-26T13:37:34.582026707Z"
     description: Function library for Helm charts
     digest: 1a7fd3c4ce4bfcb86fad708c284c76f0bfde3011e68802c30ba5c5bae078c041
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -204,7 +231,7 @@ entries:
           description: |-
             Add feature flag to override enforcing the creation of a default ServiceAccount
     apiVersion: v2
-    created: "2025-03-26T13:36:41.604176957Z"
+    created: "2025-03-26T13:37:34.579509611Z"
     description: Function library for Helm charts
     digest: 2591164762a2b1197822d88d79bf660edef2cbe9b7cb780e2b0992862c7dcb43
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -226,7 +253,7 @@ entries:
           description: |-
             Add feature flag to override enforcing the creation of a default ServiceAccount
     apiVersion: v2
-    created: "2025-03-26T13:36:41.601694465Z"
+    created: "2025-03-26T13:37:34.57715534Z"
     description: Function library for Helm charts
     digest: e02dde7edea1b1c0f130a706fad5ca6a9518efd9ac5ce12c3d4dff5cd20f02c0
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -248,7 +275,7 @@ entries:
           description: |-
             Add feature flag to override enforcing the creation of a default ServiceAccount
     apiVersion: v2
-    created: "2025-03-26T13:36:41.598546782Z"
+    created: "2025-03-26T13:37:34.57399067Z"
     description: Function library for Helm charts
     digest: 028f7a7991151f7138ad2cac3da8ea5e364a576151296d48890c80c40c818855
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -270,7 +297,7 @@ entries:
           description: |-
             Add feature flag to override enforcing the creation of a default ServiceAccount
     apiVersion: v2
-    created: "2025-03-26T13:36:41.596132858Z"
+    created: "2025-03-26T13:37:34.571340646Z"
     description: Function library for Helm charts
     digest: 69807275ee9ceb44ad05a956091335dec71ba85dae488ee1b4596d98161ce32f
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -292,7 +319,7 @@ entries:
           description: |-
             Add feature flag to override enforcing the creation of a default ServiceAccount
     apiVersion: v2
-    created: "2025-03-26T13:36:41.593602005Z"
+    created: "2025-03-26T13:37:34.568989841Z"
     description: Function library for Helm charts
     digest: 03c7c88bee0f67c912e1366e15482eeb278ccd06c402ce084212c120ef2f6c4f
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -326,7 +353,7 @@ entries:
           description: |-
             Fixed volume name reference when persistence key matches release name.
     apiVersion: v2
-    created: "2025-03-26T13:36:41.588772663Z"
+    created: "2025-03-26T13:37:34.566079821Z"
     description: Function library for Helm charts
     digest: f9556c422cc5aa8500f26c982a5952b413ba52952432f3be496c43ea31f7538e
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -360,7 +387,7 @@ entries:
           description: |-
             Fixed volume name reference when persistence key matches release name.
     apiVersion: v2
-    created: "2025-03-26T13:36:41.584447573Z"
+    created: "2025-03-26T13:37:34.563664395Z"
     description: Function library for Helm charts
     digest: 2a34497e5cc7f1bd18d68e5094fe9eb27d8361e98f0259906830870a1aaf86d1
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -394,7 +421,7 @@ entries:
           description: |-
             Fixed volume name reference when persistence key matches release name.
     apiVersion: v2
-    created: "2025-03-26T13:36:41.580061409Z"
+    created: "2025-03-26T13:37:34.561418777Z"
     description: Function library for Helm charts
     digest: 6f1b6e1d6c8beff9a39471e516770624afc32207b7aa416ad52a29b43af786c1
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -428,7 +455,7 @@ entries:
           description: |-
             Fixed volume name reference when persistence key matches release name.
     apiVersion: v2
-    created: "2025-03-26T13:36:41.576473649Z"
+    created: "2025-03-26T13:37:34.558435409Z"
     description: Function library for Helm charts
     digest: 19ce2527104ca43a675888c8fee7e1c69d24ae3dcc5c1428921dc49304f984b2
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -462,7 +489,7 @@ entries:
           description: |-
             Fixed volume name reference when persistence key matches release name.
     apiVersion: v2
-    created: "2025-03-26T13:36:41.574042794Z"
+    created: "2025-03-26T13:37:34.55617852Z"
     description: Function library for Helm charts
     digest: 807a1da3ed09e4bdd3ea5fa50354aff65bfa8bffa5a63119109efe3918cb1170
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -496,7 +523,7 @@ entries:
           description: |-
             Fixed volume name reference when persistence key matches release name.
     apiVersion: v2
-    created: "2025-03-26T13:36:41.664971987Z"
+    created: "2025-03-26T13:37:34.63580815Z"
     description: Function library for Helm charts
     digest: 15adc75556af6fd5b00c42a265bde0e1fbda9f1ce010d6a6823ed69080cdec2b
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -530,7 +557,7 @@ entries:
           description: |-
             Fixed volume name reference when persistence key matches release name.
     apiVersion: v2
-    created: "2025-03-26T13:36:41.662801437Z"
+    created: "2025-03-26T13:37:34.633627894Z"
     description: Function library for Helm charts
     digest: 560efc636bac28b8f4436c39ed89a68861aa558563b1854674acc005b4087294
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -564,7 +591,7 @@ entries:
           description: |-
             Fixed volume name reference when persistence key matches release name.
     apiVersion: v2
-    created: "2025-03-26T13:36:41.660701338Z"
+    created: "2025-03-26T13:37:34.631541473Z"
     description: Function library for Helm charts
     digest: e608e23fcab88c6e932e3153d6dcb5f9007e7253cbcb11d2d3780847575f901a
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -598,7 +625,7 @@ entries:
           description: |-
             Fixed volume name reference when persistence key matches release name.
     apiVersion: v2
-    created: "2025-03-26T13:36:41.657927658Z"
+    created: "2025-03-26T13:37:34.628839715Z"
     description: Function library for Helm charts
     digest: 385e8c09d1825949edc77d1ea88a70f997997ab834d6eb544751a99b3ce95b3f
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -632,7 +659,7 @@ entries:
           description: |-
             Fixed networkPolicies not rendering correctly
     apiVersion: v2
-    created: "2025-03-26T13:36:41.655874186Z"
+    created: "2025-03-26T13:37:34.626591422Z"
     description: Function library for Helm charts
     digest: 9d0d6bc011959195b420d7715d95b78e75d74cf89e1967ca42aa27abaae2ce7f
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -666,7 +693,7 @@ entries:
           description: |-
             Fixed networkPolicies not rendering correctly
     apiVersion: v2
-    created: "2025-03-26T13:36:41.653913297Z"
+    created: "2025-03-26T13:37:34.624574211Z"
     description: Function library for Helm charts
     digest: 8826c67de09568cca6b2cc97d7d493b56aade6d81e5304f6b0becd9fdedc75dc
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -700,7 +727,7 @@ entries:
           description: |-
             Fixed networkPolicies not rendering correctly
     apiVersion: v2
-    created: "2025-03-26T13:36:41.651906523Z"
+    created: "2025-03-26T13:37:34.621689819Z"
     description: Function library for Helm charts
     digest: add463431e0eac275e310bda4f88c234f291ea8b04d18907abde87c3ad46296c
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -734,7 +761,7 @@ entries:
           description: |-
             Fixed networkPolicies not rendering correctly
     apiVersion: v2
-    created: "2025-03-26T13:36:41.649227389Z"
+    created: "2025-03-26T13:37:34.619699718Z"
     description: Function library for Helm charts
     digest: d09bcb9585a8729cb5b9576c767f4e142ed044c8c4e7b028394eeb7412d5dae1
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -768,7 +795,7 @@ entries:
           description: |-
             Fixed networkPolicies not rendering correctly
     apiVersion: v2
-    created: "2025-03-26T13:36:41.647265008Z"
+    created: "2025-03-26T13:37:34.617764159Z"
     description: Function library for Helm charts
     digest: 9cc1304bdc66631981f27d6e8b92427f385cb5f0004c437f1bc4740ada5bdc40
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -802,7 +829,7 @@ entries:
           description: |-
             Fixed networkPolicies not rendering correctly
     apiVersion: v2
-    created: "2025-03-26T13:36:41.645210354Z"
+    created: "2025-03-26T13:37:34.615813763Z"
     description: Function library for Helm charts
     digest: 3588060439afa207f8764ddf1bdba2201395ce1dcfa7d3aec58c6f8b58f8098f
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -836,7 +863,7 @@ entries:
           description: |-
             Fixed networkPolicies not rendering correctly
     apiVersion: v2
-    created: "2025-03-26T13:36:41.64319346Z"
+    created: "2025-03-26T13:37:34.613440516Z"
     description: Function library for Helm charts
     digest: 41e7c9a39b8ee4da9e9357f59dd80377bf4af3c0cfc0a9fb44a0eb63fea0a358
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -870,7 +897,7 @@ entries:
           description: |-
             Fixed networkPolicies not rendering correctly
     apiVersion: v2
-    created: "2025-03-26T13:36:41.640405765Z"
+    created: "2025-03-26T13:37:34.611215236Z"
     description: Function library for Helm charts
     digest: 4423aaf231756cb9b2210cc2c0d0dde1330439192607f68a96b32f8718a7ed07
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -904,7 +931,7 @@ entries:
           description: |-
             Fixed networkPolicies not rendering correctly
     apiVersion: v2
-    created: "2025-03-26T13:36:41.638437784Z"
+    created: "2025-03-26T13:37:34.60925414Z"
     description: Function library for Helm charts
     digest: 7a32f9fc62c4bf8fdb028a6fdee8dde99e52df05b35c6266178f266be8ba2d65
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -938,7 +965,7 @@ entries:
           description: |-
             Fixed networkPolicies not rendering correctly
     apiVersion: v2
-    created: "2025-03-26T13:36:41.63646922Z"
+    created: "2025-03-26T13:37:34.607297021Z"
     description: Function library for Helm charts
     digest: 7353bb76cfc375ec300e1112eaecf36d0708cda91caa243080bdc86f81280d5d
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -972,7 +999,7 @@ entries:
           description: |-
             Fixed networkPolicies not rendering correctly
     apiVersion: v2
-    created: "2025-03-26T13:36:41.634472304Z"
+    created: "2025-03-26T13:37:34.604318242Z"
     description: Function library for Helm charts
     digest: edcde28b74111ef1da126e5c0a197c43da497a31e3660809e0ef254f7d8b7a74
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -1006,7 +1033,7 @@ entries:
           description: |-
             Fixed networkPolicies not rendering correctly
     apiVersion: v2
-    created: "2025-03-26T13:36:41.631683671Z"
+    created: "2025-03-26T13:37:34.602395527Z"
     description: Function library for Helm charts
     digest: 6ef702f4e7d8cee4b6069dc87677c03e299fd50143da9cea046ac1df2b04fbee
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -1040,7 +1067,7 @@ entries:
           description: |-
             Fixed networkPolicies not rendering correctly
     apiVersion: v2
-    created: "2025-03-26T13:36:41.629686495Z"
+    created: "2025-03-26T13:37:34.600471461Z"
     description: Function library for Helm charts
     digest: f7d629858bb7c19cbb0fa91f7f1d776eb213c5943afd3e4e180ef364d522e548
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -1074,7 +1101,7 @@ entries:
           description: |-
             Fixed networkPolicies not rendering correctly
     apiVersion: v2
-    created: "2025-03-26T13:36:41.627732469Z"
+    created: "2025-03-26T13:37:34.598551671Z"
     description: Function library for Helm charts
     digest: b2f1bb2243986ad747a6b9e05c32c0a5032ed4b8e5b64c6d0c2dcba945afa819
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -1108,7 +1135,7 @@ entries:
           description: |-
             Fixed networkPolicies not rendering correctly
     apiVersion: v2
-    created: "2025-03-26T13:36:41.625747275Z"
+    created: "2025-03-26T13:37:34.595996411Z"
     description: Function library for Helm charts
     digest: 99bc67eb4d270943f61d22149984734a8b772b7c6e65cd8020c57da39cf3acdb
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -1142,7 +1169,7 @@ entries:
           description: |-
             Fixed networkPolicies not rendering correctly
     apiVersion: v2
-    created: "2025-03-26T13:36:41.571677851Z"
+    created: "2025-03-26T13:37:34.553766401Z"
     description: Function library for Helm charts
     digest: 2227e0359c66aecf546e0c9cd362b1389e87165c8f6f50f9cbe28febe668c9f5
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -1176,7 +1203,7 @@ entries:
           description: |-
             Fixed networkPolicies not rendering correctly
     apiVersion: v2
-    created: "2025-03-26T13:36:41.567551036Z"
+    created: "2025-03-26T13:37:34.551096703Z"
     description: Function library for Helm charts
     digest: 3337ddeca7a740835cd89fcc22d0e06c5f084dc2ee588450d4e00f21494ef049
     home: https://github.com/davidspek/bjw-s-helm-charts/tree/main/charts/library/common
@@ -1210,7 +1237,7 @@ entries:
           description: |-
             Fixed networkPolicies not rendering correctly
     apiVersion: v2
-    created: "2025-03-26T13:36:41.563993979Z"
+    created: "2025-03-26T13:37:34.549246354Z"
     description: Function library for Helm charts
     digest: d01f8835c6b7b9aa9888eaaba73c30c25aae2e87180171f7f3ba0359ce032848
     home: https://github.com/bjw-s/helm-charts/tree/main/charts/library/common
@@ -1226,4 +1253,4 @@ entries:
     urls:
     - https://davidspek.github.io/bjw-s-helm-charts/library/common-4.0.0.tgz
     version: 4.0.0
-generated: "2025-03-26T13:36:41.560201392Z"
+generated: "2025-03-26T13:37:34.54723288Z"
