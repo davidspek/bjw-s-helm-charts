@@ -33,7 +33,6 @@ metadata:
     {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
     {{- end }}
   {{- end }}
-  namespace: {{ $rootContext.Release.Namespace }}
 spec:
   {{- if $ingressObject.className }}
   ingressClassName: {{ $ingressObject.className }}
