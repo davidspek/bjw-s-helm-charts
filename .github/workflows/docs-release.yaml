@@ -39,6 +39,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4.0.0
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./site
           destination_dir: docs
           user_name: "davidspek-bot[bot]"
