@@ -4,7 +4,7 @@ suite: container restartPolicy
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: default should pass
     asserts:
@@ -17,7 +17,7 @@ tests:
 
   - it: custom restartPolicy should pass
     set:
-      controllers.main.containers:
+      components.main.containers:
         main:
           restartPolicy: Always
 

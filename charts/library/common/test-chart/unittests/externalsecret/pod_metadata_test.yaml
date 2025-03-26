@@ -1,0 +1,42 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: secret Pod metadata
+templates:
+  - common.yaml
+values:
+  - ../_values/components_main_default_container.yaml
+tests:
+  - it: pod secret checksum annotation should pass
+    set:
+      externalsecrets:
+        externalsecret:
+          data:
+          - secretKey: username
+            remoteRef:
+              key: database-credentials
+        secret_2: # default enabled
+          data:
+          - secretKey: password
+            remoteRef:
+              key: database-credentials
+        test_not_in_checksum:
+          includeInChecksum: false
+          data:
+          - secretKey: something
+            remoteRef:
+              key: database-credentials
+        test_disabled:
+          enabled: false
+          data:
+          - secretKey: else
+            remoteRef:
+              key: database-credentials
+    asserts:
+      - documentIndex: &ComponentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *ComponentDoc
+        equal:
+          path: spec.template.metadata.annotations
+          value:
+            checksum/secrets: 44fbfcd6b26d1db1f0ee02d899f0fcd9ebe3c5591cf9cbff20cc43d8bd4a4319

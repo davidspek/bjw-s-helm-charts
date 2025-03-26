@@ -1,9 +1,9 @@
 {{/*
-Return the primary service object for a controller
+Return the primary service object for a component
 */}}
-{{- define "bjw-s.common.lib.service.primaryForController" -}}
+{{- define "bjw-s.common.lib.service.primaryForComponent" -}}
   {{- $rootContext := .rootContext -}}
-  {{- $controllerIdentifier := .controllerIdentifier -}}
+  {{- $componentIdentifier := .componentIdentifier -}}
 
   {{- $identifier := "" -}}
   {{- $result := dict -}}
@@ -11,15 +11,15 @@ Return the primary service object for a controller
   {{- /* Loop over all enabled services */ -}}
   {{- $enabledServices := (include "bjw-s.common.lib.service.enabledServices" (dict "rootContext" $rootContext) | fromYaml ) }}
   {{- if $enabledServices -}}
-    {{- /* We are only interested in services for the specified controller */ -}}
-    {{- $enabledServicesForController := dict -}}
+    {{- /* We are only interested in services for the specified component */ -}}
+    {{- $enabledServicesForComponent := dict -}}
     {{- range $name, $service := $enabledServices -}}
-      {{- if eq $service.controller $controllerIdentifier -}}
-        {{- $_ := set $enabledServicesForController $name $service -}}
+      {{- if eq $service.component $componentIdentifier -}}
+        {{- $_ := set $enabledServicesForComponent $name $service -}}
       {{- end -}}
     {{- end -}}
 
-    {{- range $name, $service := $enabledServicesForController -}}
+    {{- range $name, $service := $enabledServicesForComponent -}}
       {{- /* Determine the Service that has been marked as primary */ -}}
       {{- if $service.primary -}}
         {{- $identifier = $name -}}
@@ -28,8 +28,8 @@ Return the primary service object for a controller
 
       {{- /* Return the first Service (alphabetically) if none has been explicitly marked as primary */ -}}
       {{- if not $result -}}
-        {{- $firstServiceKey := keys $enabledServicesForController | sortAlpha | first -}}
-        {{- $result = get $enabledServicesForController $firstServiceKey -}}
+        {{- $firstServiceKey := keys $enabledServicesForComponent | sortAlpha | first -}}
+        {{- $result = get $enabledServicesForComponent $firstServiceKey -}}
         {{- $identifier = $result.identifier -}}
       {{- end -}}
     {{- end -}}

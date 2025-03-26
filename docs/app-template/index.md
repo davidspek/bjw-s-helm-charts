@@ -56,7 +56,7 @@ defaultPodOptions:
     supplementalGroups:
       - 65539
 
-controllers:
+components:
   main:
     containers:
       main:
@@ -107,7 +107,7 @@ defaultPodOptions:
     supplementalGroups:
       - 65539
 
-controllers:
+components:
   sabnzbd: # this can now be any name you wish
     containers:
       app: # this can now be any name you wish
@@ -129,7 +129,7 @@ controllers:
 
 service:
   app: # this can now be any name you wish
-    controller: sabnzbd
+    component: sabnzbd
     ports:
       http:
         port: 8080
@@ -173,7 +173,7 @@ persistence:
      supplementalGroups:
        - 65539
 
- controllers:
+ components:
 -  main:
 +  sabnzbd: # this can now be any name you wish
      containers:
@@ -198,7 +198,7 @@ persistence:
  service:
 -  main:
 +  app: # this can now be any name you wish
-+    controller: sabnzbd
++    component: sabnzbd
      ports:
        http:
          port: 8080
@@ -231,7 +231,7 @@ persistence:
 
 This is not meant as an exhaustive list of changes, but rather a "most common" example.
 
-- The `main` object for controllers, containers, services and ingress has been removed from `values.yaml` and will therefore no longer provide any (both expected and unexpected) default values.
+- The `main` object for components, containers, services and ingress has been removed from `values.yaml` and will therefore no longer provide any (both expected and unexpected) default values.
 - The `config` object for persistence has been removed from `values.yaml` and will therefore no longer provide any (both expected and unexpected) default values.
 - `enableServiceLinks` has been disabled by default. In order to explicitly enable serviceLinks, set the value to `true`.
 - `ingress.*.hosts.*.paths.*.service` Service references now require either `name` or `identifier` to be set.
@@ -241,7 +241,7 @@ This is not meant as an exhaustive list of changes, but rather a "most common" e
 
 !!! warning
 
-    **IMPORTANT** Because a new label has been introduced in the controller labelSelector (which is an immutable field), Deployments cannot be upgraded in place!
+    **IMPORTANT** Because a new label has been introduced in the component labelSelector (which is an immutable field), Deployments cannot be upgraded in place!
     [More details](https://www.datree.io/resources/kubernetes-error-codes-field-is-immutable)
 
 !!! info
@@ -313,7 +313,7 @@ defaultPodOptions:
     supplementalGroups:
       - 65539
 
-controllers:
+components:
   main:
     containers:
       main:
@@ -359,14 +359,14 @@ persistence:
 
 This is not meant as an exhaustive list of changes, but rather a "most common" example.
 
-- `podSecurityContext` has been moved to `defaultPodOptions.securityContext`. It is also possible to configure this on a controller-specific basis by moving it to `controllers.main.pod.securityContext` instead.
-- `image` has been moved to `controllers.main.containers.main.image` so that multiple containers can be configured.
+- `podSecurityContext` has been moved to `defaultPodOptions.securityContext`. It is also possible to configure this on a component-specific basis by moving it to `components.main.pod.securityContext` instead.
+- `image` has been moved to `components.main.containers.main.image` so that multiple containers can be configured.
 - `ingress.media.ingressClassName` has been renamed to `ingress.main.className`.
 - `ingress.media.enabled` can be removed, since items are considered enabled by default (they can still be disabled by adding `enabled: false`).
 - `ingress.media.hosts.*.paths.*.service` is now required since there is no more concept of a default "primary" service.
 - `persistence.media.mountPath` has been moved to `persistence.media.globalMounts.*.path` to allow multiple mountPaths for the same persistence item.
 - `persistence.media.enabled` can be removed, since items are considered enabled by default (they can still be disabled by adding `enabled: false`).
-- `probes` has been moved to `controllers.main.containers.main.probes` so that multiple containers can be configured.
+- `probes` has been moved to `components.main.containers.main.probes` so that multiple containers can be configured.
 
 ## Source code
 

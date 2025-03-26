@@ -4,7 +4,7 @@ suite: container resources
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: default should pass
     asserts:
@@ -17,7 +17,7 @@ tests:
 
   - it: defaultContainerOption should pass
     set:
-      controllers:
+      components:
         main:
           defaultContainerOptions:
             resources:
@@ -47,7 +47,7 @@ tests:
 
   - it: defaultContainerOption with container override should pass
     set:
-      controllers:
+      components:
         main:
           defaultContainerOptions:
             resources:
@@ -82,7 +82,7 @@ tests:
 
   - it: defaultContainerOption with initContainer override should pass
     set:
-      controllers:
+      components:
         main:
           defaultContainerOptions:
             resources:
@@ -115,7 +115,7 @@ tests:
 
   - it: defaultContainerOption disabled for initContainer should pass
     set:
-      controllers:
+      components:
         main:
           applyDefaultContainerOptionsToInitContainers: false
           defaultContainerOptions:

@@ -5,7 +5,7 @@ hide:
 
 # Setting default container options
 
-It is possible to configure default container options under the `controllers.*.defaultContainerOptions` key. These options will be applied to all containers within the controller.
+It is possible to configure default container options under the `components.*.defaultContainerOptions` key. These options will be applied to all containers within the component.
 
 The following fields can be configured on this level:
 
@@ -20,7 +20,7 @@ The following fields can be configured on this level:
 ## Only applying to regular containers
 
 By default the `defaultContainerOptions` will be applied to both `initContainers` and regular `containers`.
-If you wish to only apply the default options to regular containers, set `controllers.*.applyDefaultContainerOptionsToInitContainers` to `false`.
+If you wish to only apply the default options to regular containers, set `components.*.applyDefaultContainerOptionsToInitContainers` to `false`.
 
 ## Default value strategies
 
@@ -28,12 +28,12 @@ If you wish to only apply the default options to regular containers, set `contro
 
 The default strategy for configuring default container options is `overwrite`. This means that if a container has an entry for a default container option it will be overwritten entirely by the container-specific configuration.
 
-This behavior can be set explicitly by setting `controllers.*.defaultContainerOptionsStrategy` to `overwrite`.
+This behavior can be set explicitly by setting `components.*.defaultContainerOptionsStrategy` to `overwrite`.
 
 An (abbreviated) example of the `overwrite` strategy:
 
 ```yaml
-controllers:
+components:
   main:
     defaultContainerOptions:
       resources:
@@ -66,7 +66,7 @@ This behavior can be set explicitly by setting `defaultContainerOptionsStrategy`
 An (abbreviated) example of the `merge` strategy:
 
 ```yaml
-controllers:
+components:
   main:
     defaultContainerOptionsStrategy: merge
     defaultContainerOptions:

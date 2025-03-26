@@ -4,7 +4,7 @@ suite: container command override
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: default should pass
     asserts:
@@ -17,7 +17,7 @@ tests:
 
   - it: single string should pass
     set:
-      controllers.main.containers.main.command: /bin/sh
+      components.main.containers.main.command: /bin/sh
     asserts:
       - documentIndex: 0
         isKind:
@@ -30,7 +30,7 @@ tests:
 
   - it: multiline string should pass
     set:
-      controllers.main.containers.main.command: |
+      components.main.containers.main.command: |
         /bin/sh
         -c
     asserts:
@@ -47,7 +47,7 @@ tests:
 
   - it: single quoted string should pass
     set:
-      controllers.main.containers.main.command: "/bin/sh"
+      components.main.containers.main.command: "/bin/sh"
     asserts:
       - documentIndex: 0
         isKind:
@@ -60,7 +60,7 @@ tests:
 
   - it: list of strings should pass
     set:
-      controllers.main.containers.main.command:
+      components.main.containers.main.command:
         - /bin/sh
         - "-c"
     asserts:
@@ -76,7 +76,7 @@ tests:
 
   - it: command from defaultContainerOptions should pass
     set:
-      controllers.main.defaultContainerOptions:
+      components.main.defaultContainerOptions:
         command: value_of_command
     asserts:
       - documentIndex: &DeploymentDoc 0
@@ -90,9 +90,9 @@ tests:
 
   - it: command from defaultContainerOptions with container override should pass
     set:
-      controllers.main.defaultContainerOptions:
+      components.main.defaultContainerOptions:
         command: value_of_command
-      controllers.main.containers.main.command:
+      components.main.containers.main.command:
         - value 1
         - value 2
     asserts:

@@ -21,6 +21,10 @@
       "dnsPolicy": {
         "type": "string"
       },
+      "shareProcessNamespace": {
+        "type": "boolean",
+        "default": false
+      },
       "enableServiceLinks": {
         "type": "boolean",
         "default": false

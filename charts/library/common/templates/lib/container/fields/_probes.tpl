@@ -4,7 +4,7 @@ Probes used by the container.
 {{- define "bjw-s.common.lib.container.field.probes" -}}
   {{- $ctx := .ctx -}}
   {{- $rootContext := $ctx.rootContext -}}
-  {{- $controllerObject := $ctx.controllerObject -}}
+  {{- $componentObject := $ctx.componentObject -}}
   {{- $containerObject := $ctx.containerObject -}}
 
   {{- /* Default to empty dict */ -}}
@@ -26,7 +26,7 @@ Probes used by the container.
       {{- else -}}
         {{- $probeSpec := dig "spec" dict $probeValues -}}
 
-        {{- $primaryService := include "bjw-s.common.lib.service.primaryForController" (dict "rootContext" $rootContext "controllerIdentifier" $controllerObject.identifier) | fromYaml -}}
+        {{- $primaryService := include "bjw-s.common.lib.service.primaryForComponent" (dict "rootContext" $rootContext "componentIdentifier" $componentObject.identifier) | fromYaml -}}
         {{- $primaryServiceDefaultPort := dict -}}
         {{- if $primaryService -}}
           {{- $primaryServiceDefaultPort = include "bjw-s.common.lib.service.primaryPort" (dict "rootContext" $rootContext "serviceObject" $primaryService) | fromYaml -}}

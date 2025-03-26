@@ -1,14 +1,14 @@
 {{/*
-Return a controller by its identifier.
+Return a component by its identifier.
 */}}
-{{- define "bjw-s.common.lib.controller.getByIdentifier" -}}
+{{- define "bjw-s.common.lib.component.getByIdentifier" -}}
   {{- $rootContext := .rootContext -}}
   {{- $identifier := .id -}}
 
-  {{- $enabledControllers := include "bjw-s.common.lib.controller.enabledControllers" (dict "rootContext" $rootContext) | fromYaml -}}
-  {{- $controllerValues := get $enabledControllers $identifier -}}
+  {{- $enabledComponents := include "bjw-s.common.lib.component.enabledComponents" (dict "rootContext" $rootContext) | fromYaml -}}
+  {{- $componentValues := get $enabledComponents $identifier -}}
 
-  {{- if not (empty $controllerValues) -}}
-    {{- include "bjw-s.common.lib.controller.valuesToObject" (dict "rootContext" $rootContext "id" $identifier "values" $controllerValues) -}}
+  {{- if not (empty $componentValues) -}}
+    {{- include "bjw-s.common.lib.component.valuesToObject" (dict "rootContext" $rootContext "id" $identifier "values" $componentValues) -}}
   {{- end -}}
 {{- end -}}

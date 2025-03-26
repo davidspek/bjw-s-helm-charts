@@ -7,7 +7,10 @@ within the common library.
   {{- $routeObject := .object -}}
 
   {{- $routeKind := $routeObject.kind | default "HTTPRoute" -}}
-  {{- $apiVersion := "gateway.networking.k8s.io/v1alpha2" -}}
+  {{- $apiVersion := "gateway.networking.k8s.io/v1" -}}
+  {{- if $rootContext.Capabilities.APIVersions.Has (printf "gateway.networking.k8s.io/v1alpha2/%s" $routeKind) }}
+    {{- $apiVersion = "gateway.networking.k8s.io/v1alpha2" -}}
+  {{- end -}}
   {{- if $rootContext.Capabilities.APIVersions.Has (printf "gateway.networking.k8s.io/v1beta1/%s" $routeKind) }}
     {{- $apiVersion = "gateway.networking.k8s.io/v1beta1" -}}
   {{- end -}}
@@ -27,6 +30,7 @@ apiVersion: {{ $apiVersion }}
 kind: {{ $routeKind }}
 metadata:
   name: {{ $routeObject.name }}
+  namespace: {{ $rootContext.Release.Namespace }}
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}
@@ -76,17 +80,17 @@ spec:
     {{- if or (eq $routeKind "HTTPRoute") (eq $routeKind "GRPCRoute") }}
       {{- with .matches }}
     matches:
-        {{- toYaml . | nindent 6 }}
+        {{- tpl (toYaml .) $rootContext | nindent 6 }}
       {{- end }}
         {{- with .filters }}
     filters:
-        {{- toYaml . | nindent 6 }}
+        {{- tpl (toYaml .) $rootContext | nindent 6 }}
       {{- end }}
     {{- end }}
     {{- if (eq $routeKind "HTTPRoute") }}
       {{- with .timeouts }}
     timeouts:
-        {{- toYaml . | nindent 6 }}
+        {{- tpl (toYaml .) $rootContext | nindent 6 }}
       {{- end }}
     {{- end }}
   {{- end }}

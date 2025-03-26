@@ -1,6 +1,6 @@
 ---
 # yaml-language-server: $schema=../../common/values.schema.json
-controllers:
+components:
   main:
     strategy: Recreate
 
@@ -24,7 +24,7 @@ controllers:
 # -- Configures service settings for the chart.
 service:
   main:
-    controller: main
+    component: main
     ports:
       http:
         port: 80

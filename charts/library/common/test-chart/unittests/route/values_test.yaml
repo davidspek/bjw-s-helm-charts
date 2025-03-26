@@ -4,7 +4,7 @@ suite: route values
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: setting gateway should pass
     set:
@@ -58,6 +58,30 @@ tests:
         equal:
           path: spec.hostnames[0]
           value: RELEASE-NAME.local
+
+  - it: templated rules should pass
+    set:
+      config.server.path: /test
+      route.main:
+        parentRefs:
+          - name: parentName
+            namespace: parentNamespace
+        rules:
+          - matches:
+            - path:
+                type: PathPrefix
+                value: "{{ .Values.config.server.path }}"
+    asserts:
+      - documentIndex: &HTTPRouteDocument 1
+        isKind:
+          of: HTTPRoute
+      - documentIndex: *HTTPRouteDocument
+        equal:
+          path: spec.rules[0].matches[0]
+          value:
+            path:
+                type: PathPrefix
+                value: /test
 
   - it: path matches should only be used for HTTPRoutes and GRPCRoutes
     set:

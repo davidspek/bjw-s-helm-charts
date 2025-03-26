@@ -20,6 +20,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ $deploymentObject.name }}
+  namespace: {{ $rootContext.Release.Namespace }}
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}
@@ -61,11 +62,11 @@ spec:
       {{- include "bjw-s.common.lib.metadata.selectorLabels" $rootContext | nindent 6 }}
   template:
     metadata:
-      {{- with (include "bjw-s.common.lib.pod.metadata.annotations" (dict "rootContext" $rootContext "controllerObject" $deploymentObject)) }}
+      {{- with (include "bjw-s.common.lib.pod.metadata.annotations" (dict "rootContext" $rootContext "componentObject" $deploymentObject)) }}
       annotations: {{ . | nindent 8 }}
       {{- end -}}
-      {{- with (include "bjw-s.common.lib.pod.metadata.labels" (dict "rootContext" $rootContext "controllerObject" $deploymentObject)) }}
+      {{- with (include "bjw-s.common.lib.pod.metadata.labels" (dict "rootContext" $rootContext "componentObject" $deploymentObject)) }}
       labels: {{ . | nindent 8 }}
       {{- end }}
-    spec: {{ include "bjw-s.common.lib.pod.spec" (dict "rootContext" $rootContext "controllerObject" $deploymentObject) | nindent 6 }}
+    spec: {{ include "bjw-s.common.lib.pod.spec" (dict "rootContext" $rootContext "componentObject" $deploymentObject) | nindent 6 }}
 {{- end -}}

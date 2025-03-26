@@ -3,9 +3,9 @@ The container definition included in the Pod.
 */ -}}
 {{- define "bjw-s.common.lib.container.spec" -}}
   {{- $rootContext := .rootContext -}}
-  {{- $controllerObject := .controllerObject -}}
+  {{- $componentObject := .componentObject -}}
   {{- $containerObject := .containerObject -}}
-  {{- $ctx := dict "rootContext" $rootContext "controllerObject" $controllerObject "containerObject" $containerObject -}}
+  {{- $ctx := dict "rootContext" $rootContext "componentObject" $componentObject "containerObject" $containerObject -}}
 
 name: {{ include "bjw-s.common.lib.container.field.name" (dict "ctx" $ctx) | trim }}
 image: {{ include "bjw-s.common.lib.container.field.image" (dict "ctx" $ctx) | trim }}
@@ -39,8 +39,8 @@ env: {{ . | trim | nindent 2 }}
   {{- with (include "bjw-s.common.lib.container.field.envFrom" (dict "ctx" $ctx) | trim) }}
 envFrom: {{ . | trim | nindent 2 }}
   {{- end -}}
-  {{- with $containerObject.ports }}
-ports: {{ toYaml . | trim | nindent 2 }}
+  {{- with (include "bjw-s.common.lib.container.field.ports" (dict "ctx" $ctx "rootContext" $rootContext) | trim) }}
+ports: {{ . | trim | nindent 2 }}
   {{- end -}}
   {{- with (include "bjw-s.common.lib.container.field.probes" (dict "ctx" $ctx) | trim) }}
     {{- . | trim | nindent 0 -}}

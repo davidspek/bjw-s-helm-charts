@@ -3,7 +3,7 @@ Returns the value for annotations
 */ -}}
 {{- define "bjw-s.common.lib.pod.metadata.annotations" -}}
   {{- $rootContext := .rootContext -}}
-  {{- $controllerObject := .controllerObject -}}
+  {{- $componentObject := .componentObject -}}
 
   {{- /* Default annotations */ -}}
   {{- $annotations := merge
@@ -25,8 +25,8 @@ Returns the value for annotations
   {{- end -}}
 
   {{- /* See if a pod-specific override is set */ -}}
-  {{- if hasKey $controllerObject "pod" -}}
-    {{- $podOption := get $controllerObject.pod "annotations" -}}
+  {{- if hasKey $componentObject "pod" -}}
+    {{- $podOption := get $componentObject.pod "annotations" -}}
     {{- if not (empty $podOption) -}}
       {{- $annotations = merge $podOption $annotations -}}
     {{- end -}}
@@ -44,7 +44,7 @@ Returns the value for annotations
       {{- $configMapIncludeInChecksum = $configmap.includeInChecksum -}}
     {{- end -}}
     {{- if and $configMapEnabled $configMapIncludeInChecksum -}}
-      {{- $_ := set $configMapsFound $name (toYaml $configmap.data | sha256sum) -}}
+      {{- $_ := set $configMapsFound $name (tpl (toYaml $configmap.data) $rootContext | sha256sum) -}}
     {{- end -}}
   {{- end -}}
   {{- if $configMapsFound -}}
@@ -66,7 +66,24 @@ Returns the value for annotations
       {{- $secretIncludeInChecksum = $secret.includeInChecksum -}}
     {{- end -}}
     {{- if and $secretEnabled $secretIncludeInChecksum -}}
-      {{- $_ := set $secretsFound $name (toYaml $secret.stringData | sha256sum) -}}
+      {{- if hasKey $secret "data" -}}
+        {{- $_ := set $secretsFound $name (tpl (toYaml $secret.data) $rootContext | sha256sum) -}}
+      {{- else if hasKey $secret "stringData" -}}
+        {{- $_ := set $secretsFound $name (tpl (toYaml $secret.stringData) $rootContext | sha256sum) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- range $name, $externalsecret := $rootContext.Values.externalsecrets -}}
+    {{- $externalsecretEnabled := true -}}
+    {{- if hasKey $externalsecret "enabled" -}}
+      {{- $externalsecretEnabled = $externalsecret.enabled -}}
+    {{- end -}}
+    {{- $externalsecretIncludeInChecksum := true -}}
+    {{- if hasKey $externalsecret "includeInChecksum" -}}
+      {{- $externalsecretIncludeInChecksum = $externalsecret.includeInChecksum -}}
+    {{- end -}}
+    {{- if and $externalsecretEnabled $externalsecretIncludeInChecksum -}}
+      {{- $_ := set $secretsFound $name (toYaml $externalsecret | sha256sum) -}}
     {{- end -}}
   {{- end -}}
   {{- if $secretsFound -}}
@@ -77,6 +94,12 @@ Returns the value for annotations
   {{- end -}}
 
   {{- if not (empty $annotations) -}}
-    {{- $annotations | toYaml -}}
+    {{- $outAnnotations := dict -}}
+    {{- with $annotations -}}
+      {{- range $key, $value := . -}}
+      {{- $outAnnotations = merge $outAnnotations (dict $key (tpl $value $rootContext)) -}}
+      {{- end -}}
+    {{- end -}}
+    {{- $outAnnotations | toYaml -}}
   {{- end -}}
 {{- end -}}

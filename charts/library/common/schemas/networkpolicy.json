@@ -11,7 +11,7 @@
       "annotations": {
         "$ref": "definitions.json#/annotations"
       },
-      "controller": {
+      "component": {
         "type": "string"
       },
       "labels": {

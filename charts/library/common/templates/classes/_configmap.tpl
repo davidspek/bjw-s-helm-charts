@@ -19,6 +19,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ $configMapObject.name }}
+  namespace: {{ $rootContext.Release.Namespace }}
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}
@@ -34,10 +35,10 @@ metadata:
   namespace: {{ $rootContext.Release.Namespace }}
 {{- with $configMapObject.data }}
 data:
-    {{- tpl (toYaml .) $rootContext | nindent 2 }}
+  {{- tpl (toYaml .) $rootContext | nindent 2 }}
 {{- end }}
 {{- with $configMapObject.binaryData }}
 binaryData:
-    {{- tpl (toYaml .) $rootContext | nindent 2 }}
+  {{- tpl (toYaml .) $rootContext | nindent 2 }}
 {{- end }}
 {{- end -}}

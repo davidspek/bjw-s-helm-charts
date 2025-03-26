@@ -20,6 +20,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ $statefulsetObject.name }}
+  namespace: {{ $rootContext.Release.Namespace }}
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}
@@ -35,7 +36,13 @@ metadata:
   namespace: {{ $rootContext.Release.Namespace }}
 spec:
   revisionHistoryLimit: {{ include "bjw-s.common.lib.defaultKeepNonNullValue" (dict "value" $statefulsetObject.revisionHistoryLimit "default" 3) }}
+  {{- if hasKey $statefulsetObject "replicas" }}
+    {{- if not (eq $statefulsetObject.replicas nil) }}
   replicas: {{ $statefulsetObject.replicas }}
+    {{- end }}
+  {{- else }}
+  replicas: 1
+  {{- end }}
   podManagementPolicy: {{ dig "statefulset" "podManagementPolicy" "OrderedReady" $statefulsetObject }}
   updateStrategy:
     type: {{ $statefulsetObject.strategy }}
@@ -53,13 +60,13 @@ spec:
   {{- end }}
   template:
     metadata:
-      {{- with (include "bjw-s.common.lib.pod.metadata.annotations" (dict "rootContext" $rootContext "controllerObject" $statefulsetObject)) }}
+      {{- with (include "bjw-s.common.lib.pod.metadata.annotations" (dict "rootContext" $rootContext "componentObject" $statefulsetObject)) }}
       annotations: {{ . | nindent 8 }}
       {{- end -}}
-      {{- with (include "bjw-s.common.lib.pod.metadata.labels" (dict "rootContext" $rootContext "controllerObject" $statefulsetObject)) }}
+      {{- with (include "bjw-s.common.lib.pod.metadata.labels" (dict "rootContext" $rootContext "componentObject" $statefulsetObject)) }}
       labels: {{ . | nindent 8 }}
       {{- end }}
-    spec: {{ include "bjw-s.common.lib.pod.spec" (dict "rootContext" $rootContext "controllerObject" $statefulsetObject) | nindent 6 }}
+    spec: {{ include "bjw-s.common.lib.pod.spec" (dict "rootContext" $rootContext "componentObject" $statefulsetObject) | nindent 6 }}
   {{- with (include "bjw-s.common.lib.statefulset.volumeclaimtemplates" (dict "rootContext" $rootContext "statefulsetObject" $statefulsetObject)) }}
   volumeClaimTemplates: {{ . | nindent 4 }}
   {{- end }}

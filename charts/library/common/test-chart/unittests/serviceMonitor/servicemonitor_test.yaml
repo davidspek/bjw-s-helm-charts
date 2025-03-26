@@ -4,7 +4,7 @@ suite: serviceMonitor values
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: a serviceMonitor is not created by default
     asserts:
@@ -72,6 +72,7 @@ tests:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/version: 1.0.0
             helm.sh/chart: common-test-1.0.0
             test.label: testvalue
 

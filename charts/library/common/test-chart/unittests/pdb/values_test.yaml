@@ -1,0 +1,78 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: PodDisruptionBudget values
+templates:
+  - common.yaml
+values:
+  - ../_values/components_main_default_container.yaml
+tests:
+  - it: pdbs are enabled by default
+    set:
+      podDisruptionBudgets:
+        second:
+          component: main
+          maxUnavailable: 1
+    asserts:
+      - hasDocuments:
+          count: 2
+      - documentIndex: &FirstPdbDocument 1
+        isKind:
+          of: PodDisruptionBudget
+
+  - it: pdb can be disabled
+    values:
+      - ../_values/pdb_main_default.yaml
+    set:
+      podDisruptionBudgets:
+        main:
+          enabled: false
+    asserts:
+      - hasDocuments:
+          count: 1
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+
+  - it: pdb selector targets the correct component
+    values:
+      - ../_values/pdb_main_default.yaml
+    asserts:
+      - hasDocuments:
+          count: 2
+      - documentIndex: *FirstPdbDocument
+        equal:
+          path: spec.selector.matchLabels
+          value:
+            app.kubernetes.io/component: main
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+
+  - it: pdb should have the correct minAvailable
+    values:
+      - ../_values/pdb_main_default.yaml
+    asserts:
+      - hasDocuments:
+          count: 2
+      - documentIndex: *FirstPdbDocument
+        equal:
+          path: spec.minAvailable
+          value: 1
+
+  - it: pdb should have the correct maxUnavailable and unhealthyPodEvictionPolicy
+    set:
+      podDisruptionBudgets:
+        main:
+          component: main
+          maxUnavailable: 2
+          unhealthyPodEvictionPolicy: IfHealthyBudget
+    asserts:
+      - hasDocuments:
+          count: 2
+      - documentIndex: *FirstPdbDocument
+        equal:
+          path: spec.maxUnavailable
+          value: 2
+      - documentIndex: *FirstPdbDocument
+        equal:
+          path: spec.unhealthyPodEvictionPolicy
+          value: IfHealthyBudget

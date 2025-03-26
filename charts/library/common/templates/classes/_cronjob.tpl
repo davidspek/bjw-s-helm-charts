@@ -27,6 +27,7 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: {{ $cronjobObject.name }}
+  namespace: {{ $rootContext.Release.Namespace }}
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}
@@ -64,11 +65,11 @@ spec:
       backoffLimit: {{ include "bjw-s.common.lib.defaultKeepNonNullValue" (dict "value" $cronJobSettings.backoffLimit "default" 6) }}
       template:
         metadata:
-          {{- with (include "bjw-s.common.lib.pod.metadata.annotations" (dict "rootContext" $rootContext "controllerObject" $cronjobObject)) }}
+          {{- with (include "bjw-s.common.lib.pod.metadata.annotations" (dict "rootContext" $rootContext "componentObject" $cronjobObject)) }}
           annotations: {{ . | nindent 12 }}
           {{- end -}}
-          {{- with (include "bjw-s.common.lib.pod.metadata.labels" (dict "rootContext" $rootContext "controllerObject" $cronjobObject)) }}
+          {{- with (include "bjw-s.common.lib.pod.metadata.labels" (dict "rootContext" $rootContext "componentObject" $cronjobObject)) }}
           labels: {{ . | nindent 12 }}
           {{- end }}
-        spec: {{ include "bjw-s.common.lib.pod.spec" (dict "rootContext" $rootContext "controllerObject" $cronjobObject) | nindent 10 }}
+        spec: {{ include "bjw-s.common.lib.pod.spec" (dict "rootContext" $rootContext "componentObject" $cronjobObject) | nindent 10 }}
 {{- end -}}

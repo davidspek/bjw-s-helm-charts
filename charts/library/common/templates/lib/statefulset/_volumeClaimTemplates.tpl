@@ -41,8 +41,14 @@ VolumeClaimTemplates for StatefulSet
   {{- $volumeClaimTemplates := list -}}
 
   {{- range $index, $volumeClaimTemplate := (dig "statefulset" "volumeClaimTemplates" list $statefulsetObject) }}
-    {{- $vct := include "bjw-s.common.lib.statefulset.volumeclaimtemplate" (dict "rootContext" $rootContext "values" $volumeClaimTemplate) -}}
-    {{- $volumeClaimTemplates = append $volumeClaimTemplates ($vct | fromYaml) -}}
+    {{- $volumeClaimTemplateEnabled := true -}}
+    {{- if hasKey $volumeClaimTemplate "enabled" -}}
+      {{- $volumeClaimTemplateEnabled = $volumeClaimTemplate.enabled -}}
+    {{- end -}}
+    {{- if $volumeClaimTemplateEnabled -}}
+      {{- $vct := include "bjw-s.common.lib.statefulset.volumeclaimtemplate" (dict "rootContext" $rootContext "values" $volumeClaimTemplate) -}}
+      {{- $volumeClaimTemplates = append $volumeClaimTemplates ($vct | fromYaml) -}}
+    {{- end -}}
   {{- end -}}
 
   {{- if not (empty $volumeClaimTemplates) -}}

@@ -4,12 +4,12 @@ suite: container probes
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
   - ../_values/service_main_default.yaml
 set:
-  controllers.main.containers.main.probes.liveness.enabled: true
-  controllers.main.containers.main.probes.readiness.enabled: true
-  controllers.main.containers.main.probes.startup.enabled: true
+  components.main.containers.main.probes.liveness.enabled: true
+  components.main.containers.main.probes.readiness.enabled: true
+  components.main.containers.main.probes.startup.enabled: true
 
 tests:
   - it: default probes
@@ -119,7 +119,7 @@ tests:
 
   - it: multiple services are handled correctly
     set:
-      controllers:
+      components:
         other:
           containers:
             main:
@@ -136,7 +136,7 @@ tests:
                   enabled: true
       service:
         other:
-          controller: other
+          component: other
           ports:
             http:
               enabled: true

@@ -4,7 +4,7 @@ suite: networkPolicy metadata
 
 set:
   networkpolicies.main:
-    controller: main
+    component: main
     policyTypes:
       - Ingress
       - Egress
@@ -13,7 +13,7 @@ set:
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: default metadata should pass
     asserts:
@@ -30,6 +30,7 @@ tests:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/version: 1.0.0
             helm.sh/chart: common-test-1.0.0
 
   - it: custom metadata should pass
@@ -56,6 +57,7 @@ tests:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/version: 1.0.0
             helm.sh/chart: common-test-1.0.0
             test_label: test
 
@@ -89,6 +91,7 @@ tests:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/version: 1.0.0
             global_label: test
             helm.sh/chart: common-test-1.0.0
             test_label: test

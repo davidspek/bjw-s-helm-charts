@@ -1,13 +1,13 @@
 # Multiple Services
 
-## With a single controller
+## With a single component
 
-It is possible to have multiple Service objects that point to a single controller.
+It is possible to have multiple Service objects that point to a single component.
 
 ### Example
 
 ```yaml
-controllers:
+components:
   main:
     containers:
       main:
@@ -18,27 +18,27 @@ controllers:
 
 service:
   main:
-    controller: main # (1)!
+    component: main # (1)!
     ports:
       http:
         port: 8080
   second:
-    controller: main # (1)!
+    component: main # (1)!
     ports:
       http:
         port: 8081
 ```
 
-1. Point to the controller with the "main" identifier
+1. Point to the component with the "main" identifier
 
-## With multiple controllers
+## With multiple components
 
-It is also possible have multiple Service objects that point to different controllers.
+It is also possible have multiple Service objects that point to different components.
 
 ### Example
 
 ```yaml
-controllers:
+components:
   main:
     containers:
       main:
@@ -56,21 +56,21 @@ controllers:
 
 service:
   main:
-    controller: main # (1)!
+    component: main # (1)!
     ports:
       http:
         port: 8080
   second:
-    controller: main # (1)!
+    component: main # (1)!
     ports:
       http:
         port: 8081
   third:
-    controller: second # (2)!
+    component: second # (2)!
     ports:
       http:
         port: 8081
 ```
 
-1. Point to the controller with the "main" identifier
-2. Point to the controller with the "second" identifier
+1. Point to the component with the "main" identifier
+2. Point to the component with the "second" identifier

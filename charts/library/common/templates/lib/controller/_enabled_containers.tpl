@@ -1,12 +1,12 @@
 {{/*
-Return the enabled containers for a controller.
+Return the enabled containers for a component.
 */}}
-{{- define "bjw-s.common.lib.controller.enabledContainers" -}}
+{{- define "bjw-s.common.lib.component.enabledContainers" -}}
   {{- $rootContext := .rootContext -}}
-  {{- $controllerObject := .controllerObject -}}
+  {{- $componentObject := .componentObject -}}
 
   {{- $enabledContainers := dict -}}
-  {{- range $name, $container := $controllerObject.containers -}}
+  {{- range $name, $container := $componentObject.containers -}}
     {{- if kindIs "map" $container -}}
       {{- /* Enable container by default, but allow override */ -}}
       {{- $containerEnabled := true -}}

@@ -4,7 +4,7 @@ suite: service names
 templates:
   - common.yaml
 values:
-  - ../_values/controllers_main_default_container.yaml
+  - ../_values/components_main_default_container.yaml
 tests:
   - it: default name
     values:
@@ -47,7 +47,7 @@ tests:
     set:
       service:
         second:
-          controller: main
+          component: main
           ports:
             ui:
               port: 8082

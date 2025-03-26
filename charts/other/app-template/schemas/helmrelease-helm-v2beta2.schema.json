@@ -258,11 +258,11 @@
               "description": "Remediation holds the remediation configuration for when the Helm install action for the HelmRelease fails. The default is to not perform any action.",
               "properties": {
                 "ignoreTestFailures": {
-                  "description": "IgnoreTestFailures tells the controller to skip remediation when the Helm tests are run after an install action but fail. Defaults to 'Test.IgnoreFailures'.",
+                  "description": "IgnoreTestFailures tells the component to skip remediation when the Helm tests are run after an install action but fail. Defaults to 'Test.IgnoreFailures'.",
                   "type": "boolean"
                 },
                 "remediateLastFailure": {
-                  "description": "RemediateLastFailure tells the controller to remediate the last failure, when no retries remain. Defaults to 'false'.",
+                  "description": "RemediateLastFailure tells the component to remediate the last failure, when no retries remain. Defaults to 'false'.",
                   "type": "boolean"
                 },
                 "retries": {
@@ -296,7 +296,7 @@
           "type": "string"
         },
         "kubeConfig": {
-          "description": "KubeConfig for reconciling the HelmRelease on a remote cluster. When used in combination with HelmReleaseSpec.ServiceAccountName, forces the controller to act on behalf of that Service Account at the target cluster. If the --default-service-account flag is set, its value will be used as a controller level fallback for when HelmReleaseSpec.ServiceAccountName is empty.",
+          "description": "KubeConfig for reconciling the HelmRelease on a remote cluster. When used in combination with HelmReleaseSpec.ServiceAccountName, forces the component to act on behalf of that Service Account at the target cluster. If the --default-service-account flag is set, its value will be used as a component level fallback for when HelmReleaseSpec.ServiceAccountName is empty.",
           "properties": {
             "secretRef": {
               "description": "SecretRef holds the name of a secret that contains a key with the kubeconfig file as the value. If no key is set, the key will default to 'value'. It is recommended that the kubeconfig is self-contained, and the secret is regularly updated if credentials such as a cloud-access-token expire. Cloud specific `cmd-path` auth helpers will not function without adding binaries and credentials to the Pod that is responsible for reconciling Kubernetes resources.",
@@ -324,7 +324,7 @@
           "type": "integer"
         },
         "persistentClient": {
-          "description": "PersistentClient tells the controller to use a persistent Kubernetes client for this release. When enabled, the client will be reused for the duration of the reconciliation, instead of being created and destroyed for each (step of a) Helm action. \n This can improve performance, but may cause issues with some Helm charts that for example do create Custom Resource Definitions during installation outside Helm's CRD lifecycle hooks, which are then not observed to be available by e.g. post-install hooks. \n If not set, it defaults to true.",
+          "description": "PersistentClient tells the component to use a persistent Kubernetes client for this release. When enabled, the client will be reused for the duration of the reconciliation, instead of being created and destroyed for each (step of a) Helm action. \n This can improve performance, but may cause issues with some Helm charts that for example do create Custom Resource Definitions during installation outside Helm's CRD lifecycle hooks, which are then not observed to be available by e.g. post-install hooks. \n If not set, it defaults to true.",
           "type": "boolean"
         },
         "postRenderers": {
@@ -569,7 +569,7 @@
           "type": "string"
         },
         "suspend": {
-          "description": "Suspend tells the controller to suspend reconciliation for this HelmRelease, it does not apply to already started reconciliations. Defaults to false.",
+          "description": "Suspend tells the component to suspend reconciliation for this HelmRelease, it does not apply to already started reconciliations. Defaults to false.",
           "type": "boolean"
         },
         "targetNamespace": {
@@ -608,7 +608,7 @@
               "type": "array"
             },
             "ignoreFailures": {
-              "description": "IgnoreFailures tells the controller to skip remediation when the Helm tests are run but fail. Can be overwritten for tests run after install or upgrade actions in 'Install.IgnoreTestFailures' and 'Upgrade.IgnoreTestFailures'.",
+              "description": "IgnoreFailures tells the component to skip remediation when the Helm tests are run but fail. Can be overwritten for tests run after install or upgrade actions in 'Install.IgnoreTestFailures' and 'Upgrade.IgnoreTestFailures'.",
               "type": "boolean"
             },
             "timeout": {
@@ -695,11 +695,11 @@
               "description": "Remediation holds the remediation configuration for when the Helm upgrade action for the HelmRelease fails. The default is to not perform any action.",
               "properties": {
                 "ignoreTestFailures": {
-                  "description": "IgnoreTestFailures tells the controller to skip remediation when the Helm tests are run after an upgrade action but fail. Defaults to 'Test.IgnoreFailures'.",
+                  "description": "IgnoreTestFailures tells the component to skip remediation when the Helm tests are run after an upgrade action but fail. Defaults to 'Test.IgnoreFailures'.",
                   "type": "boolean"
                 },
                 "remediateLastFailure": {
-                  "description": "RemediateLastFailure tells the controller to remediate the last failure, when no retries remain. Defaults to 'false' unless 'Retries' is greater than 0.",
+                  "description": "RemediateLastFailure tells the component to remediate the last failure, when no retries remain. Defaults to 'false' unless 'Retries' is greater than 0.",
                   "type": "boolean"
                 },
                 "retries": {
@@ -837,13 +837,13 @@
           "type": "integer"
         },
         "helmChart": {
-          "description": "HelmChart is the namespaced name of the HelmChart resource created by the controller for the HelmRelease.",
+          "description": "HelmChart is the namespaced name of the HelmChart resource created by the component for the HelmRelease.",
           "type": "string"
         },
         "history": {
           "description": "History holds the history of Helm releases performed for this HelmRelease up to the last successfully completed release.",
           "items": {
-            "description": "Snapshot captures a point-in-time copy of the status information for a Helm release, as managed by the controller.",
+            "description": "Snapshot captures a point-in-time copy of the status information for a Helm release, as managed by the component.",
             "properties": {
               "apiVersion": {
                 "description": "APIVersion is the API version of the Snapshot. Provisional: when the calculation method of the Digest field is changed, this field will be used to distinguish between the old and new methods.",
@@ -894,7 +894,7 @@
               },
               "testHooks": {
                 "additionalProperties": {
-                  "description": "TestHookStatus holds the status information for a test hook as observed to be run by the controller.",
+                  "description": "TestHookStatus holds the status information for a test hook as observed to be run by the component.",
                   "properties": {
                     "lastCompleted": {
                       "description": "LastCompleted is the time the test hook last completed.",
@@ -914,7 +914,7 @@
                   "type": "object",
                   "additionalProperties": false
                 },
-                "description": "TestHooks is the list of test hooks for the release as observed to be run by the controller.",
+                "description": "TestHooks is the list of test hooks for the release as observed to be run by the component.",
                 "type": "object"
               },
               "version": {
@@ -953,7 +953,7 @@
           "type": "string"
         },
         "lastAttemptedGeneration": {
-          "description": "LastAttemptedGeneration is the last generation the controller attempted to reconcile.",
+          "description": "LastAttemptedGeneration is the last generation the component attempted to reconcile.",
           "format": "int64",
           "type": "integer"
         },

@@ -1,7 +1,7 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/app-template-3.2.0/charts/other/app-template/values.schema.json
 
-controllers:
+components:
   main:
     strategy: Recreate
 
@@ -25,7 +25,7 @@ controllers:
 # -- Configures service settings for the chart.
 service:
   main:
-    controller: main
+    component: main
     ports:
       http:
         port: 80
