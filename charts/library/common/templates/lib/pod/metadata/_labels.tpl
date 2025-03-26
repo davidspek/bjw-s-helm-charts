@@ -11,6 +11,14 @@ Returns the value for labels
     (include "bjw-s.common.lib.metadata.versionLabel" $rootContext | fromYaml)
   -}}
 
+  {{- /* Include global labels if specified */ -}}
+  {{- if $rootContext.Values.global.propagateGlobalMetadataToPods -}}
+    {{- $labels = merge
+      (include "bjw-s.common.lib.metadata.globalLabels" $rootContext | fromYaml)
+      $labels
+    -}}
+  {{- end -}}
+
   {{- /* Fetch the Pod selectorLabels */ -}}
   {{- $selectorLabels := include "bjw-s.common.lib.metadata.selectorLabels" $rootContext | fromYaml -}}
   {{- if not (empty $selectorLabels) -}}

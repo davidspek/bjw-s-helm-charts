@@ -1,3 +1,4 @@
+---
 name: "Charts: Release"
 
 concurrency: helm-release
@@ -6,97 +7,154 @@ on:
   workflow_dispatch:
     inputs:
       charts:
-        description: >
-          Charts to release. Comma-separated string.
-          Defaults to releasing everything.
-        default: ""
-        required: false
-
+        description: "JSON encoded list of charts to release"
+        required: true
+        type: string
+        default: "[]"
   push:
     branches:
       - main
     paths:
       - "charts/**"
 
-env:
-  HELM_VERSION: 3.11.2
-
 jobs:
   prepare:
-    name: Prepare data required for release
+    name: Prepare data required for workflow
     runs-on: ubuntu-22.04
     outputs:
-      libraryChartsToRelease: ${{ steps.collect-charts.outputs.chartsLibraryToRelease }}
-      applicationChartsToRelease: ${{ steps.collect-charts.outputs.chartsApplicationToRelease }}
+      libraryChartsToRelease: ${{ steps.filtered-charts.outputs.libraryChartsToRelease }}
+      otherChartsToRelease: ${{ steps.filtered-charts.outputs.otherChartsToRelease }}
     steps:
+      # ----------------------------
+      # Setup
+      # ----------------------------
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Collect charts to release
-        uses: bjw-s/helm-charts-actions/collect-charts@main
-        id: collect-charts
+      - name: Grab repository configuration
+        id: repo-config
+        shell: bash
+        run: |
+          echo "config=$(yq '.' '.ci/repo-config.yaml' -o json -I=0)" >> "$GITHUB_OUTPUT"
+
+      - name: Get changed library charts
+        id: changed-library-charts
+        if: ${{ github.event_name != 'workflow_dispatch' }}
+        uses: tj-actions/changed-files@v45
         with:
-          repoConfigFile: ./.ci/repo-config.yaml
-          overrideCharts: "[${{ inputs.charts }}]"
-          requireHeadAheadOfBase: false
+          matrix: true
+          path: charts
+          dir_names: true
+          dir_names_max_depth: 2
+          files: |
+            library/**
+
+      - name: Get changed charts
+        id: changed-charts
+        if: ${{ github.event_name != 'workflow_dispatch' }}
+        uses: tj-actions/changed-files@v45
+        with:
+          matrix: true
+          path: charts
+          dir_names: true
+          dir_names_max_depth: 2
+          files_ignore: |
+            library/**
+
+      - name: Get specified charts
+        id: specified-charts
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let input = '${{ inputs.charts }}';
+            let cwd = process.cwd();
+
+            let tmpCharts = []
+            if (input === '[]') {
+              console.log("Empty charts input, scanning for charts in repository");
+              const globber = await glob.create('charts/*/*', { implicitDescendants: false });
+              for await (const file of globber.globGenerator()) {
+                if (fs.lstatSync(file).isDirectory()) {
+                  relativePath = file.slice(`${cwd}/charts/`.length);
+                  tmpCharts.push(relativePath);
+                }
+              }
+            } else {
+              tmpCharts = JSON.parse(input);
+              tmpCharts.forEach(function (chart) {
+                const fullPath = `${cwd}/charts/${chart}`;
+                if (!fs.existsSync(fullPath)) {
+                  core.setFailed(`Chart ${chart} does not exist in repository`);
+                  process.exit(1);
+                }
+                if (!fs.lstatSync(fullPath).isDirectory()) {
+                  core.setFailed(`${chart} is not a valid directory`);
+                  process.exit(1);
+                }
+              });
+            }
+
+            let libraryCharts = tmpCharts.filter(chart => chart.startsWith('library/'));
+            core.setOutput('libraryChartsToRelease', JSON.stringify(libraryCharts));
+            let otherCharts = tmpCharts.filter(chart => !chart.startsWith('library/'));
+            core.setOutput('otherChartsToRelease', JSON.stringify(otherCharts));
+
+      - name: Filter out excluded charts
+        id: filtered-charts
+        uses: actions/github-script@v7
+        with:
+          script: |
+            let libraryChartsInput = ${{ github.event_name == 'workflow_dispatch' && steps.specified-charts.outputs.libraryChartsToRelease || steps.changed-library-charts.outputs.all_changed_files }};
+            let otherChartsInput = ${{ github.event_name == 'workflow_dispatch' && steps.specified-charts.outputs.otherChartsToRelease || steps.changed-charts.outputs.all_changed_files }};
+            let excludedFromRelease = ${{ steps.repo-config.outputs.config }}['excluded-charts-release'];
+
+            let libraryCharts = libraryChartsInput.filter(item => excludedFromRelease.indexOf(item) < 0);
+            core.setOutput('libraryChartsToRelease', JSON.stringify(libraryCharts));
+            let otherCharts = otherChartsInput.filter(item => excludedFromRelease.indexOf(item) < 0);
+            core.setOutput('otherChartsToRelease', JSON.stringify(otherCharts));
 
   release-library-charts:
-    name: Release Library charts to GitHub pages
-    uses: ./.github/workflows/charts-release-ghpages.yaml
+    name: Release library charts
     needs:
       - prepare
+    if: ${{ needs.prepare.outputs.libraryChartsToRelease != '[]' && needs.prepare.outputs.libraryChartsToRelease != '' }}
+    strategy:
+      matrix:
+        chart: ${{ fromJSON(needs.prepare.outputs.libraryChartsToRelease) }}
+      fail-fast: false
+      max-parallel: 1
+    uses: ./.github/workflows/chart-release-steps.yaml
     with:
-      charts: "${{ needs.prepare.outputs.libraryChartsToRelease }}"
-    secrets: inherit
+      chart: ${{ matrix.chart }}
+      createGithubRelease: true
+      publishToGhPages: true
+      publishToOciRegistry: false
+      deployGhPages: true
 
-  tag-library-charts:
-    name: Create git tags for library charts
-    uses: ./.github/workflows/tag-charts.yaml
+  release-other-charts:
+    name: Release other charts
     needs:
       - prepare
       - release-library-charts
+    if: |-
+      ${{
+        !cancelled() &&
+        !contains(needs.*.result, 'failure') &&
+        (needs.prepare.outputs.otherChartsToRelease != '[]' && needs.prepare.outputs.otherChartsToRelease != '')
+      }}
+    strategy:
+      matrix:
+        chart: ${{ fromJSON(needs.prepare.outputs.otherChartsToRelease) }}
+      fail-fast: false
+      max-parallel: 1
+    uses: ./.github/workflows/chart-release-steps.yaml
     with:
-      charts: "${{ needs.prepare.outputs.libraryChartsToRelease }}"
-    secrets: inherit
-
-  release-library-github-oci:
-    name: Release Library charts to GitHub Container Registry
-    uses: ./.github/workflows/charts-release-oci.yaml
-    needs:
-      - prepare
-      - release-library-charts
-    with:
-      charts: "${{ needs.prepare.outputs.libraryChartsToRelease }}"
-    secrets: inherit
-
-  release-application-charts:
-    name: Release Application charts to GitHub pages
-    uses: ./.github/workflows/charts-release-ghpages.yaml
-    needs:
-      - prepare
-      - release-library-charts
-    with:
-      charts: "${{ needs.prepare.outputs.applicationChartsToRelease }}"
-    secrets: inherit
-
-  tag-application-charts:
-    name: Create git tags for application charts
-    uses: ./.github/workflows/tag-charts.yaml
-    needs:
-      - prepare
-      - release-application-charts
-    with:
-      charts: "${{ needs.prepare.outputs.applicationChartsToRelease }}"
-    secrets: inherit
-
-  release-github-oci:
-    name: Release Application charts to GitHub Container Registry
-    uses: ./.github/workflows/charts-release-oci.yaml
-    needs:
-      - prepare
-      - release-library-charts
-    with:
-      charts: "${{ needs.prepare.outputs.applicationChartsToRelease }}"
-    secrets: inherit
+      chart: ${{ matrix.chart }}
+      createGithubRelease: true
+      publishToGhPages: true
+      publishToOciRegistry: true
+      deployGhPages: true

@@ -1,75 +1,134 @@
-name: "Charts: Lint"
+name: "Charts: Lint (Reusable)"
 
 on:
   workflow_call:
     inputs:
-      checkoutCommit:
-        required: true
-        type: string
-      isRenovatePR:
-        required: true
-        default: "false"
-        type: string
-      chartsToLint:
+      charts:
         description: >
-          A JSON encoded array of charts to lint
-        required: true
-        type: string
-      overrideDeps:
-        description: >
-          A JSON encoded array of dependencies to override before linting
-        type: string
-        required: false
+          Json encoded list of Helm charts to release.
+          Defaults to releasing everything.
         default: "[]"
-
-env:
-  HELM_VERSION: 3.11.2
+        required: true
+        type: string
+      helmVersion:
+        description: >
+          Helm version to use.
+        default: "latest"
+        required: false
+        type: string
 
 jobs:
+  validate-required-changes:
+    name: Validate required changes
+    strategy:
+      matrix:
+        chart: ${{ fromJSON(inputs.charts) }}
+      fail-fast: false
+    if: |
+      ${{
+        (inputs.charts != '[]' && inputs.charts != '') &&
+        github.event_name == 'pull_request'
+      }}
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout pull request branch
+        uses: actions/checkout@v4
+        with:
+          path: pull
+
+      - name: Checkout default branch
+        uses: actions/checkout@v4
+        with:
+          ref: "${{ github.event.repository.default_branch }}"
+          path: default
+
+      - name: Get chart details for PR
+        id: chart-details-pr
+        uses: bjw-s/helm-charts-actions/get-chart-details@main
+        with:
+          path: pull/charts/${{ matrix.chart }}
+          validateChartYaml: true
+          requireChangelog: true
+
+      - name: Get chart details for default branch
+        id: chart-details-default
+        uses: bjw-s/helm-charts-actions/get-chart-details@main
+        with:
+          path: default/charts/${{ matrix.chart }}
+          allowChartToNotExist: true
+          validateChartYaml: false
+          requireChangelog: false
+
+      # - name: Check version update
+      #   if: ${{ steps.chart-details-pr.outputs.version == steps.chart-details-default.outputs.version }}
+      #   uses: actions/github-script@v7
+      #   with:
+      #     script: |
+      #       core.setFailed("Chart version has not been updated for ${{ matrix.chart }}");
+
+      # - name: Check changelog update
+      #   if: ${{ steps.chart-details-pr.outputs.changes == steps.chart-details-default.outputs.changes }}
+      #   uses: actions/github-script@v7
+      #   with:
+      #     script: |
+      #       core.setFailed("Changelog has not been updated for ${{ matrix.chart }}");
+
+  validate_success:
+    needs:
+      - validate-required-changes
+    if: ${{ !cancelled() }}
+    name: Validation successful
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check matrix status
+        if: >-
+          ${{
+              (inputs.chartsToLint != '' && inputs.chartsToLint != '[]') &&
+              contains(needs.*.result, 'failure')
+          }}
+        run: exit 1
+
   lint-chart:
-    if: ${{ inputs.chartsToLint != '[]' }}
+    if: ${{ inputs.charts != '[]' && inputs.charts != '' }}
     name: Lint chart
     strategy:
       matrix:
-        chart: ${{ fromJSON(inputs.chartsToLint) }}
+        chart: ${{ fromJSON(inputs.charts) }}
       fail-fast: false
+    needs:
+      - validate_success
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ inputs.checkoutCommit }}
-
-      - name: Verify chart version
-        uses: bjw-s/helm-charts-actions/verify-chart-version@main
-        id: verify-chart-version
-        with:
-          chart: "charts/${{ matrix.chart }}"
-
-      # - name: Verify chart changelog
-      #   uses: bjw-s/helm-charts-actions/verify-chart-changelog@main
-      #   if: inputs.isRenovatePR != 'true'
-      #   id: verify-chart-changelog
-      #   with:
-      #     chart: "charts/${{ matrix.chart }}"
 
       - name: Install Kubernetes tools
-        uses: yokawasa/action-setup-kube-tools@v0.11.1
+        uses: yokawasa/action-setup-kube-tools@v0.11.2
         with:
           setup-tools: |
             helmv3
-          helm: "${{ env.HELM_VERSION }}"
+          helm: "${{ inputs.helmVersion }}"
 
       - name: Set up chart-testing
-        uses: helm/chart-testing-action@v2.6.1
+        uses: helm/chart-testing-action@v2.7.0
 
-      - name: Override chart dependencies
-        uses: ./.github/actions/override-chart-deps
-        if: ${{ inputs.overrideDeps != '[]' }}
+      - name: Dereference JSON schema
+        uses: bjw-s/helm-charts-actions/dereference-json-schema@main
         with:
-          chart: ${{ matrix.chart }}
-          overrides: ${{ inputs.overrideDeps }}
+          schemaFile: "charts/${{ matrix.chart }}/values.schema.json"
+          outputFile: "charts/${{ matrix.chart }}/values.schema.json"
+          allowFileNotFound: true
+
+      - name: Always assume in-repo common library
+        env:
+          COMMON_LIBRARY_LOCATION: ${{ github.workspace }}/charts/library/common
+        working-directory: charts/${{ matrix.chart }}
+        run: |
+          yq -i '. |= .dependencies |= map(select(.name == "common" and .repository == "https://bjw-s.github.io/helm-charts").version = ">0.0.0-0")' Chart.yaml
+          yq -i '. |= .dependencies |= map(select(.name == "common" and .repository == "https://bjw-s.github.io/helm-charts").repository = "file://${{ env.COMMON_LIBRARY_LOCATION }}")' Chart.yaml
+          echo "::group::Modified Chart.yaml"
+          cat Chart.yaml
+          echo "::endgroup::"
 
       - name: Run chart-testing (lint)
         run: ct lint --config .ci/ct/ct.yaml --charts "charts/${{ matrix.chart }}"
@@ -77,19 +136,14 @@ jobs:
   lint_success:
     needs:
       - lint-chart
-    if: |
-      always()
+    if: ${{ !cancelled() }}
     name: Lint successful
     runs-on: ubuntu-latest
     steps:
       - name: Check matrix status
         if: >-
           ${{
-              (
-                inputs.chartsToLint != '' && inputs.chartsToLint != '[]'
-              ) &&
-              (
-                contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
-              )
+              (inputs.chartsToLint != '' && inputs.chartsToLint != '[]') &&
+              contains(needs.*.result, 'failure')
           }}
         run: exit 1

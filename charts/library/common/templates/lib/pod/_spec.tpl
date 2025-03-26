@@ -9,9 +9,6 @@ The pod definition included in the component.
 enableServiceLinks: {{ include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "enableServiceLinks" "default" false) }}
 serviceAccountName: {{ include "bjw-s.common.lib.pod.field.serviceAccountName" (dict "ctx" $ctx) | trim }}
 automountServiceAccountToken: {{ include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "automountServiceAccountToken" "default" true) }}
-  {{- with (include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "shareProcessNamespace")) }}
-shareProcessNamespace: {{ . | trim }}
-  {{- end -}}
   {{- with (include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "priorityClassName")) }}
 priorityClassName: {{ . | trim }}
   {{- end -}}
@@ -30,6 +27,14 @@ hostname: {{ . | trim }}
 hostIPC: {{ include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "hostIPC" "default" false) }}
 hostNetwork: {{ include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "hostNetwork" "default" false) }}
 hostPID: {{ include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "hostPID" "default" false) }}
+  {{- if ge ($rootContext.Capabilities.KubeVersion.Minor | int) 29 }}
+    {{- with (include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "hostUsers")) }}
+hostUsers: {{ . | trim }}
+    {{- end -}}
+    {{- with (include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "shareProcessNamespace")) }}
+shareProcessNamespace: {{ . | trim }}
+    {{- end -}}
+  {{- end }}
 dnsPolicy: {{ include "bjw-s.common.lib.pod.field.dnsPolicy" (dict "ctx" $ctx) | trim }}
   {{- with (include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "dnsConfig")) }}
 dnsConfig: {{ . | nindent 2 }}
@@ -50,7 +55,7 @@ restartPolicy: {{ . | trim }}
 nodeSelector: {{ . | nindent 2 }}
   {{- end -}}
   {{- with (include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "affinity")) }}
-affinity: {{ . | nindent 2 }}
+affinity: {{- tpl . $rootContext | nindent 2 }}
   {{- end -}}
   {{- with (include "bjw-s.common.lib.pod.field.topologySpreadConstraints" (dict "ctx" $ctx "rootContext" $rootContext)) }}
 topologySpreadConstraints: {{ . | nindent 2 }}

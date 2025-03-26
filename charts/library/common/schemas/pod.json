@@ -21,10 +21,6 @@
       "dnsPolicy": {
         "type": "string"
       },
-      "shareProcessNamespace": {
-        "type": "boolean",
-        "default": false
-      },
       "enableServiceLinks": {
         "type": "boolean",
         "default": false
@@ -41,11 +37,14 @@
       },
       "hostNetwork": {
         "type": "boolean",
-        "default": "false"
+        "default": false
       },
       "hostPID": {
         "type": "boolean",
         "default": false
+      },
+      "hostUsers": {
+        "type": ["boolean", "null"]
       },
       "hostname": {
         "type": "string"
@@ -79,6 +78,10 @@
       },
       "securityContext": {
         "$ref": "k8s-api.json#/core.v1.PodSecurityContext"
+      },
+      "shareProcessNamespace": {
+        "type": ["boolean", "null"],
+        "default": false
       },
       "terminationGracePeriodSeconds": {
         "type": ["integer", "null"]

@@ -1,0 +1,216 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: "pod metadata: labels"
+templates:
+  - common.yaml
+values:
+  - ../_values/components_main_default_container.yaml
+tests:
+  - it: default pod labels
+    documentSelector: &DeploymentSelector
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: RELEASE-NAME
+    asserts:
+      - equal:
+          path: spec.template.metadata.labels
+          value:
+            app.kubernetes.io/component: main
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/version: 1.0.0
+
+  - it: pod labels from defaultPodOptions should be included
+    set:
+      defaultPodOptions:
+        labels:
+          defaultPodOptionsLabel: test
+    documentSelector: *DeploymentSelector
+    asserts:
+      - isSubset:
+          path: spec.template.metadata.labels
+          content:
+            defaultPodOptionsLabel: test
+
+  - it: pod labels from pod options should be included
+    set:
+      components:
+        main:
+          pod:
+            labels:
+              podOptionsLabel: test
+    documentSelector: *DeploymentSelector
+    asserts:
+      - isSubset:
+          path: spec.template.metadata.labels
+          content:
+            podOptionsLabel: test
+
+  - it: pod labels from global labels should not be included by default
+    set:
+      global:
+        labels:
+          globalLabel: test
+    documentSelector: *DeploymentSelector
+    asserts:
+      - isNotSubset:
+          path: spec.template.metadata.labels
+          content:
+            globalLabel: test
+
+  - it: pod labels from global labels should be included when requested
+    set:
+      global:
+        propagateGlobalMetadataToPods: true
+        labels:
+          globalLabel: test
+    documentSelector: *DeploymentSelector
+    asserts:
+      - isSubset:
+          path: spec.template.metadata.labels
+          content:
+            globalLabel: test
+
+  - it: templated labels should pass
+    set:
+      custom_metadata:
+        custom_label: test
+      defaultPodOptions:
+        labels:
+          defaultPodOptionsLabel: "{{ .Values.custom_metadata.custom_label }}"
+      components:
+        main:
+          type: deployment
+          pod:
+            labels:
+              podOptionsLabel: "{{ .Values.custom_metadata.custom_label }}"
+    documentSelector: *DeploymentSelector
+    asserts:
+      - isSubset:
+          path: spec.template.metadata.labels
+          content:
+            defaultPodOptionsLabel: test
+            podOptionsLabel: test
+
+  - it: pod labels with quotes should not create double quotes
+    set:
+      defaultPodOptions:
+        labels:
+          defaultPodOptionsLabel: "true"
+      components:
+        main:
+          type: deployment
+          pod:
+            labels:
+              podOptionsLabel: "true"
+    documentSelector: *DeploymentSelector
+    asserts:
+      - isSubset:
+          path: spec.template.metadata.labels
+          content:
+            defaultPodOptionsLabel: "true"
+            podOptionsLabel: "true"
+
+  - it: podOptions labels should overwrite defaultPodOptions
+    set:
+      defaultPodOptions:
+        labels:
+          defaultPodOptionsLabel: test
+          overwriteDefaultPodOptionsLabel: overwrite
+      components:
+        main:
+          type: deployment
+          pod:
+            labels:
+              overwriteDefaultPodOptionsLabel: test
+    documentSelector: *DeploymentSelector
+    asserts:
+      - isSubset:
+          path: spec.template.metadata.labels
+          content:
+            defaultPodOptionsLabel: test
+            overwriteDefaultPodOptionsLabel: test
+
+  - it: setting default pod labels with more components should have correct component in pod metadata
+    set:
+      defaultPodOptions:
+        labels:
+          version: '{{ .Chart.AppVersion }}'
+      components:
+        main:
+          type: deployment
+        second:
+          type: deployment
+          containers:
+            second:
+              image:
+                repository: ghcr.io/mendhak/http-https-echo
+                tag: 31
+        third:
+          type: statefulset
+          pod:
+            labels:
+              podOptionsLabel: "true"
+          containers:
+            third:
+              image:
+                repository: ghcr.io/mendhak/http-https-echo
+                tag: 31
+    asserts:
+      - documentIndex: &MainComponentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: &SecondComponentDoc 1
+        isKind:
+          of: Deployment
+      - documentIndex: &ThirdComponentDoc 2
+        isKind:
+          of: StatefulSet
+      - documentIndex: *MainComponentDoc
+        equal:
+          path: spec.template.metadata.labels
+          value:
+            app.kubernetes.io/component: main
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/version: 1.0.0
+            version: 1.0.0
+      - documentIndex: *MainComponentDoc
+        equal:
+          path: spec.selector.matchLabels
+          value:
+            app.kubernetes.io/component: main
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+      - documentIndex: *SecondComponentDoc
+        equal:
+          path: spec.template.metadata.labels
+          value:
+            app.kubernetes.io/component: second
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/version: 1.0.0
+            version: 1.0.0
+      - documentIndex: *SecondComponentDoc
+        equal:
+          path: spec.selector.matchLabels
+          value:
+            app.kubernetes.io/component: second
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+      - documentIndex: *ThirdComponentDoc
+        equal:
+          path: spec.template.metadata.labels
+          value:
+            app.kubernetes.io/component: third
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/version: 1.0.0
+            version: 1.0.0
+            podOptionsLabel: "true"
+      - documentIndex: *ThirdComponentDoc
+        equal:
+          path: spec.selector.matchLabels
+          value:
+            app.kubernetes.io/component: third
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME

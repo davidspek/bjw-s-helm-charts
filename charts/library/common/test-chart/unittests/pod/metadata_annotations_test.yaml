@@ -1,0 +1,126 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: "pod metadata: annotations"
+templates:
+  - common.yaml
+values:
+  - ../_values/components_main_default_container.yaml
+tests:
+  - it: default pod annotations
+    documentSelector: &DeploymentSelector
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: RELEASE-NAME
+    asserts:
+      - notExists:
+          path: spec.template.metadata.annotations
+
+  - it: pod annotations from defaultPodOptions should be included
+    set:
+      defaultPodOptions:
+        annotations:
+          defaultPodOptionsAnnotation: test
+    documentSelector: *DeploymentSelector
+    asserts:
+      - isSubset:
+          path: spec.template.metadata.annotations
+          content:
+            defaultPodOptionsAnnotation: test
+
+  - it: pod annotations from pod options should be included
+    set:
+      components:
+        main:
+          pod:
+            annotations:
+              podOptionsAnnotation: test
+    documentSelector: *DeploymentSelector
+    asserts:
+      - isSubset:
+          path: spec.template.metadata.annotations
+          content:
+            podOptionsAnnotation: test
+
+  - it: pod annotations from global annotations should not be included by default
+    set:
+      global:
+        annotations:
+          globalAnnotation: test
+    documentSelector: *DeploymentSelector
+    asserts:
+      - isNotSubset:
+          path: spec.template.metadata.annotations
+          content:
+            globalAnnotation: test
+
+  - it: pod annotations from global annotations should be included when requested
+    set:
+      global:
+        propagateGlobalMetadataToPods: true
+        annotations:
+          globalAnnotation: test
+    documentSelector: *DeploymentSelector
+    asserts:
+      - isSubset:
+          path: spec.template.metadata.annotations
+          content:
+            globalAnnotation: test
+
+  - it: templated annotations should pass
+    set:
+      custom_metadata:
+        custom_annotation: test
+      defaultPodOptions:
+        annotations:
+          defaultPodOptionsAnnotation: "{{ .Values.custom_metadata.custom_annotation }}"
+      components:
+        main:
+          type: deployment
+          pod:
+            annotations:
+              podOptionsAnnotation: "{{ .Values.custom_metadata.custom_annotation }}"
+    documentSelector: *DeploymentSelector
+    asserts:
+      - isSubset:
+          path: spec.template.metadata.annotations
+          content:
+            defaultPodOptionsAnnotation: test
+            podOptionsAnnotation: test
+
+  - it: pod annotations with quotes should not create double quotes
+    set:
+      defaultPodOptions:
+        annotations:
+          defaultPodOptionsAnnotation: "true"
+      components:
+        main:
+          type: deployment
+          pod:
+            annotations:
+              podOptionsAnnotation: "true"
+    documentSelector: *DeploymentSelector
+    asserts:
+      - isSubset:
+          path: spec.template.metadata.annotations
+          content:
+            defaultPodOptionsAnnotation: "true"
+            podOptionsAnnotation: "true"
+
+  - it: podOptions annotations should overwrite defaultPodOptions
+    set:
+      defaultPodOptions:
+        annotations:
+          defaultPodOptionsAnnotation: test
+          overwriteDefaultPodOptionsAnnotation: overwrite
+      components:
+        main:
+          type: deployment
+          pod:
+            annotations:
+              overwriteDefaultPodOptionsAnnotation: test
+    documentSelector: *DeploymentSelector
+    asserts:
+      - isSubset:
+          path: spec.template.metadata.annotations
+          content:
+            defaultPodOptionsAnnotation: test
+            overwriteDefaultPodOptionsAnnotation: test

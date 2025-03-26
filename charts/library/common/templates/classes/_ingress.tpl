@@ -51,7 +51,7 @@ spec:
     {{- end }}
   {{- end }}
   {{- if $ingressObject.defaultBackend }}
-  defaultBackend: {{ $ingressObject.defaultBackend }}
+  defaultBackend: {{ $ingressObject.defaultBackend | toYaml | nindent 4 }}
   {{- else }}
   rules:
   {{- range $ingressObject.hosts }}

@@ -26,9 +26,9 @@ Return the primary service object for a component
         {{- $result = $service -}}
       {{- end -}}
 
-      {{- /* Return the first Service if none has been explicitly marked as primary */ -}}
+      {{- /* Return the first Service (alphabetically) if none has been explicitly marked as primary */ -}}
       {{- if not $result -}}
-        {{- $firstServiceKey := keys $enabledServicesForComponent | first -}}
+        {{- $firstServiceKey := keys $enabledServicesForComponent | sortAlpha | first -}}
         {{- $result = get $enabledServicesForComponent $firstServiceKey -}}
         {{- $identifier = $result.identifier -}}
       {{- end -}}
