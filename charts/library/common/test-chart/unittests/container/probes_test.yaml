@@ -184,7 +184,7 @@ tests:
       service:
         main:
           enabled: false
-          controller: main
+          component: main
     documentSelector: *DeploymentSelector
     asserts:
       - notExists:

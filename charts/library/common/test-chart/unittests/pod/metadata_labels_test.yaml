@@ -17,6 +17,7 @@ tests:
             app.kubernetes.io/component: main
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/version: 1.0.0
 
   - it: pod labels from defaultPodOptions should be included
     set:
