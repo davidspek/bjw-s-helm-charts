@@ -213,6 +213,7 @@ tests:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/version: 1.0.0
             helm.sh/chart: common-test-1.0.0
       - documentIndex: &SecondConfigmapDocument 1
         isKind:
@@ -224,6 +225,7 @@ tests:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/version: 1.0.0
             helm.sh/chart: common-test-1.0.0
       - documentIndex: &ThirdConfigmapDocument 2
         isKind:
@@ -235,6 +237,7 @@ tests:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/version: 1.0.0
             helm.sh/chart: common-test-1.0.0
             test: test_label
       - documentIndex: *ThirdConfigmapDocument
